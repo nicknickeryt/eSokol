@@ -19,7 +19,7 @@ Gears: 16T (rear hub - pedals), 16T (rear-hub - motor), 9T (motor - rear hub)\
 Motor - hub gear ratio:  9:16=0,5625\
 Output torque: ~11,82Nm\
 Vmax: ~16 km/h\
-Note: the original 9T gear will probably be replaced with a 13T one, which will improve the Vmax to ~23km/h, but with ~1,5 less torque. \
+Note: the original 9T gear will probably be replaced with a 13T one, which will improve the Vmax to ~23km/h, but with ~1,5 less torque. 
 
 ## Why?
 [image]\
