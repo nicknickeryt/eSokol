@@ -20,7 +20,7 @@ Motor - hub gear ratio:  9:16=0,5625\
 Output torque: ~11,82Nm\
 Vmax: ~16 km/h\
 Note: the original 9T gear will probably be replaced with a 13T one, which will improve the Vmax to ~23km/h, but with ~1,5 less torque. \
-\
+
 ## Why?
 [image]\
 Well, I've really wanted to make an electric bicycle for a long time. My goal was to do it cheap and somewhat unique while I'll be learning something new.\
@@ -52,6 +52,7 @@ The bike will be controlled using a screen mounted on the handle. It will provid
 • switch between "sport mode" and smooth mode,\
 • read motor and battery voltage and temperature,\
 • more?\
+\
 This repo is currently divided into firmware and hardware parts. In firmware, you will be able to find everything related to the STM32 microcontroller firmware. In hardware, it will be possible to browse different 3d-printable part designs, KiCad schematics and libraries, various images and additional hardware-related files. This repo will be updated soon.
 
 
