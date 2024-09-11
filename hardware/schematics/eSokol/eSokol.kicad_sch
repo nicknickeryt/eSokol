@@ -1,0 +1,336 @@
+(kicad_sch
+	(version 20231120)
+	(generator "eeschema")
+	(generator_version "8.0")
+	(uuid "44b9e6ec-08e4-4361-b4b8-e7c9cf0a26a7")
+	(paper "A4")
+	(lib_symbols)
+	(sheet
+		(at 185.42 107.95)
+		(size 31.75 16.51)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "480f9b32-02ba-41e3-b0a1-d8e247c9dc24")
+		(property "Sheetname" "LIGHTS"
+			(at 185.42 107.2384 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "lights.kicad_sch"
+			(at 185.42 125.0446 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "eSokol"
+				(path "/44b9e6ec-08e4-4361-b4b8-e7c9cf0a26a7"
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 146.05 54.61)
+		(size 26.67 13.97)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "5f79abaa-79e0-4ada-a821-e92ee16aff81")
+		(property "Sheetname" "BLINKERS"
+			(at 146.05 53.8984 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "blinkers.kicad_sch"
+			(at 146.05 69.1646 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "eSokol"
+				(path "/44b9e6ec-08e4-4361-b4b8-e7c9cf0a26a7"
+					(page "9")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 74.93 76.2)
+		(size 33.02 27.94)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "a2dfd65e-cf30-482b-b10c-95e6c4259503")
+		(property "Sheetname" "DYNAMO"
+			(at 74.93 75.4884 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "dynamo.kicad_sch"
+			(at 74.93 104.7246 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Pole2" ""
+			(at 74.93 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(instances
+			(project "eSokol"
+				(path "/44b9e6ec-08e4-4361-b4b8-e7c9cf0a26a7"
+					(page "7")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 212.09 60.96)
+		(size 22.86 17.78)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "acfcdde5-2a88-4121-879e-06f52fef97fe")
+		(property "Sheetname" "HALL"
+			(at 212.09 60.2484 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "hall.kicad_sch"
+			(at 212.09 79.3246 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "eSokol"
+				(path "/44b9e6ec-08e4-4361-b4b8-e7c9cf0a26a7"
+					(page "4")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 83.82 30.48)
+		(size 27.94 24.13)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "b5a573a5-87d9-4a2f-9b67-46c66d639bd2")
+		(property "Sheetname" "BELL"
+			(at 83.82 29.7684 0)
+			(show_name yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "bell.kicad_sch"
+			(at 83.82 55.1946 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "eSokol"
+				(path "/44b9e6ec-08e4-4361-b4b8-e7c9cf0a26a7"
+					(page "9")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 40.64 130.81)
+		(size 31.75 29.21)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "b63e7a33-8411-45b1-b6a7-2dce3da20f8d")
+		(property "Sheetname" "OLED"
+			(at 40.64 130.0984 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "oled.kicad_sch"
+			(at 40.64 160.6046 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Pole2" ""
+			(at 40.64 130.81 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(instances
+			(project "eSokol"
+				(path "/44b9e6ec-08e4-4361-b4b8-e7c9cf0a26a7"
+					(page "8")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 100.33 137.16)
+		(size 27.94 19.05)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "eb9f82fa-578d-4247-bf0e-2e36a9af3c3d")
+		(property "Sheetname" "BUZZER"
+			(at 100.33 136.4484 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "buzzer.kicad_sch"
+			(at 100.33 156.7946 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "eSokol"
+				(path "/44b9e6ec-08e4-4361-b4b8-e7c9cf0a26a7"
+					(page "7")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 194.31 85.09)
+		(size 19.05 12.7)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "f565501d-a817-4ef9-831d-033eb352bbe6")
+		(property "Sheetname" "MAIN_MCU"
+			(at 194.31 84.3784 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "mcu.kicad_sch"
+			(at 194.31 98.3746 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "eSokol"
+				(path "/44b9e6ec-08e4-4361-b4b8-e7c9cf0a26a7"
+					(page "3")
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+)
