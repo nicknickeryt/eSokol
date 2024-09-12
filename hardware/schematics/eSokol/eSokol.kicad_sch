@@ -140,7 +140,7 @@
 			(color 0 0 0 0.0000)
 		)
 		(uuid "acfcdde5-2a88-4121-879e-06f52fef97fe")
-		(property "Sheetname" "HALL"
+		(property "Sheetname" "HALL_SPEED"
 			(at 212.09 60.2484 0)
 			(effects
 				(font

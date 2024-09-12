@@ -5321,6 +5321,12 @@
 		(uuid "197460b5-80ef-4986-b645-20c6031d9efe")
 	)
 	(junction
+		(at 35.56 151.13)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "283e6969-d9fc-4e54-87e4-99519ffab2cb")
+	)
+	(junction
 		(at 27.94 34.29)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -5387,12 +5393,6 @@
 		(uuid "bb953c9f-62f2-4ab1-bda1-322795c1dc51")
 	)
 	(junction
-		(at 38.1 143.51)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "c71e388a-75b9-4b0f-92bc-72583e523a66")
-	)
-	(junction
 		(at 152.4 127)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -5420,16 +5420,6 @@
 	)
 	(wire
 		(pts
-			(xy 24.13 134.62) (xy 24.13 135.89)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "0477e9b1-154f-4e2b-8ec5-0f9a1f1a50da")
-	)
-	(wire
-		(pts
 			(xy 181.61 106.68) (xy 177.8 106.68)
 		)
 		(stroke
@@ -5450,17 +5440,7 @@
 	)
 	(wire
 		(pts
-			(xy 24.13 116.84) (xy 24.13 119.38)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "0d9a20f0-7d49-4b10-bde5-2657ea180d31")
-	)
-	(wire
-		(pts
-			(xy 80.01 184.15) (xy 76.2 184.15)
+			(xy 160.02 187.96) (xy 156.21 187.96)
 		)
 		(stroke
 			(width 0)
@@ -5587,16 +5567,6 @@
 			(type default)
 		)
 		(uuid "3bfd21b2-bb5b-479f-aca6-338af136ad3b")
-	)
-	(wire
-		(pts
-			(xy 45.72 127) (xy 45.72 128.27)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "3c173cd2-2969-4487-a90e-6a96bf89aaa5")
 	)
 	(wire
 		(pts
@@ -5820,16 +5790,6 @@
 	)
 	(wire
 		(pts
-			(xy 38.1 133.35) (xy 38.1 143.51)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "7c231681-0fc2-4403-8f21-660eb2acc5f7")
-	)
-	(wire
-		(pts
 			(xy 246.38 83.82) (xy 246.38 85.09)
 		)
 		(stroke
@@ -5850,7 +5810,7 @@
 	)
 	(wire
 		(pts
-			(xy 76.2 181.61) (xy 80.01 181.61)
+			(xy 156.21 185.42) (xy 160.02 185.42)
 		)
 		(stroke
 			(width 0)
@@ -5870,13 +5830,13 @@
 	)
 	(wire
 		(pts
-			(xy 45.72 138.43) (xy 53.34 138.43)
+			(xy 34.29 139.7) (xy 34.29 140.97)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "8b89edab-1cdf-4af6-91be-2e4b1d1fb445")
+		(uuid "88b644bc-4d02-44cd-b37d-551346267d69")
 	)
 	(wire
 		(pts
@@ -5920,6 +5880,16 @@
 	)
 	(wire
 		(pts
+			(xy 43.18 162.56) (xy 43.18 156.21)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "92fbf2cc-5508-4d98-9fd3-4c6d6ec28d1c")
+	)
+	(wire
+		(pts
 			(xy 256.54 21.59) (xy 256.54 24.13)
 		)
 		(stroke
@@ -5930,13 +5900,23 @@
 	)
 	(wire
 		(pts
-			(xy 80.01 179.07) (xy 76.2 179.07)
+			(xy 160.02 182.88) (xy 156.21 182.88)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "93da38b9-83a5-4d34-baae-ee911f0e8e42")
+	)
+	(wire
+		(pts
+			(xy 34.29 140.97) (xy 35.56 140.97)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9501ea21-de37-47b2-ba11-e218309ce726")
 	)
 	(wire
 		(pts
@@ -5947,6 +5927,16 @@
 			(type default)
 		)
 		(uuid "96351619-5a95-4eaf-86d3-c76316907d81")
+	)
+	(wire
+		(pts
+			(xy 43.18 130.81) (xy 43.18 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "969c2841-300a-4789-a994-dffd8660e182")
 	)
 	(wire
 		(pts
@@ -6017,16 +6007,6 @@
 			(type default)
 		)
 		(uuid "9d4c8550-aee5-42ab-8a24-582020e2d941")
-	)
-	(wire
-		(pts
-			(xy 38.1 151.13) (xy 38.1 152.4)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9d723f46-9f4e-4ba8-8c89-9be54b4c36b5")
 	)
 	(wire
 		(pts
@@ -6170,7 +6150,7 @@
 	)
 	(wire
 		(pts
-			(xy 31.75 127) (xy 45.72 127)
+			(xy 50.8 138.43) (xy 53.34 138.43)
 		)
 		(stroke
 			(width 0)
@@ -6207,16 +6187,6 @@
 			(type default)
 		)
 		(uuid "baf10577-a6f4-44c0-8307-d46d4fe43ade")
-	)
-	(wire
-		(pts
-			(xy 33.02 143.51) (xy 38.1 143.51)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "bb978fec-f165-498a-be2e-6a535323a06a")
 	)
 	(wire
 		(pts
@@ -6277,6 +6247,16 @@
 			(type default)
 		)
 		(uuid "c6699b10-61d3-4cae-b9a1-683da7ad030b")
+	)
+	(wire
+		(pts
+			(xy 41.91 129.54) (xy 43.18 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c9639b22-f566-43a4-812c-ed716e310875")
 	)
 	(wire
 		(pts
@@ -6370,6 +6350,16 @@
 	)
 	(wire
 		(pts
+			(xy 35.56 162.56) (xy 35.56 161.29)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e313e4d5-6ac9-4fb1-903a-1a66e98c3fb0")
+	)
+	(wire
+		(pts
 			(xy 50.8 124.46) (xy 50.8 125.73)
 		)
 		(stroke
@@ -6397,6 +6387,16 @@
 			(type default)
 		)
 		(uuid "ed6f0709-2b2e-4ae3-939a-074e3bc2f4d8")
+	)
+	(wire
+		(pts
+			(xy 35.56 148.59) (xy 35.56 151.13)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "edf5f613-8004-4370-973c-2b34ca899efe")
 	)
 	(wire
 		(pts
@@ -6470,6 +6470,16 @@
 	)
 	(wire
 		(pts
+			(xy 25.4 156.21) (xy 27.94 156.21)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fc588592-0494-42e3-806b-8c5823cb4220")
+	)
+	(wire
+		(pts
 			(xy 86.36 127) (xy 88.9 127)
 		)
 		(stroke
@@ -6504,8 +6514,8 @@
 		(uuid 49b202cd-7931-4363-b424-f8234e6cf725)
 	)
 	(rectangle
-		(start 30.48 168.91)
-		(end 93.98 191.77)
+		(start 124.46 170.18)
+		(end 173.99 194.31)
 		(stroke
 			(width 0)
 			(type default)
@@ -6555,8 +6565,8 @@
 		(uuid d78330af-767f-4fe3-94b2-a29f4476b289)
 	)
 	(rectangle
-		(start 17.78 101.6)
-		(end 110.49 158.75)
+		(start 13.97 101.6)
+		(end 114.3 182.88)
 		(stroke
 			(width 0)
 			(type default)
@@ -6636,7 +6646,7 @@
 	)
 	(text "Throttle linear Hall sensor"
 		(exclude_from_sim no)
-		(at 19.558 123.698 90)
+		(at 16.256 132.588 90)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6647,7 +6657,7 @@
 	)
 	(text "THROTTLE HANDLE"
 		(exclude_from_sim no)
-		(at 61.722 161.036 0)
+		(at 59.944 185.42 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6679,7 +6689,7 @@
 	)
 	(text "RTC MODULE"
 		(exclude_from_sim no)
-		(at 60.96 195.326 0)
+		(at 140.97 196.596 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6933,7 +6943,7 @@
 			)
 		)
 	)
-	(global_label "HALL"
+	(global_label "HALL_SPEED"
 		(shape input)
 		(at 135.89 78.74 180)
 		(fields_autoplaced yes)
@@ -6945,7 +6955,7 @@
 		)
 		(uuid "485389e8-6640-461f-8679-b99925e667f3")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 128.4295 78.74 0)
+			(at 121.4144 78.74 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7021,7 +7031,7 @@
 			)
 		)
 	)
-	(global_label "THR_EN"
+	(global_label "THR_DIS"
 		(shape output)
 		(at 181.61 88.9 0)
 		(fields_autoplaced yes)
@@ -7034,7 +7044,7 @@
 		)
 		(uuid "5902faeb-ad19-4cb1-b605-b103cf04d86c")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 191.6104 88.9 0)
+			(at 192.2152 88.9 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7221,9 +7231,9 @@
 			)
 		)
 	)
-	(global_label "THR_EN"
+	(global_label "THR_DIS"
 		(shape input)
-		(at 33.02 143.51 180)
+		(at 25.4 156.21 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -7234,7 +7244,7 @@
 		)
 		(uuid "7ca55629-9951-4819-8a3c-ace61026f4bd")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 23.0196 143.51 0)
+			(at 14.7948 156.21 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7335,7 +7345,7 @@
 	)
 	(global_label "RTC_SDA"
 		(shape input)
-		(at 80.01 181.61 0)
+		(at 160.02 185.42 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -7345,7 +7355,7 @@
 		)
 		(uuid "8cca4ee9-07a6-4db9-a7e2-386248750cf0")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 91.0385 181.61 0)
+			(at 171.0485 185.42 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7379,7 +7389,7 @@
 	)
 	(global_label "RTC_SCL"
 		(shape input)
-		(at 80.01 184.15 0)
+		(at 160.02 187.96 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -7389,7 +7399,7 @@
 		)
 		(uuid "a4f93e3f-cb06-4a30-9895-e10117692b48")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 90.978 184.15 0)
+			(at 170.988 187.96 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7534,7 +7544,7 @@
 	)
 	(global_label "3V3_L"
 		(shape input)
-		(at 80.01 179.07 0)
+		(at 160.02 182.88 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -7544,7 +7554,7 @@
 		)
 		(uuid "c1d91b2b-32a4-48bc-b6de-b9f6472b46d7")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 88.4985 179.07 0)
+			(at 168.5085 182.88 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7886,7 +7896,7 @@
 	)
 	(symbol
 		(lib_id "power:+5V")
-		(at 24.13 116.84 0)
+		(at 41.91 129.54 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -7895,7 +7905,7 @@
 		(fields_autoplaced yes)
 		(uuid "06b72a23-6d3f-4282-90a0-7e0ae5ff9c58")
 		(property "Reference" "#PWR058"
-			(at 24.13 120.65 0)
+			(at 41.91 133.35 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7904,7 +7914,7 @@
 			)
 		)
 		(property "Value" "+5V"
-			(at 24.13 111.76 0)
+			(at 41.91 124.46 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7912,7 +7922,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 24.13 116.84 0)
+			(at 41.91 129.54 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7921,7 +7931,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 24.13 116.84 0)
+			(at 41.91 129.54 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7930,7 +7940,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+5V\""
-			(at 24.13 116.84 0)
+			(at 41.91 129.54 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8156,6 +8166,81 @@
 			(project "eSokol"
 				(path "/44b9e6ec-08e4-4361-b4b8-e7c9cf0a26a7/f565501d-a817-4ef9-831d-033eb352bbe6"
 					(reference "U3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Transistor_FET:AO3400A")
+		(at 40.64 151.13 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "1d20357e-aed0-49f8-a519-75b91d3417d3")
+		(property "Reference" "Q9"
+			(at 46.482 150.876 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "AO3400A"
+			(at 46.482 153.416 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-23"
+			(at 45.72 153.035 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://www.aosmd.com/pdfs/datasheet/AO3400A.pdf"
+			(at 45.72 154.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Description" "30V Vds, 5.7A Id, N-Channel MOSFET, SOT-23"
+			(at 40.64 151.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "3"
+			(uuid "a6eeac77-7a0a-4669-b0d7-36228b47ecb9")
+		)
+		(pin "2"
+			(uuid "ed42adff-5cbd-4c63-83ec-874d4e56acb9")
+		)
+		(pin "1"
+			(uuid "2bce3563-4f7f-4abd-9da4-38a28c2c4965")
+		)
+		(instances
+			(project "eSokol"
+				(path "/44b9e6ec-08e4-4361-b4b8-e7c9cf0a26a7/f565501d-a817-4ef9-831d-033eb352bbe6"
+					(reference "Q9")
 					(unit 1)
 				)
 			)
@@ -8642,16 +8727,15 @@
 	)
 	(symbol
 		(lib_id "megasaturnv_custom_components:RTC_DS3231")
-		(at 60.96 181.61 0)
+		(at 140.97 185.42 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "393449eb-289d-4e61-9e93-e6c47510027c")
 		(property "Reference" "RTC1"
-			(at 48.26 181.6101 0)
+			(at 146.558 175.768 0)
 			(effects
 				(font
 					(size 1.524 1.524)
@@ -8660,7 +8744,7 @@
 			)
 		)
 		(property "Value" "RTC_DS3231"
-			(at 48.26 179.0701 0)
+			(at 146.558 173.228 0)
 			(effects
 				(font
 					(size 1.524 1.524)
@@ -8669,7 +8753,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 55.88 181.61 0)
+			(at 135.89 185.42 0)
 			(effects
 				(font
 					(size 1.524 1.524)
@@ -8678,7 +8762,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 55.88 181.61 0)
+			(at 135.89 185.42 0)
 			(effects
 				(font
 					(size 1.524 1.524)
@@ -8687,7 +8771,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 60.96 181.61 0)
+			(at 140.97 185.42 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8994,7 +9078,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 76.2 176.53 180)
+		(at 156.21 180.34 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -9003,7 +9087,7 @@
 		(fields_autoplaced yes)
 		(uuid "56f45568-7940-4a82-8538-50a676b85ad1")
 		(property "Reference" "#PWR019"
-			(at 76.2 170.18 0)
+			(at 156.21 173.99 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9012,7 +9096,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 76.2 171.45 0)
+			(at 156.21 175.26 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9021,7 +9105,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 76.2 176.53 0)
+			(at 156.21 180.34 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9030,7 +9114,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 76.2 176.53 0)
+			(at 156.21 180.34 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9039,7 +9123,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 76.2 176.53 0)
+			(at 156.21 180.34 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9273,7 +9357,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 24.13 135.89 0)
+		(at 43.18 162.56 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -9282,7 +9366,7 @@
 		(fields_autoplaced yes)
 		(uuid "61f13d31-4037-41bd-8c8e-1c0c6fe61beb")
 		(property "Reference" "#PWR059"
-			(at 24.13 142.24 0)
+			(at 43.18 168.91 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9291,7 +9375,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 24.13 140.97 0)
+			(at 43.18 167.64 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9300,7 +9384,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 24.13 135.89 0)
+			(at 43.18 162.56 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9309,7 +9393,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 24.13 135.89 0)
+			(at 43.18 162.56 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9318,7 +9402,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 24.13 135.89 0)
+			(at 43.18 162.56 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9333,73 +9417,6 @@
 			(project "eSokol"
 				(path "/44b9e6ec-08e4-4361-b4b8-e7c9cf0a26a7/f565501d-a817-4ef9-831d-033eb352bbe6"
 					(reference "#PWR059")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 38.1 152.4 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "6f58c1b2-f77e-4e07-91b8-6cc6591c41bf")
-		(property "Reference" "#PWR020"
-			(at 38.1 158.75 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 38.1 157.48 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Footprint" ""
-			(at 38.1 152.4 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 38.1 152.4 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 38.1 152.4 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "4da8f031-c8b0-494f-a107-46afce8f3936")
-		)
-		(instances
-			(project "eSokol"
-				(path "/44b9e6ec-08e4-4361-b4b8-e7c9cf0a26a7/f565501d-a817-4ef9-831d-033eb352bbe6"
-					(reference "#PWR020")
 					(unit 1)
 				)
 			)
@@ -9482,7 +9499,7 @@
 		(dnp no)
 		(uuid "7fa0d744-ee2b-4865-8fa9-588c6c82e4c7")
 		(property "Reference" "R28"
-			(at 68.58 153.162 90)
+			(at 68.834 153.416 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9490,7 +9507,7 @@
 			)
 		)
 		(property "Value" "100"
-			(at 68.58 155.194 90)
+			(at 68.834 155.448 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10078,7 +10095,7 @@
 	)
 	(symbol
 		(lib_id "49e:Hall_Sensor")
-		(at 26.67 127 0)
+		(at 45.72 138.43 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -10086,7 +10103,7 @@
 		(dnp no)
 		(uuid "a2bfee7d-d038-4d6f-bd67-57a384eb5367")
 		(property "Reference" "U7"
-			(at 33.02 120.396 0)
+			(at 52.07 131.826 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10095,7 +10112,7 @@
 			)
 		)
 		(property "Value" "Hall_Sensor"
-			(at 22.1488 128.143 0)
+			(at 41.1988 139.573 0)
 			(effects
 				(font
 					(size 0.9906 0.9906)
@@ -10105,7 +10122,7 @@
 			)
 		)
 		(property "Footprint" "Package_TO_SOT_SMD:SOT-23"
-			(at 25.4 120.65 0)
+			(at 44.45 132.08 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10114,7 +10131,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 26.67 127 0)
+			(at 45.72 138.43 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10123,7 +10140,7 @@
 			)
 		)
 		(property "Description" "3-pin Linear Hall Effect Sensor"
-			(at 26.67 127 0)
+			(at 45.72 138.43 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10132,7 +10149,7 @@
 			)
 		)
 		(property "LCSC Part" "C266230"
-			(at 35.56 133.35 0)
+			(at 54.61 144.78 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10141,7 +10158,7 @@
 			)
 		)
 		(property "MPN" "GH39FKSW"
-			(at 35.56 130.81 0)
+			(at 54.61 142.24 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10150,7 +10167,7 @@
 			)
 		)
 		(property "Notes" "Alternate part: OH49E-S (C85573)"
-			(at 44.45 135.89 0)
+			(at 63.5 147.32 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10452,6 +10469,139 @@
 	)
 	(symbol
 		(lib_id "power:+5V")
+		(at 34.29 139.7 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "b81dc403-fafa-4214-97b0-414b6ad99d6e")
+		(property "Reference" "#PWR064"
+			(at 34.29 143.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+5V"
+			(at 34.29 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 34.29 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 34.29 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+5V\""
+			(at 34.29 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "0fd93b2d-6356-4389-905c-dc2bce249acf")
+		)
+		(instances
+			(project "eSokol"
+				(path "/44b9e6ec-08e4-4361-b4b8-e7c9cf0a26a7/f565501d-a817-4ef9-831d-033eb352bbe6"
+					(reference "#PWR064")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 35.56 162.56 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "bab02f1a-992c-416c-8ced-3061c168e6b8")
+		(property "Reference" "#PWR020"
+			(at 35.56 168.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 35.56 167.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" ""
+			(at 35.56 162.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 35.56 162.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 35.56 162.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "06ae8495-d141-427d-baaa-ae38a24360bf")
+		)
+		(instances
+			(project "eSokol"
+				(path "/44b9e6ec-08e4-4361-b4b8-e7c9cf0a26a7/f565501d-a817-4ef9-831d-033eb352bbe6"
+					(reference "#PWR020")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+5V")
 		(at 100.33 138.43 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10660,81 +10810,6 @@
 			(project ""
 				(path "/44b9e6ec-08e4-4361-b4b8-e7c9cf0a26a7/f565501d-a817-4ef9-831d-033eb352bbe6"
 					(reference "Q11")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Transistor_FET:AO3400A")
-		(at 43.18 133.35 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "cc0376e2-9772-499e-a561-b9075f2a96a7")
-		(property "Reference" "Q9"
-			(at 39.116 138.176 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "AO3400A"
-			(at 39.116 140.716 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Package_TO_SOT_SMD:SOT-23"
-			(at 48.26 135.255 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-					(italic yes)
-				)
-				(justify left)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "http://www.aosmd.com/pdfs/datasheet/AO3400A.pdf"
-			(at 48.26 137.16 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-				(hide yes)
-			)
-		)
-		(property "Description" "30V Vds, 5.7A Id, N-Channel MOSFET, SOT-23"
-			(at 43.18 133.35 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "3"
-			(uuid "dc43bcdd-ec66-40fb-8c44-6c9e0b7f4995")
-		)
-		(pin "2"
-			(uuid "be80fcc5-bef6-4a43-9d38-248fa20fa24d")
-		)
-		(pin "1"
-			(uuid "a0e266b9-be05-48e6-b25a-5aa63f77045f")
-		)
-		(instances
-			(project "eSokol"
-				(path "/44b9e6ec-08e4-4361-b4b8-e7c9cf0a26a7/f565501d-a817-4ef9-831d-033eb352bbe6"
-					(reference "Q9")
 					(unit 1)
 				)
 			)
@@ -11213,8 +11288,83 @@
 		)
 	)
 	(symbol
+		(lib_id "Transistor_BJT:BC547")
+		(at 33.02 156.21 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "f0979f0e-3bc9-4564-a4a1-4301bb5abb43")
+		(property "Reference" "Q13"
+			(at 26.416 158.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "BC547"
+			(at 26.416 161.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_THT:TO-92_Inline"
+			(at 38.1 158.115 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.onsemi.com/pub/Collateral/BC550-D.pdf"
+			(at 33.02 156.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Description" "0.1A Ic, 45V Vce, Small Signal NPN Transistor, TO-92"
+			(at 33.02 156.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "3"
+			(uuid "fac29b2d-fac4-4045-9cbb-e4219a6e9dbe")
+		)
+		(pin "1"
+			(uuid "c22cdc9f-ff9d-468f-9fc9-b91b02025628")
+		)
+		(pin "2"
+			(uuid "628032be-df0f-4c05-898d-9168a3222bd1")
+		)
+		(instances
+			(project "eSokol"
+				(path "/44b9e6ec-08e4-4361-b4b8-e7c9cf0a26a7/f565501d-a817-4ef9-831d-033eb352bbe6"
+					(reference "Q13")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:R")
-		(at 38.1 147.32 180)
+		(at 35.56 144.78 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -11222,7 +11372,7 @@
 		(dnp no)
 		(uuid "f21f16d3-eed0-4f2e-a20c-e7c66182a106")
 		(property "Reference" "R17"
-			(at 40.132 147.574 0)
+			(at 28.702 143.764 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11231,7 +11381,7 @@
 			)
 		)
 		(property "Value" "100k"
-			(at 40.132 150.114 0)
+			(at 28.702 146.304 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11240,7 +11390,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 39.878 147.32 90)
+			(at 37.338 144.78 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11249,7 +11399,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 38.1 147.32 0)
+			(at 35.56 144.78 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11258,7 +11408,7 @@
 			)
 		)
 		(property "Description" "Resistor"
-			(at 38.1 147.32 0)
+			(at 35.56 144.78 0)
 			(effects
 				(font
 					(size 1.27 1.27)

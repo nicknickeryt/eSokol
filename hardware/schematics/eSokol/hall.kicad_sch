@@ -578,7 +578,7 @@
 		)
 		(uuid "acae7535-d7b9-4aea-812b-561b53e48f6e")
 	)
-	(global_label "HALL"
+	(global_label "HALL_SPEED"
 		(shape output)
 		(at 165.1 96.52 0)
 		(fields_autoplaced yes)
