@@ -6,6 +6,44 @@
 	(paper "A4")
 	(lib_symbols)
 	(sheet
+		(at 33.02 53.34)
+		(size 29.21 25.4)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "0b1f9a26-574f-45f7-a035-e03762f89362")
+		(property "Sheetname" "THROTTLE"
+			(at 33.02 52.6284 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "throttle.kicad_sch"
+			(at 33.02 79.3246 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "eSokol"
+				(path "/44b9e6ec-08e4-4361-b4b8-e7c9cf0a26a7"
+					(page "10")
+				)
+			)
+		)
+	)
+	(sheet
 		(at 185.42 107.95)
 		(size 31.75 16.51)
 		(fields_autoplaced yes)
