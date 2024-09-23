@@ -205,45 +205,6 @@
 		)
 	)
 	(sheet
-		(at 83.82 30.48)
-		(size 27.94 24.13)
-		(fields_autoplaced yes)
-		(stroke
-			(width 0.1524)
-			(type solid)
-		)
-		(fill
-			(color 0 0 0 0.0000)
-		)
-		(uuid "b5a573a5-87d9-4a2f-9b67-46c66d639bd2")
-		(property "Sheetname" "BELL"
-			(at 83.82 29.7684 0)
-			(show_name yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left bottom)
-			)
-		)
-		(property "Sheetfile" "bell.kicad_sch"
-			(at 83.82 55.1946 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(instances
-			(project "eSokol"
-				(path "/44b9e6ec-08e4-4361-b4b8-e7c9cf0a26a7"
-					(page "9")
-				)
-			)
-		)
-	)
-	(sheet
 		(at 40.64 130.81)
 		(size 31.75 29.21)
 		(fields_autoplaced yes)
