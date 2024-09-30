@@ -633,6 +633,10 @@
     [
       "0b1f9a26-574f-45f7-a035-e03762f89362",
       "THROTTLE"
+    ],
+    [
+      "f25837fe-55ef-42f7-bbb9-b2f5055e9bf6",
+      "BIGBATT"
     ]
   ],
   "text_variables": {}
