@@ -1,0 +1,313 @@
+[POMIARY]: dutyCycle CCR1: 
+16
+[POMIARY]: zmierzono vWheelKmh : 
+0.00 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+17
+[POMIARY]: zmierzono vWheelKmh : 
+0.00 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+18
+[POMIARY]: zmierzono vWheelKmh : 
+0.00 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+19
+[POMIARY]: zmierzono vWheelKmh : 
+0.00 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+20
+[POMIARY]: zmierzono vWheelKmh : 
+0.97 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+21
+[POMIARY]: zmierzono vWheelKmh : 
+1.80 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+22
+[POMIARY]: zmierzono vWheelKmh : 
+2.54 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+23
+[POMIARY]: zmierzono vWheelKmh : 
+3.21 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+24
+[POMIARY]: zmierzono vWheelKmh : 
+3.97 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+25
+[POMIARY]: zmierzono vWheelKmh : 
+4.75 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+26
+[POMIARY]: zmierzono vWheelKmh : 
+5.35 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+27
+[POMIARY]: zmierzono vWheelKmh : 
+5.96 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+28
+[POMIARY]: zmierzono vWheelKmh : 
+6.77 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+29
+[POMIARY]: zmierzono vWheelKmh : 
+7.32 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+30
+[POMIARY]: zmierzono vWheelKmh : 
+7.92 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+31
+[POMIARY]: zmierzono vWheelKmh : 
+8.79 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+32
+[POMIARY]: zmierzono vWheelKmh : 
+8.97 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+33
+[POMIARY]: zmierzono vWheelKmh : 
+9.60 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+34
+[POMIARY]: zmierzono vWheelKmh : 
+10.26 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+35
+[POMIARY]: zmierzono vWheelKmh : 
+10.92 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+36
+[POMIARY]: zmierzono vWheelKmh : 
+11.38 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+37
+[POMIARY]: zmierzono vWheelKmh : 
+11.98 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+38
+[POMIARY]: zmierzono vWheelKmh : 
+12.42 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+39
+[POMIARY]: zmierzono vWheelKmh : 
+12.90 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+40
+[POMIARY]: zmierzono vWheelKmh : 
+13.54 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+41
+[POMIARY]: zmierzono vWheelKmh : 
+13.96 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+42
+[POMIARY]: zmierzono vWheelKmh : 
+14.41 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+43
+[POMIARY]: zmierzono vWheelKmh : 
+14.72 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+44
+[POMIARY]: zmierzono vWheelKmh : 
+15.39 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+45
+[POMIARY]: zmierzono vWheelKmh : 
+15.57 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+46
+[POMIARY]: zmierzono vWheelKmh : 
+16.72 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+47
+[POMIARY]: zmierzono vWheelKmh : 
+16.52 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+48
+[POMIARY]: zmierzono vWheelKmh : 
+17.59 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+49
+[POMIARY]: zmierzono vWheelKmh : 
+17.59 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+50
+[POMIARY]: zmierzono vWheelKmh : 
+18.81 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+51
+[POMIARY]: zmierzono vWheelKmh : 
+19.08 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+52
+[POMIARY]: zmierzono vWheelKmh : 
+19.35 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+53
+[POMIARY]: zmierzono vWheelKmh : 
+19.92 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+54
+[POMIARY]: zmierzono vWheelKmh : 
+20.52 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+55
+[POMIARY]: zmierzono vWheelKmh : 
+20.84 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+56
+[POMIARY]: zmierzono vWheelKmh : 
+21.16 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+57
+[POMIARY]: zmierzono vWheelKmh : 
+21.85 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+58
+[POMIARY]: zmierzono vWheelKmh : 
+22.96 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+59
+[POMIARY]: zmierzono vWheelKmh : 
+23.35 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+60
+[POMIARY]: zmierzono vWheelKmh : 
+23.35 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+61
+[POMIARY]: zmierzono vWheelKmh : 
+24.19 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+62
+[POMIARY]: zmierzono vWheelKmh : 
+24.19 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+63
+[POMIARY]: zmierzono vWheelKmh : 
+24.63 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+64
+[POMIARY]: zmierzono vWheelKmh : 
+24.63 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+65
+[POMIARY]: zmierzono vWheelKmh : 
+24.19 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: dutyCycle CCR1: 
+66
+[POMIARY]: zmierzono vWheelKmh : 
+24.19 [km/h] 
+ czekam 15s na następny krok...
+
+[POMIARY]: ---- UKOŃCZONO [max 66%]! ----
+
+[23:52:35.180] Disconnected
+[23:52:36.181] Warning: Could not open /dev/ttyUSB0 (No such file or directory)
+[23:52:36.181] Waiting for tty device..
+
+

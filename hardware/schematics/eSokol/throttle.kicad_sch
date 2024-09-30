@@ -2799,6 +2799,17 @@
 		)
 		(uuid ea6938d7-7845-48e8-a372-a8686875ec46)
 	)
+	(text "TODO:\nproper connectors for gnd, vcc, thr_dis, thr_pwm and thr_out\ncheck stm32 outputs\n"
+		(exclude_from_sim no)
+		(at 21.082 130.81 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "15522f8f-e2b4-44fe-9da0-cadec3da3393")
+	)
 	(text "note that 49e max output current is 10mA,\nand as the circuit already draws ~6mA, \nwe limit the LED current to ~0.7mA max just to be safe"
 		(exclude_from_sim no)
 		(at 120.142 127.254 0)
