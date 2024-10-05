@@ -17,7 +17,7 @@
 			(color 0 0 0 0.0000)
 		)
 		(uuid "0b1f9a26-574f-45f7-a035-e03762f89362")
-		(property "Sheetname" "THROTTLE"
+		(property "Sheetname" "BIG"
 			(at 33.02 52.6284 0)
 			(effects
 				(font
@@ -26,7 +26,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Sheetfile" "throttle.kicad_sch"
+		(property "Sheetfile" "big.kicad_sch"
 			(at 33.02 79.3246 0)
 			(effects
 				(font
@@ -285,44 +285,6 @@
 			(project "eSokol"
 				(path "/44b9e6ec-08e4-4361-b4b8-e7c9cf0a26a7"
 					(page "7")
-				)
-			)
-		)
-	)
-	(sheet
-		(at 245.11 105.41)
-		(size 30.48 16.51)
-		(fields_autoplaced yes)
-		(stroke
-			(width 0.1524)
-			(type solid)
-		)
-		(fill
-			(color 0 0 0 0.0000)
-		)
-		(uuid "f25837fe-55ef-42f7-bbb9-b2f5055e9bf6")
-		(property "Sheetname" "BIGBATT"
-			(at 245.11 104.6984 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left bottom)
-			)
-		)
-		(property "Sheetfile" "bigbatt.kicad_sch"
-			(at 245.11 122.5046 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(instances
-			(project "eSokol"
-				(path "/44b9e6ec-08e4-4361-b4b8-e7c9cf0a26a7"
-					(page "10")
 				)
 			)
 		)
