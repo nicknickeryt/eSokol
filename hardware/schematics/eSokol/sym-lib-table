@@ -2,4 +2,5 @@
   (version 7)
   (lib (name "eSokol_us1881")(type "KiCad")(uri "/home/nick/Dokumenty/eSokol/us1881/eSokol_us1881.kicad_sym")(options "")(descr ""))
   (lib (name "ds-vc288")(type "KiCad")(uri "/home/nick/Dokumenty/eSokol11wrze/ds-vc288.kicad_sym")(options "")(descr ""))
+  (lib (name "TCRT5000")(type "KiCad")(uri "/home/nick/Dokumenty/eSokol-repo/libs/TCRT5000.kicad_sym")(options "")(descr ""))
 )
