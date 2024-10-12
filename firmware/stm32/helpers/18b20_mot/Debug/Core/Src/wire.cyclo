@@ -1,0 +1,9 @@
+../Core/Src/wire.c:7:19:wire_init	1
+../Core/Src/wire.c:13:13:delay_us	2
+../Core/Src/wire.c:20:19:wire_reset	2
+../Core/Src/wire.c:36:12:read_bit	1
+../Core/Src/wire.c:47:9:wire_read	3
+../Core/Src/wire.c:58:13:write_bit	2
+../Core/Src/wire.c:72:6:wire_write	2
+../Core/Src/wire.c:80:16:byte_crc	3
+../Core/Src/wire.c:92:9:wire_crc	2
