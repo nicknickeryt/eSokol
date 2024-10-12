@@ -61,7 +61,6 @@ static void MX_TIM1_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-
 // DEBUG UART HELPERS
 void send_string(char *s) {
 	HAL_UART_Transmit(&huart1, (uint8_t*) s, strlen(s), 1000);
@@ -96,11 +95,11 @@ void send_float(float num) {
 
 uint8_t pasCounter = 0;         // counts rising edges of pas signal
 int lastPasResetTick = 0;       // last pas counter reset (at 12 counters)
-const float pedalGearRatio = 2.875;   // this is ratio to calculate target speed, 46:16 (pedals gear, wheel gear)
-const float motorGearRatio = 0.5625;  // this is ratio to calculate target speed, 9:16 (motor gear, wheel gear)
+const float pedalGearRatio = 2.875; // this is ratio to calculate target speed, 46:16 (pedals gear, wheel gear)
+const float motorGearRatio = 0.5625; // this is ratio to calculate target speed, 9:16 (motor gear, wheel gear)
 
 const float pi = 3.141592;
-const float pasMagnetAngle = (2.0  * pi) / 12.0; // pas angle after which we calculate omega. 2pi/12 is 30° (we have 12 magnets)
+const float pasMagnetAngle = (2.0 * pi) / 12.0; // pas angle after which we calculate omega. 2pi/12 is 30° (we have 12 magnets)
 
 const float rWheel = 0.25; 			// wheel radius [m]
 
@@ -114,7 +113,7 @@ float pasActive = 0;
 // duty cycle
 float targetDutyCycle = 0.0;
 
-// (-0.00000044 * (x*x*x*x*x)) - (0.000049 * (x*x*x*x)) + (0.00164 * (x*x*x)) +( 0.0169 * (x*x)) + (1.1815 * x) + 18.912
+// (-0.00000044 * (x*x*x*x*x)) - (0.000049 * (x*x*x*x)) + (0.00164 * (x*x*x)) +( 0.0169 * (x*x)) + (1.1815 * x) + 18.912 (+ 1.5) <- 1,5 for motor to spin 5% FASTER
 
 const float minDutyCycle = 16.0;
 const float maxDutyCycle = 66.0;
@@ -122,40 +121,88 @@ const float warnDutyCycle = 80.0;
 
 // x => speedKmh
 void calculateDutyCycle(float x) {
-	float dutyCycle = (-0.00000044 * (x*x*x*x*x)) - (0.000049 * (x*x*x*x)) + (0.00164 * (x*x*x)) +( 0.0169 * (x*x)) + (1.1815 * x) + 18.912;
-	if(dutyCycle <= minDutyCycle) {
+	float dutyCycle = (-0.00000044 * (x * x * x * x * x))
+			- (0.000049 * (x * x * x * x)) + (0.00164 * (x * x * x))
+			+ (0.0169 * (x * x)) + (1.1815 * x) + 18.912 + 3.3; // <- 1.5 for motor to spin 5% FASTER
+	if (dutyCycle <= minDutyCycle) {
 		targetDutyCycle = 0;
-	}
-	else if(dutyCycle > warnDutyCycle) {
+	} else if (dutyCycle > warnDutyCycle) {
 		targetDutyCycle = 0;
-	}
-	else if(dutyCycle > maxDutyCycle && dutyCycle < warnDutyCycle) {
+	} else if (dutyCycle > maxDutyCycle && dutyCycle < warnDutyCycle) {
 		targetDutyCycle = maxDutyCycle;
-	}
-	else targetDutyCycle = dutyCycle;
+	} else
+		targetDutyCycle = dutyCycle;
 }
 
 void updateDutyCycle(void) {
 	TIM1->CCR1 = targetDutyCycle;
 }
 
-
 void resetPas(int inactive) {
-	pasCounter = 0;
 	lastPasResetTick = HAL_GetTick();
 
-	if(inactive) {
-		lastPasResetTick = HAL_GetTick();
+	if (inactive) {
 		pasActive = 0;
-
 		targetDutyCycle = 0.0;
-
+		vWheel = 0.0;  // Reset vWheel only if the bike is inactive
 		TIM1->CCR1 = 0;
+	} else {
+		pasActive = 1;
+		pasCounter = 0;
 	}
-	else pasActive = 1;
 }
 
+void logDebugDegrees(float timeS) {
+	send_string("[DEBUG]: 30 stopni!\r\nczas: ");
 
+	send_float(timeS);
+	send_string("sekund\r\n");
+}
+
+void logDebugVWheel() {
+	send_string("vWheel: ");
+	send_float(vWheel);
+	send_string(" [m/s] ");
+	send_float(vWheel * 3.6);
+	send_string(" [km/h] \r\n");
+}
+
+void logDebugDutyCycle() {
+	send_string("dutyCycle: ");
+	send_float(targetDutyCycle);
+	send_string(" [%] \r\n");
+	send_string("targetDutyCycle: ");
+	send_float(targetDutyCycle);
+	send_string(" [%] \r\n");
+}
+
+void startupAnim() {
+	for(uint8_t i = 0; i<4; i++) {
+	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_15, 1);
+	HAL_Delay(50);
+	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_15, 0);
+	HAL_Delay(50);
+	}
+
+	HAL_Delay(200);
+
+	for(uint8_t i = 0; i<4; i++) {
+	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_15, 1);
+	HAL_Delay(50);
+	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_15, 0);
+	HAL_Delay(50);
+	}
+
+	HAL_Delay(200);
+
+	for(uint8_t i = 0; i<2; i++) {
+	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_15, 1);
+	HAL_Delay(200);
+	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_15, 0);
+	HAL_Delay(200);
+	}
+	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_15, 1);
+}
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 	if (GPIO_Pin == GPIO_PIN_5) {
@@ -201,82 +248,59 @@ int main(void)
   MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
 
-  // inicjalizacja milis
-  lastPasResetTick = HAL_GetTick();
+	// inicjalizacja milis
+	lastPasResetTick = HAL_GetTick();
 
-  // inicjalizacja PWM
-  TIM1->CCR1 = targetDutyCycle;
-  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+	// inicjalizacja PWM
+	TIM1->CCR1 = targetDutyCycle;
+	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+
+	startupAnim();
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, 0);
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 	while (1) {
+		if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_14) == 1) {
+			HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, 1);
+			continue;
+		}
+		else
+			HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, 0);
 
-		// aktualnie jest to z dokladnoscia 360°/12 = 30° ze wzgledu na 12 magnesów.
 		int currTick = HAL_GetTick();
 		float timeS = ((float) currTick - (float) lastPasResetTick) / 1000.0;
 
 		if (pasCounter >= 1) {
-			send_string("[DEBUG]: 30 stopni!\r\nczas: ");
 
+//			 If bike is stationary, wait for 5 PAS counts before updating
+			if (vWheel == 0.0 && pasCounter < 5) {
+				if(pasCounter < 4) lastPasResetTick = HAL_GetTick();
+				continue;
+			}
 
-#ifdef LOG_VERBOSE
-			send_string("\r\n tick: ");
-			send_int(currTick);
-			send_string("\r\n lastTick: ");
-			send_int(lastPasResetTick);
-			send_string("\r\n diffTick: ");
-			send_int(currTick - lastPasResetTick);
-			send_string("\r\n");
-#endif
-
-
-			send_float(timeS);
-			send_string("sekund\r\n");
+			logDebugDegrees(timeS);  // 30 stopni!
 
 			omegaPedals = pasMagnetAngle / timeS;
 			omegaWheel = omegaPedals * pedalGearRatio;
 
-#ifdef LOG_VERBOSE
-			send_string("omegaPedals: ");
-			send_float(omegaPedals);
-			send_string("\r\n");
-
-			send_string("omegaWheel: ");
-			send_float(omegaWheel);
-			send_string("\r\n");
-#endif
-
 			vWheel = omegaWheel * rWheel;
-
-			send_string("vWheel: ");
-			send_float(vWheel);
-			send_string(" [m/s] ");
-			send_float(vWheel * 3.6);
-			send_string(" [km/h] \r\n");
-
+			logDebugVWheel();
 
 			// Duty cycle calc
 			calculateDutyCycle(vWheel * 3.6);
 			updateDutyCycle();
-
-		send_string("dutyCycle: ");
-			send_float(targetDutyCycle);
-			send_string(" [%] \r\n");
-			send_string("targetDutyCycle: ");
-			send_float(targetDutyCycle);
-			send_string(" [%] \r\n");
+			logDebugDutyCycle();
 
 			resetPas(0);
 		}
-		if(timeS > 0.75 && pasActive) {
+		if (timeS > 0.75 && pasActive) {
 			send_string("[DEBUG]: ---- INACTIVE ----\r\n");
-
+			vWheel = 0.0;
 			resetPas(1);
 		}
-
 
     /* USER CODE END WHILE */
 
@@ -451,8 +475,35 @@ static void MX_GPIO_Init(void)
 /* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
+  __HAL_RCC_GPIOA_CLK_ENABLE();
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(REAR_FRONT_LEDS_GPIO_Port, REAR_FRONT_LEDS_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(THR_DIS_GPIO_Port, THR_DIS_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin : REAR_FRONT_LEDS_Pin */
+  GPIO_InitStruct.Pin = REAR_FRONT_LEDS_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(REAR_FRONT_LEDS_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : THR_SWITCH_Pin */
+  GPIO_InitStruct.Pin = THR_SWITCH_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(THR_SWITCH_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : THR_DIS_Pin */
+  GPIO_InitStruct.Pin = THR_DIS_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(THR_DIS_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : PAS_SIGNAL_Pin */
   GPIO_InitStruct.Pin = PAS_SIGNAL_Pin;

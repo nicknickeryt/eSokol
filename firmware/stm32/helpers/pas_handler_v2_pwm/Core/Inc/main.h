@@ -59,8 +59,14 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define REAR_FRONT_LEDS_Pin GPIO_PIN_15
+#define REAR_FRONT_LEDS_GPIO_Port GPIOC
+#define THR_SWITCH_Pin GPIO_PIN_14
+#define THR_SWITCH_GPIO_Port GPIOB
 #define OUT_PWM_Pin GPIO_PIN_8
 #define OUT_PWM_GPIO_Port GPIOA
+#define THR_DIS_Pin GPIO_PIN_3
+#define THR_DIS_GPIO_Port GPIOB
 #define PAS_SIGNAL_Pin GPIO_PIN_5
 #define PAS_SIGNAL_GPIO_Port GPIOB
 #define PAS_SIGNAL_EXTI_IRQn EXTI9_5_IRQn
