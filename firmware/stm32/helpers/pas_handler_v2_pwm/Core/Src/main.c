@@ -23,6 +23,9 @@
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
 #include <string.h>
+
+#include "helpers.h"
+#include "algorithm.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -61,157 +64,14 @@ static void MX_TIM1_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-// DEBUG UART HELPERS
-void send_string(char *s) {
-	HAL_UART_Transmit(&huart1, (uint8_t*) s, strlen(s), 1000);
-}
-
-void send_uint8(uint8_t num) {
-	char buffer[4];
-	sprintf(buffer, "%u", num);
-	send_string(buffer);
-}
-
-void send_int(int num) {
-	char buffer[12];
-	sprintf(buffer, "%d", num);
-	send_string(buffer);
-}
-
-void send_float(float num) {
-	int whole_part = (int) num; // Część całkowita
-	int fractional_part = (int) ((num - whole_part) * 100); // Część ułamkowa do 2 miejsc po przecinku
-
-	if (fractional_part < 0) {
-		fractional_part = -fractional_part; // Dla ujemnych wartości
-	}
-
-	char buffer[20];
-	sprintf(buffer, "%d.%02d", whole_part, fractional_part); // Formatowanie na część całkowitą i ułamkową
-	send_string(buffer); // Wywołanie send_string
-}
-
-// GLOBAL VARS
-
-uint8_t pasCounter = 0;         // counts rising edges of pas signal
-int lastPasResetTick = 0;       // last pas counter reset (at 12 counters)
-const float pedalGearRatio = 2.875; // this is ratio to calculate target speed, 46:16 (pedals gear, wheel gear)
-const float motorGearRatio = 0.5625; // this is ratio to calculate target speed, 9:16 (motor gear, wheel gear)
-
-const float pi = 3.141592;
-const float pasMagnetAngle = (2.0 * pi) / 12.0; // pas angle after which we calculate omega. 2pi/12 is 30° (we have 12 magnets)
-
-const float rWheel = 0.25; 			// wheel radius [m]
-
-float omegaPedals = 0.0;
-float omegaWheel = 0.0;
-float vWheel = 0.0;
-float lastVWheel = 0.0;
-
-float pasActive = 0;
-
-// duty cycle
-float targetDutyCycle = 0.0;
-
-// (-0.00000044 * (x*x*x*x*x)) - (0.000049 * (x*x*x*x)) + (0.00164 * (x*x*x)) +( 0.0169 * (x*x)) + (1.1815 * x) + 18.912 (+ 1.5) <- 1,5 for motor to spin 5% FASTER
-
-const float minDutyCycle = 16.0;
-const float maxDutyCycle = 66.0;
-const float warnDutyCycle = 80.0;
-
-// x => speedKmh
-void calculateDutyCycle(float x) {
-	float dutyCycle = (-0.00000044 * (x * x * x * x * x))
-			- (0.000049 * (x * x * x * x)) + (0.00164 * (x * x * x))
-			+ (0.0169 * (x * x)) + (1.1815 * x) + 18.912 + 3.3; // <- 1.5 for motor to spin 5% FASTER
-	if (dutyCycle <= minDutyCycle) {
-		targetDutyCycle = 0;
-	} else if (dutyCycle > warnDutyCycle) {
-		targetDutyCycle = 0;
-	} else if (dutyCycle > maxDutyCycle && dutyCycle < warnDutyCycle) {
-		targetDutyCycle = maxDutyCycle;
-	} else
-		targetDutyCycle = dutyCycle;
-}
-
-void updateDutyCycle(void) {
-	TIM1->CCR1 = targetDutyCycle;
-}
-
-void resetPas(int inactive) {
-	lastPasResetTick = HAL_GetTick();
-
-	if (inactive) {
-		pasActive = 0;
-		targetDutyCycle = 0.0;
-		vWheel = 0.0;  // Reset vWheel only if the bike is inactive
-		TIM1->CCR1 = 0;
-	} else {
-		pasActive = 1;
-		pasCounter = 0;
-	}
-}
-
-void logDebugDegrees(float timeS) {
-	send_string("[DEBUG]: 30 stopni!\r\nczas: ");
-
-	send_float(timeS);
-	send_string("sekund\r\n");
-}
-
-void logDebugVWheel() {
-	send_string("vWheel: ");
-	send_float(vWheel);
-	send_string(" [m/s] ");
-	send_float(vWheel * 3.6);
-	send_string(" [km/h] \r\n");
-}
-
-void logDebugDutyCycle() {
-	send_string("dutyCycle: ");
-	send_float(targetDutyCycle);
-	send_string(" [%] \r\n");
-	send_string("targetDutyCycle: ");
-	send_float(targetDutyCycle);
-	send_string(" [%] \r\n");
-}
-
-void startupAnim() {
-	for(uint8_t i = 0; i<4; i++) {
-	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_15, 1);
-	HAL_Delay(50);
-	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_15, 0);
-	HAL_Delay(50);
-	}
-
-	HAL_Delay(200);
-
-	for(uint8_t i = 0; i<4; i++) {
-	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_15, 1);
-	HAL_Delay(50);
-	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_15, 0);
-	HAL_Delay(50);
-	}
-
-	HAL_Delay(200);
-
-	for(uint8_t i = 0; i<2; i++) {
-	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_15, 1);
-	HAL_Delay(200);
-	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_15, 0);
-	HAL_Delay(200);
-	}
-	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_15, 1);
-}
+/* Global variables ----------------------------------------------------------*/
+TIM_HandleTypeDef htim1;
+UART_HandleTypeDef huart1;
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
-	if (GPIO_Pin == GPIO_PIN_5) {
-
+	if (GPIO_Pin == GPIO_PIN_5)
 		pasCounter++;
 
-		// lub od razu liczymy omege, ale pamietajmy o tym, by byly co najmniej 2 cykle
-		// od jakichs 5 sekund, jak w ciagu 5 sekund nie ma interrupta, resetujemy wszystki i czekamy na 2 w counterze
-	}
 }
 
 /* USER CODE END 0 */
@@ -247,60 +107,17 @@ int main(void)
   MX_USART1_UART_Init();
   MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
-
-	// inicjalizacja milis
-	lastPasResetTick = HAL_GetTick();
-
-	// inicjalizacja PWM
-	TIM1->CCR1 = targetDutyCycle;
-	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
-
-	startupAnim();
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, 0);
+	init();
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 	while (1) {
-		if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_14) == 1) {
-			HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, 1);
+		float timeS = ((float) HAL_GetTick() - (float) lastPasResetTick) / 1000.0;
+
+		if (!runAlgorithm(timeS))
 			continue;
-		}
-		else
-			HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, 0);
-
-		int currTick = HAL_GetTick();
-		float timeS = ((float) currTick - (float) lastPasResetTick) / 1000.0;
-
-		if (pasCounter >= 1) {
-
-//			 If bike is stationary, wait for 5 PAS counts before updating
-			if (vWheel == 0.0 && pasCounter < 5) {
-				if(pasCounter < 4) lastPasResetTick = HAL_GetTick();
-				continue;
-			}
-
-			logDebugDegrees(timeS);  // 30 stopni!
-
-			omegaPedals = pasMagnetAngle / timeS;
-			omegaWheel = omegaPedals * pedalGearRatio;
-
-			vWheel = omegaWheel * rWheel;
-			logDebugVWheel();
-
-			// Duty cycle calc
-			calculateDutyCycle(vWheel * 3.6);
-			updateDutyCycle();
-			logDebugDutyCycle();
-
-			resetPas(0);
-		}
-		if (timeS > 0.75 && pasActive) {
-			send_string("[DEBUG]: ---- INACTIVE ----\r\n");
-			vWheel = 0.0;
-			resetPas(1);
-		}
 
     /* USER CODE END WHILE */
 
@@ -378,7 +195,7 @@ static void MX_TIM1_Init(void)
   htim1.Instance = TIM1;
   htim1.Init.Prescaler = 72-1;
   htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim1.Init.Period = 100-1;
+  htim1.Init.Period = 1000-1;
   htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim1.Init.RepetitionCounter = 0;
   htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;

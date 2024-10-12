@@ -1,0 +1,13 @@
+../Core/Src/helpers.c:27:6:init	1
+../Core/Src/helpers.c:37:6:send_string	1
+../Core/Src/helpers.c:41:6:send_uint8	1
+../Core/Src/helpers.c:47:6:send_int	1
+../Core/Src/helpers.c:53:6:send_float	2
+../Core/Src/helpers.c:66:6:logDebugDegrees	1
+../Core/Src/helpers.c:73:6:logDebugVWheel	1
+../Core/Src/helpers.c:81:6:logDebugDutyCycle	1
+../Core/Src/helpers.c:90:6:logDebugInactive	1
+../Core/Src/helpers.c:94:6:updateDutyCycle	1
+../Core/Src/helpers.c:99:6:resetPas	2
+../Core/Src/helpers.c:114:6:startupAnim	4
+../Core/Src/helpers.c:141:6:checkSwitches	2
