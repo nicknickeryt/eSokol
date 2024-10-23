@@ -5155,6 +5155,16 @@
 	)
 	(wire
 		(pts
+			(xy 177.8 93.98) (xy 181.61 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2236c682-ca5c-4fa7-8b23-92aff1f6e4e8")
+	)
+	(wire
+		(pts
 			(xy 246.38 85.09) (xy 250.19 85.09)
 		)
 		(stroke
@@ -6228,6 +6238,29 @@
 			)
 		)
 		(uuid "f3c01ea8-eaf5-4087-a761-bd979be553df")
+	)
+	(global_label "THR_SPORT"
+		(shape output)
+		(at 181.61 93.98 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+				(color 204 102 0 1)
+			)
+			(justify left)
+		)
+		(uuid "0064b8aa-42c9-4f63-978f-3a7440738a11")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 195.1785 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
 	)
 	(global_label "BAT_SENSE"
 		(shape output)
@@ -9668,6 +9701,73 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:R")
+		(at 36.83 161.29 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "edda65d2-8b3e-4443-8f28-14e4d92625bf")
+		(property "Reference" "R35"
+			(at 32.385 159.893 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "220"
+			(at 32.512 162.306 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 35.052 161.29 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 36.83 161.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 36.83 161.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "698511c8-2d1c-4b1b-8667-9ad420b9396f")
+		)
+		(pin "2"
+			(uuid "443c9269-5dec-413a-aee4-d9465d90c605")
+		)
+		(instances
+			(project ""
+				(path "/44b9e6ec-08e4-4361-b4b8-e7c9cf0a26a7/f565501d-a817-4ef9-831d-033eb352bbe6"
+					(reference "R35")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:C")
 		(at 160.02 50.8 90)
 		(unit 1)
@@ -9730,73 +9830,6 @@
 			(project ""
 				(path "/44b9e6ec-08e4-4361-b4b8-e7c9cf0a26a7/f565501d-a817-4ef9-831d-033eb352bbe6"
 					(reference "C11")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R")
-		(at 36.83 161.29 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "edda65d2-8b3e-4443-8f28-14e4d92625bf")
-		(property "Reference" "R35"
-			(at 32.385 159.893 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "220"
-			(at 32.512 162.306 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 35.052 161.29 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 36.83 161.29 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Resistor"
-			(at 36.83 161.29 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "698511c8-2d1c-4b1b-8667-9ad420b9396f")
-		)
-		(pin "2"
-			(uuid "443c9269-5dec-413a-aee4-d9465d90c605")
-		)
-		(instances
-			(project ""
-				(path "/44b9e6ec-08e4-4361-b4b8-e7c9cf0a26a7/f565501d-a817-4ef9-831d-033eb352bbe6"
-					(reference "R35")
 					(unit 1)
 				)
 			)
