@@ -5,16 +5,16 @@
  *      Author: nick
  */
 
-#ifndef INC_ALGORITHM_H_
-#define INC_ALGORITHM_H_
+#ifndef __ALGORITHM_H_
+#define __ALGORITHM_H_
 
 #include <stdint.h>
 #include <stdbool.h>
 
-#define ALGORITHM_EQ_COMPONENT 	2.5
+#define ALGORITHM_EQ_COMPONENT 	2.8
 #define ALGORITHM_EQ_FACTOR		1.1
 
 void calculateDutyCycle(float x);
 bool runAlgorithm();
 
-#endif /* INC_ALGORITHM_H_ */
+#endif /* __ALGORITHM_H_ */

@@ -63,6 +63,15 @@ void Error_Handler(void);
 #define BLINK_GPIO_Port GPIOC
 #define FRONT_COLD_Pin GPIO_PIN_15
 #define FRONT_COLD_GPIO_Port GPIOC
+#define FRONT_WARM_Pin GPIO_PIN_2
+#define FRONT_WARM_GPIO_Port GPIOA
+#define SPEAKER_PWM_Pin GPIO_PIN_6
+#define SPEAKER_PWM_GPIO_Port GPIOA
+#define THR_SPORT_Pin GPIO_PIN_1
+#define THR_SPORT_GPIO_Port GPIOB
+#define BT_STATE_Pin GPIO_PIN_12
+#define BT_STATE_GPIO_Port GPIOB
+#define BT_STATE_EXTI_IRQn EXTI15_10_IRQn
 #define REAR_LED_Pin GPIO_PIN_13
 #define REAR_LED_GPIO_Port GPIOB
 #define THR_SWITCH_Pin GPIO_PIN_14
@@ -80,6 +89,7 @@ void Error_Handler(void);
 
 /* Global variables ----------------------------------------------------------*/
 extern TIM_HandleTypeDef htim1;
+extern TIM_HandleTypeDef htim3;
 extern UART_HandleTypeDef huart1;
 
 /* USER CODE END Private defines */
