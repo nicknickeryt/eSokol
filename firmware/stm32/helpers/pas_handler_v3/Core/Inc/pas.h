@@ -2,7 +2,7 @@
  * pas.h
  *
  * Contains pedal assist sensor helpers
- * 
+ *
  *  Created on: Oct 27, 2024
  *      Author: nick
  */

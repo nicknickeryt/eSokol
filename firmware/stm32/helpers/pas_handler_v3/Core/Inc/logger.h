@@ -2,7 +2,7 @@
  * logger.h
  *
  * Contains logging utilities
- * 
+ *
  *  Created on: Oct 27, 2024
  *      Author: nick
  */

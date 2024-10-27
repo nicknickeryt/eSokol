@@ -38,7 +38,6 @@ uint32_t sound_off[] = {
 uint32_t sound_off_dur[] = {
     125, 62};
 
-
 uint32_t presForFrequency(uint32_t frequency)
 {
     return frequency == 0 ? 0 : (TIM3_FREQ / (1000 * frequency));
@@ -68,35 +67,40 @@ void startToneSequence(uint32_t *tone, uint32_t *duration, uint32_t size)
 
 void processTone()
 {
-    if (currentToneSequence == NULL || currentIndex >= sequenceSize) {
+    if (currentToneSequence == NULL || currentIndex >= sequenceSize)
+    {
         return; // Brak sekwencji lub zakończenie odtwarzania
     }
 
     uint32_t now = HAL_GetTick();
 
     // Sprawdzamy, czy czas trwania tonu upłynął
-    if (isToneActive && (now - toneStartTime >= currentDurationSequence[currentIndex])) {
-        noTone();  // Zatrzymujemy ton
+    if (isToneActive && (now - toneStartTime >= currentDurationSequence[currentIndex]))
+    {
+        noTone();         // Zatrzymujemy ton
         isToneActive = 0; // Przechodzimy do pauzy
         currentIndex++;
     }
 
     // Rozpoczynamy nowy ton
-    if (!isToneActive && currentIndex < sequenceSize) {
+    if (!isToneActive && currentIndex < sequenceSize)
+    {
         int frequency = currentToneSequence[currentIndex];
-        if (frequency > 0) {
+        if (frequency > 0)
+        {
             int prescaler = presForFrequency(frequency);
             __HAL_TIM_SET_PRESCALER(&htim3, prescaler);
             toneStartTime = HAL_GetTick(); // Ustawienie nowego czasu startu
             isToneActive = 1;
-        } else {
+        }
+        else
+        {
             // Jeśli częstotliwość to 0, pauzujemy bez dźwięku
             toneStartTime = HAL_GetTick();
             isToneActive = 1;
         }
     }
 }
-
 
 void playTone(uint8_t number)
 {
@@ -122,9 +126,9 @@ void playTone(uint8_t number)
     }
 }
 
-void playToggleSound(bool state) {
-    
-	uint8_t tone = state == true ? SOUND_ON : SOUND_OFF;
-    playTone(tone);
+void playToggleSound(bool state)
+{
 
+    uint8_t tone = state == true ? SOUND_ON : SOUND_OFF;
+    playTone(tone);
 }
