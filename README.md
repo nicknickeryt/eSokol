@@ -1,5 +1,5 @@
 # eSokół
-The cheapest possible open source electric bike project built around MY1016Z2 motor and STM32.\
+The cheapest possible open source electric bike project built around MY1016Z2 motor and WeAct BlackPill STM32F401CCU6 microcontroller board.\
 This is stil WIP. Images and details soon!\
 \
 [image]\
