@@ -58,4 +58,6 @@ void resetDutyCycle(void);
 void updateDutyCycle(void);
 void resetPas(bool inactive);
 
+void processDummyVelocityData(void);
+
 #endif /* __HELPERS_H */

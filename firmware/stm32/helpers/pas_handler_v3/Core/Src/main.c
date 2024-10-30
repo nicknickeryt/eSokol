@@ -130,9 +130,6 @@ int main(void)
   MX_USART1_UART_Init();
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
-  HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
-  /* Initialize all configured peripherals */
-  HAL_UARTEx_ReceiveToIdle_IT(&huart1, rxBuffer, 16);
 
   bikeInit();
   /* USER CODE END 2 */
@@ -147,6 +144,7 @@ int main(void)
     processTone();
     processAnimation();
     blink1S();
+    processDummyVelocityData();
 
     if (!runAlgorithm())
       continue;
@@ -258,6 +256,10 @@ static void MX_TIM1_Init(void)
   sConfigOC.OCIdleState = TIM_OCIDLESTATE_RESET;
   sConfigOC.OCNIdleState = TIM_OCNIDLESTATE_RESET;
   if (HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_4) != HAL_OK)
   {
     Error_Handler();
   }
@@ -388,20 +390,21 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, BLINK_Pin|FRONT_COLD_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(BLINK_GPIO_Port, BLINK_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(FRONT_WARM_GPIO_Port, FRONT_WARM_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, THR_SPORT_Pin|REAR_LED_Pin|THR_SWITCH_Pin|THR_DIS_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, BULBS_Pin|THR_SPORT_Pin|REAR_LED_Pin|THR_SWITCH_Pin
+                          |THR_DIS_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : BLINK_Pin FRONT_COLD_Pin */
-  GPIO_InitStruct.Pin = BLINK_Pin|FRONT_COLD_Pin;
+  /*Configure GPIO pin : BLINK_Pin */
+  GPIO_InitStruct.Pin = BLINK_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+  HAL_GPIO_Init(BLINK_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : FRONT_WARM_Pin */
   GPIO_InitStruct.Pin = FRONT_WARM_Pin;
@@ -410,8 +413,10 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(FRONT_WARM_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : THR_SPORT_Pin REAR_LED_Pin THR_SWITCH_Pin THR_DIS_Pin */
-  GPIO_InitStruct.Pin = THR_SPORT_Pin|REAR_LED_Pin|THR_SWITCH_Pin|THR_DIS_Pin;
+  /*Configure GPIO pins : BULBS_Pin THR_SPORT_Pin REAR_LED_Pin THR_SWITCH_Pin
+                           THR_DIS_Pin */
+  GPIO_InitStruct.Pin = BULBS_Pin|THR_SPORT_Pin|REAR_LED_Pin|THR_SWITCH_Pin
+                          |THR_DIS_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
