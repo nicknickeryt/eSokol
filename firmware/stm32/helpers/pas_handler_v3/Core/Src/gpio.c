@@ -19,10 +19,6 @@ void writePin(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin, bool newState)
 {
     switch (GPIO_Pin)
     {
-    case FRONT_COLD_Pin:
-        if (GPIOx == FRONT_COLD_GPIO_Port)
-            frontColdEnabled = newState;
-        break;
     case FRONT_WARM_Pin:
         if (GPIOx == FRONT_WARM_GPIO_Port)
             frontWarmEnabled = newState;
@@ -38,6 +34,10 @@ void writePin(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin, bool newState)
     case THR_SPORT_Pin:
         if (GPIOx == THR_SPORT_GPIO_Port)
             sportModeDisabled = newState;
+        break;
+    case BULBS_Pin:
+        if (GPIOx == BULBS_GPIO_Port)
+            bulbsEnabled = newState;  
         break;
     default:
         break;

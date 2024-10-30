@@ -18,22 +18,38 @@ typedef struct
 	void (*action)(void);
 } Command;
 
-extern Command commands[8];
+typedef struct
+{
+	const char *command;
+	void (*action)(uint16_t arg);
+} VariableCommand;
+
+extern Command commands[9];
+
+extern VariableCommand variableCommands[1];
 
 extern bool frontColdEnabled;
+extern uint16_t frontColdBrightness;
 extern bool frontWarmEnabled;
 extern bool rearEnabled;
 extern bool throttleEnabled;
 extern bool sportModeDisabled;
 extern bool soundEnabled;
+extern bool bulbsEnabled;
 
 void animStart(void);
 void toggleFrontC(void);
+void toggleFrontCNoSound(void); // TODO CHANGE THIS AAAA
+void enableFrontCNoSound();
+void disableFrontCNoSound();
+void setFrontColdBrightness(uint16_t brightness);
 void toggleFrontW(void);
 void toggleRearLED(void);
 void toggleThrottle(void);
 void toggleSportMode(void);
 void toggleSound(void);
+void toggleBulbs(void);
+
 void sendStatus(void);
 
 #endif /* __COMMANDS_H */

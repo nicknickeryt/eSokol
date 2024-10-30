@@ -61,12 +61,12 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define BLINK_Pin GPIO_PIN_13
 #define BLINK_GPIO_Port GPIOC
-#define FRONT_COLD_Pin GPIO_PIN_15
-#define FRONT_COLD_GPIO_Port GPIOC
 #define FRONT_WARM_Pin GPIO_PIN_2
 #define FRONT_WARM_GPIO_Port GPIOA
 #define SPEAKER_PWM_Pin GPIO_PIN_6
 #define SPEAKER_PWM_GPIO_Port GPIOA
+#define BULBS_Pin GPIO_PIN_0
+#define BULBS_GPIO_Port GPIOB
 #define THR_SPORT_Pin GPIO_PIN_1
 #define THR_SPORT_GPIO_Port GPIOB
 #define BT_STATE_Pin GPIO_PIN_12
@@ -78,6 +78,8 @@ void Error_Handler(void);
 #define THR_SWITCH_GPIO_Port GPIOB
 #define OUT_PWM_Pin GPIO_PIN_8
 #define OUT_PWM_GPIO_Port GPIOA
+#define FRONT_COLD_PWM_Pin GPIO_PIN_11
+#define FRONT_COLD_PWM_GPIO_Port GPIOA
 #define THR_DIS_Pin GPIO_PIN_3
 #define THR_DIS_GPIO_Port GPIOB
 #define PAS_SIGNAL_Pin GPIO_PIN_5

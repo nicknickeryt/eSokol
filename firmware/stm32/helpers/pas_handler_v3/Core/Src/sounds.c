@@ -8,6 +8,7 @@
  */
 
 #include "main.h"
+#include "commands.h"
 #include "sounds.h"
 #include "helpers.h"
 
@@ -104,6 +105,7 @@ void processTone()
 
 void playTone(uint8_t number)
 {
+    if(!soundEnabled) return;
     switch (number)
     {
     case 1:

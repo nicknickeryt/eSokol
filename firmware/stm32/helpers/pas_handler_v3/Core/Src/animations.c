@@ -14,6 +14,7 @@
 #include "helpers.h"
 #include "gpio.h"
 #include "uart.h"
+#include "commands.h"
 
 #include "stm32f4xx_hal.h"
 
@@ -48,7 +49,7 @@ void processAnimation()
 	case ANIM_STARTUP_PHASE1:
 		if (now - animStartTime >= 30)
 		{
-			togglePin(FRONT_COLD_GPIO_Port, FRONT_COLD_Pin);
+			toggleFrontCNoSound();
 			togglePin(REAR_LED_GPIO_Port, REAR_LED_Pin);
 			animStep++;
 			animStartTime = now;
@@ -64,7 +65,7 @@ void processAnimation()
 	case ANIM_STARTUP_PHASE2:
 		if (now - animStartTime >= 75)
 		{
-			togglePin(FRONT_COLD_GPIO_Port, FRONT_COLD_Pin);
+			toggleFrontCNoSound();
 			togglePin(REAR_LED_GPIO_Port, REAR_LED_Pin);
 			animStep++;
 			animStartTime = now;
@@ -80,7 +81,7 @@ void processAnimation()
 	case ANIM_STARTUP_PHASE3:
 		if (now - animStartTime >= 250)
 		{
-			togglePin(FRONT_COLD_GPIO_Port, FRONT_COLD_Pin);
+			toggleFrontCNoSound();
 			togglePin(REAR_LED_GPIO_Port, REAR_LED_Pin);
 			animStep++;
 			animStartTime = now;
@@ -88,7 +89,7 @@ void processAnimation()
 			if (animStep >= 2)
 			{
 				currentAnimState = ANIM_IDLE;
-				writePin(FRONT_COLD_GPIO_Port, FRONT_COLD_Pin, 1);
+				enableFrontCNoSound();
 				writePin(REAR_LED_GPIO_Port, REAR_LED_Pin, 1);
 				shouldSendStatus = true;
 			}
@@ -98,7 +99,7 @@ void processAnimation()
 	case ANIM_CONNECTED:
 		if (now - animStartTime >= 75)
 		{
-			togglePin(FRONT_COLD_GPIO_Port, FRONT_COLD_Pin);
+			toggleFrontCNoSound();
 			togglePin(REAR_LED_GPIO_Port, REAR_LED_Pin);
 			animStep++;
 			animStartTime = now;
@@ -106,7 +107,7 @@ void processAnimation()
 			if (animStep >= 5)
 			{
 				currentAnimState = ANIM_IDLE;
-				writePin(FRONT_COLD_GPIO_Port, FRONT_COLD_Pin, 0);
+				disableFrontCNoSound();
 				writePin(REAR_LED_GPIO_Port, REAR_LED_Pin, 0);
 				shouldSendStatus = true;
 			}
@@ -116,7 +117,7 @@ void processAnimation()
 	case ANIM_DISCONNECTED:
 		if (now - animStartTime >= 30)
 		{
-			togglePin(FRONT_COLD_GPIO_Port, FRONT_COLD_Pin);
+			toggleFrontCNoSound();
 			togglePin(REAR_LED_GPIO_Port, REAR_LED_Pin);
 			animStep++;
 			animStartTime = now;
@@ -124,21 +125,23 @@ void processAnimation()
 			if (animStep >= 10)
 			{
 				currentAnimState = ANIM_IDLE;
-				writePin(FRONT_COLD_GPIO_Port, FRONT_COLD_Pin, 0);
+				disableFrontCNoSound();
 				writePin(REAR_LED_GPIO_Port, REAR_LED_Pin, 0);
 			}
 		}
 		break;
 
+	
 	case ANIM_BLINK_DISCONNECTED:
 		if (now - animStartTime >= 1000)
 		{
-			togglePin(FRONT_COLD_GPIO_Port, FRONT_COLD_Pin);
+			toggleFrontCNoSound();
 			togglePin(REAR_LED_GPIO_Port, REAR_LED_Pin);
 			animStartTime = now;
 		}
 		break;
 	}
+
 }
 
 void blink1S()

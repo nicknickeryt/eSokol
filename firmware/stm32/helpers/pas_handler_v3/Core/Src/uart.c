@@ -38,6 +38,18 @@ void handleRxInterrupt(UART_HandleTypeDef *huart, uint16_t size)
 			break;
 		}
 	}
+
+	// FIXME well that is currently done terribly wrong
+	for (uint32_t i = 0; i < sizeof(variableCommands) / sizeof(VariableCommand); i++)
+	{
+		if (strncmp((char *)rxBuffer, variableCommands[i].command, strlen(variableCommands[i].command)) == 0)
+		{
+			uint16_t arg = (rxBuffer[10] - '0') * 100 + (rxBuffer[11] - '0') * 10 + (rxBuffer[12] - '0');
+			variableCommands[i].action(arg);
+			break;
+		}
+	}
+
 	HAL_UARTEx_ReceiveToIdle_IT(huart, rxBuffer, sizeof(rxBuffer));
 }
 
