@@ -36,12 +36,12 @@ VariableCommand variableCommands[] = {
 
 // bike controls/statuses/features/idk
 bool frontColdEnabled = false;
-uint16_t frontColdBrightness = 5;    // [0,999] 
+uint16_t frontColdBrightness = 75;    // [0,999] 
 bool frontWarmEnabled = false;
 bool rearEnabled = false;
 bool throttleEnabled = false;
 bool sportModeDisabled = true;
-bool soundEnabled = false;
+bool soundEnabled = true;
 bool bulbsEnabled = false;
 
 void animStart()
