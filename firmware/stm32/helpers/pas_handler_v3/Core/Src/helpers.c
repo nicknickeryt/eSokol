@@ -29,9 +29,9 @@ void bikeInit()
 	TIM1->CCR1 = targetDutyCycle;
 	TIM1->CCR4 = 500;
 
-	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);	// OUT_PWM
-	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_4);   // FRONT_COLD_PWM
-	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);   // SOUND
+	HAL_TIM_PWM_Start(TIM_THROTTLE_LEDS, TIM_CHANNEL_1);	// OUT_PWM
+	HAL_TIM_PWM_Start(TIM_THROTTLE_LEDS, TIM_CHANNEL_4);   // FRONT_COLD_PWM
+	HAL_TIM_PWM_Start(TIM_SOUND, TIM_CHANNEL_1);   // SOUND
 
 	playAnim(ANIM_STARTUP_PHASE1);
 	writePin(GPIOB, GPIO_PIN_3, 0); // Throttle default disabled

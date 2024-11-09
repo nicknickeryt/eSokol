@@ -19,10 +19,10 @@
 
 // #define DEBUG_ENABLED            // enabled algorithm & friends debug mode
 
-#define PWM_THROTTLE &htim1
-#define PWM_SOUND &htim3
+#define TIM_THROTTLE_LEDS &htim1
+#define TIM_SOUND &htim3
 #define PWM_ENABLED 1
-#define PWM_DISABLED 1
+#define PWM_DISABLED 0
 
 extern uint8_t pasCounter;
 extern int lastPasResetTick;

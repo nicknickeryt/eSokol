@@ -16,6 +16,7 @@
 #include "sounds.h"
 #include "gpio.h"
 #include "logger.h"
+#include "pas.h"
 
 Command commands[9] = {
     {"eskl_animStart\r\n", animStart},
@@ -51,7 +52,7 @@ void animStart()
 }
 
 uint16_t frontColdBrightnessToDutyCycle() {
-    return frontColdBrightness;
+    return frontColdBrightness * (1000/DUTY_PWM_MAX_CCR1);        // cnt is 10000
 }
 
 void toggleFrontC()
@@ -100,7 +101,7 @@ void toggleRearLED()
 void toggleThrottle()
 {
     togglePin(THR_DIS_GPIO_Port, THR_DIS_Pin);
-    togglePWM(PWM_THROTTLE, !throttleEnabled);
+    togglePWM(TIM_THROTTLE_LEDS, !throttleEnabled);
     playToggleSound(throttleEnabled);
 }
 
@@ -120,7 +121,7 @@ void toggleSound()
 {
     soundEnabled = !soundEnabled;
     playToggleSound(soundEnabled);
-    togglePWM(PWM_SOUND, soundEnabled);
+    togglePWM(TIM_SOUND, soundEnabled);
 }
 
 /* status format: eskl_stABCDEFGHHH

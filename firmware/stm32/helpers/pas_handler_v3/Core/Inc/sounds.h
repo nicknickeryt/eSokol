@@ -13,6 +13,7 @@
 #include <stdbool.h>
 
 #define TIM3_FREQ 84000000
+#define TIM3_MAX_CNT  1000
 
 #define SOUND_MARIO 1
 

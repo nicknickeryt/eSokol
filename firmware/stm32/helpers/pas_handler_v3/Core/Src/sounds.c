@@ -41,12 +41,12 @@ uint32_t sound_off_dur[] = {
 
 uint32_t presForFrequency(uint32_t frequency)
 {
-    return frequency == 0 ? 0 : (TIM3_FREQ / (1000 * frequency));
+    return frequency == 0 ? 0 : (TIM3_FREQ / (TIM3_MAX_CNT * frequency));
 }
 
 void noTone()
 {
-    __HAL_TIM_SET_PRESCALER(&htim3, 0);
+    __HAL_TIM_SET_PRESCALER(TIM_SOUND, 0);
 }
 
 // Deklaracja zmiennych globalnych dla sekwencji dźwięków
@@ -90,7 +90,7 @@ void processTone()
         if (frequency > 0)
         {
             int prescaler = presForFrequency(frequency);
-            __HAL_TIM_SET_PRESCALER(&htim3, prescaler);
+            __HAL_TIM_SET_PRESCALER(TIM_SOUND, prescaler);
             toneStartTime = HAL_GetTick(); // Ustawienie nowego czasu startu
             isToneActive = 1;
         }
