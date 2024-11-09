@@ -59,9 +59,6 @@ void togglePWM(TIM_HandleTypeDef *htim, bool state)
 }
 
 
-
-
-
 static uint32_t seed = 1; 
 uint32_t timeDummyVelocity = 0;
 
