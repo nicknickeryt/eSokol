@@ -205,53 +205,6 @@
 		)
 	)
 	(sheet
-		(at 40.64 130.81)
-		(size 31.75 29.21)
-		(fields_autoplaced yes)
-		(stroke
-			(width 0.1524)
-			(type solid)
-		)
-		(fill
-			(color 0 0 0 0.0000)
-		)
-		(uuid "b63e7a33-8411-45b1-b6a7-2dce3da20f8d")
-		(property "Sheetname" "OLED"
-			(at 40.64 130.0984 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left bottom)
-			)
-		)
-		(property "Sheetfile" "oled.kicad_sch"
-			(at 40.64 160.6046 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Pole2" ""
-			(at 40.64 130.81 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(instances
-			(project "eSokol"
-				(path "/44b9e6ec-08e4-4361-b4b8-e7c9cf0a26a7"
-					(page "8")
-				)
-			)
-		)
-	)
-	(sheet
 		(at 100.33 137.16)
 		(size 27.94 19.05)
 		(fields_autoplaced yes)
