@@ -11,8 +11,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#define ALGORITHM_EQ_COMPONENT 2.8
-#define ALGORITHM_EQ_FACTOR 1.1
+#define ALGORITHM_EQ_COMPONENT -1.0
+#define ALGORITHM_EQ_FACTOR 1.05
 
 void calculateDutyCycle(float x);
 bool runAlgorithm();
