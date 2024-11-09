@@ -22,7 +22,7 @@ char *currentMessage = "eskl_initCompl\r\n";
 
 bool shouldSendStatus = false;
 
-uint16_t shouldSendStatus1sTime = 0;
+uint32_t shouldSendStatus1sTime = 0;
 bool shouldSendStatus1s = false;
 
 void handleRxInterrupt(UART_HandleTypeDef *huart, uint16_t size)
