@@ -22,6 +22,9 @@ char *currentMessage = "eskl_initCompl\r\n";
 
 bool shouldSendStatus = false;
 
+uint16_t shouldSendStatus1sTime = 0;
+bool shouldSendStatus1s = false;
+
 void handleRxInterrupt(UART_HandleTypeDef *huart, uint16_t size)
 {
 	if (huart != &huart1 || size == 0)
@@ -55,9 +58,17 @@ void handleRxInterrupt(UART_HandleTypeDef *huart, uint16_t size)
 
 void processSendStatus()
 {
-	if (shouldSendStatus)
+	sendStatus1s();
+	if (shouldSendStatus || shouldSendStatus1s)
 	{
-		shouldSendStatus = false;
+		shouldSendStatus = false, shouldSendStatus1s = false;
 		sendStatus();
 	}
+}
+
+void sendStatus1s()
+{
+	shouldSendStatus1s = HAL_GetTick() - shouldSendStatus1sTime > 1000;
+	if (shouldSendStatus1s)
+		shouldSendStatus1sTime = HAL_GetTick();
 }
