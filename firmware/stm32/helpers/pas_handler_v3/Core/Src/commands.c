@@ -34,6 +34,7 @@ VariableCommand variableCommands[] = {
     {"eskl_bri__", setFrontColdBrightness}
 };
 
+char *statusMessage;
 
 // bike controls/statuses/features/idk
 bool frontColdEnabled = false;
@@ -44,6 +45,10 @@ bool throttleEnabled = false;
 bool sportModeDisabled = true;
 bool soundEnabled = true;
 bool bulbsEnabled = false;
+
+void initStatusMessage() {
+    statusMessage = (char *)malloc(21 * sizeof(char));
+}
 
 void animStart()
 {
@@ -136,7 +141,6 @@ void toggleSound()
  */
 void sendStatus()
 {
-    char *statusMessage = (char *)malloc(21 * sizeof(char));
     char frontColdBrightnessHundreds = (frontColdBrightness / 100) + '0';
     char frontColdBrightnessTens = ((frontColdBrightness / 10) % 10) + '0';
     char frontColdBrightnessUnits = (frontColdBrightness % 10) + '0';

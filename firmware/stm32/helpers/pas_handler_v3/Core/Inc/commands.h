@@ -37,6 +37,7 @@ extern bool sportModeDisabled;
 extern bool soundEnabled;
 extern bool bulbsEnabled;
 
+void initStatusMessage(void);
 void animStart(void);
 void toggleFrontC(void);
 void toggleFrontCNoSound(void); // TODO CHANGE THIS AAAA
