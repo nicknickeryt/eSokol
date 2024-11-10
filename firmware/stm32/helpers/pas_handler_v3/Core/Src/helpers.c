@@ -20,6 +20,12 @@
 
 bool bluetoothConnected = 0;
 
+char *velocityBuffer;
+
+void initVelocityBuffer() {
+	 velocityBuffer = (char *)malloc(18 * sizeof(char));
+}
+
 void bikeInit()
 {
 	HAL_UARTEx_ReceiveToIdle_IT(&huart1, rxBuffer, 16);
@@ -41,6 +47,7 @@ void bikeInit()
 		bluetoothConnected = true;
 
 	initStatusMessage();
+	initVelocityBuffer();
 	playTone(2);
 }
 
@@ -75,10 +82,8 @@ void processDummyVelocityData()
 	timeDummyVelocity = HAL_GetTick();
     uint8_t velocity = generateRandomNum();
 
-    char *dummyData = (char *)malloc(18 * sizeof(char));
-
-    sprintf(dummyData, "eskl_evel%d\r\n",
+    sprintf(velocityBuffer, "eskl_evel%d\r\n",
             velocity);
 
-    send_string(dummyData);
+    send_string(velocityBuffer);
 }
