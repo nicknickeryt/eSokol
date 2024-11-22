@@ -10,9 +10,9 @@
 #ifndef __GPIO_H
 #define __GPIO_H
 
+#include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
-#include <stdbool.h>
 #include <string.h>
 
 #include "stm32f4xx_hal.h"

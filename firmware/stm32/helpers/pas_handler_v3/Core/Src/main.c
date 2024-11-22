@@ -153,7 +153,8 @@ int main(void) {
     blink1S();
     processDummyVelocityData();
 
-    if (!runAlgorithm()) continue;
+    if (!runAlgorithm())
+      continue;
 
     /* USER CODE END WHILE */
 

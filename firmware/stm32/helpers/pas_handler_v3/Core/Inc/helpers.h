@@ -10,9 +10,9 @@
 #ifndef __HELPERS_H
 #define __HELPERS_H
 
+#include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
-#include <stdbool.h>
 #include <string.h>
 
 #include "stm32f4xx_hal.h"

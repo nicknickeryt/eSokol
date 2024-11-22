@@ -11,9 +11,10 @@
 #define __SOUNDS_H
 
 #include <stdbool.h>
+#include <stdint.h>
 
 #define TIM3_FREQ 84000000
-#define TIM3_MAX_CNT  1000
+#define TIM3_MAX_CNT 1000
 
 #define SOUND_MARIO 1
 
@@ -26,7 +27,7 @@
 uint32_t presForFrequency(uint32_t frequency);
 void noTone(void);
 
-void startToneSequence(uint32_t *tone, uint32_t *duration, uint32_t size);
+void startToneSequence(uint32_t* tone, uint32_t* duration, uint32_t size);
 void processTone();
 
 void playTone(uint8_t number);

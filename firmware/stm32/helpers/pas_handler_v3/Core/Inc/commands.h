@@ -11,17 +11,16 @@
 #define __COMMANDS_H
 
 #include <stdbool.h>
+#include <stdint.h>
 
-typedef struct
-{
-	const char *command;
-	void (*action)(void);
+typedef struct {
+  const char *command;
+  void (*action)(void);
 } Command;
 
-typedef struct
-{
-	const char *command;
-	void (*action)(uint16_t arg);
+typedef struct {
+  const char *command;
+  void (*action)(uint16_t arg);
 } VariableCommand;
 
 extern Command commands[9];
@@ -40,7 +39,7 @@ extern bool bulbsEnabled;
 void initStatusMessage(void);
 void animStart(void);
 void toggleFrontC(void);
-void toggleFrontCNoSound(void); // TODO CHANGE THIS AAAA
+void toggleFrontCNoSound(void);  // TODO CHANGE THIS AAAA
 void enableFrontCNoSound();
 void disableFrontCNoSound();
 void setFrontColdBrightness(uint16_t brightness);

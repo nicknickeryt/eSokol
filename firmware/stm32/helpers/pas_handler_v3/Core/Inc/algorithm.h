@@ -8,8 +8,8 @@
 #ifndef __ALGORITHM_H_
 #define __ALGORITHM_H_
 
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
 
 #define ALGORITHM_EQ_COMPONENT -1.0
 #define ALGORITHM_EQ_FACTOR 1.05
