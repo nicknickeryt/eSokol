@@ -85,6 +85,9 @@ void Error_Handler(void);
 #define PAS_SIGNAL_Pin GPIO_PIN_5
 #define PAS_SIGNAL_GPIO_Port GPIOB
 #define PAS_SIGNAL_EXTI_IRQn EXTI9_5_IRQn
+#define HALL_SPEED_Pin GPIO_PIN_9
+#define HALL_SPEED_GPIO_Port GPIOB
+#define HALL_SPEED_EXTI_IRQn EXTI9_5_IRQn
 
 /* USER CODE BEGIN Private defines */
 
