@@ -51,7 +51,6 @@ void resetPas(bool inactive) {
   }
 }
 
-#ifdef DEBUG_ENABLED
 void logDebugDegrees(float timeS) {
   send_string("[DEBUG]: 30 stopni!\r\nczas: ");
 
@@ -79,10 +78,3 @@ void logDebugDutyCycle() {
 void logDebugInactive() {
   send_string("[DEBUG]: ---- INACTIVE ----\r\n");
 }
-#else
-void logDebugVWheel() {}
-
-void logDebugDutyCycle() {}
-
-void logDebugInactive() {}
-#endif

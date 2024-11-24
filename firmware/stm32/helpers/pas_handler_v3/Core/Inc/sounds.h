@@ -24,14 +24,17 @@
 #define SOUND_ON 4
 #define SOUND_OFF 5
 
+#define SOUND_ERR 6
+
 uint32_t presForFrequency(uint32_t frequency);
 void noTone(void);
 
 void startToneSequence(uint32_t* tone, uint32_t* duration, uint32_t size);
-void processTone();
+void processTone(void);
 
 void playTone(uint8_t number);
 
 void playToggleSound(bool state);
+void playErrorSound(void);
 
 #endif /* __SOUNDS_H */

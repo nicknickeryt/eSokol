@@ -24,6 +24,9 @@ uint32_t sound_connected_dur[] = {250, 125, 125, 250};
 uint32_t sound_disconnected[] = {440, 349, 330};
 uint32_t sound_disconnected_dur[] = {125, 125, 250};
 
+uint32_t sound_err[] = {370, 0, 370};
+uint32_t sound_err_dur[] = {62, 25, 125};
+
 uint32_t sound_on[] = {523, 659};
 uint32_t sound_on_dur[] = {125, 62};
 
@@ -110,6 +113,10 @@ void playTone(uint8_t number) {
       startToneSequence(sound_off, sound_off_dur,
                         (sizeof(sound_off_dur) / sizeof(sound_off_dur[0])));
       break;
+    case 6:
+      startToneSequence(sound_err, sound_err_dur,
+                        (sizeof(sound_err_dur) / sizeof(sound_err_dur[0])));
+      break;
     default:
       break;
   }
@@ -118,4 +125,8 @@ void playTone(uint8_t number) {
 void playToggleSound(bool state) {
   uint8_t tone = state == true ? SOUND_ON : SOUND_OFF;
   playTone(tone);
+}
+
+void playErrorSound() {
+  playTone(SOUND_ERR);
 }

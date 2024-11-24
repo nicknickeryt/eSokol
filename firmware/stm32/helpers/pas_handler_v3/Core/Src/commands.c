@@ -17,8 +17,9 @@
 #include "main.h"
 #include "pas.h"
 #include "sounds.h"
+#include <algorithm.h>
 
-Command commands[9] = {{"eskl_animStart\r\n", animStart},
+Command commands[11] = {{"eskl_animStart\r\n", animStart},
                        {"eskl_frontCTog\r\n", toggleFrontCold},
                        {"eskl_frontWTog\r\n", toggleFrontWarm},
                        {"eskl_rearLETog\r\n", toggleRearLED},
@@ -26,9 +27,11 @@ Command commands[9] = {{"eskl_animStart\r\n", animStart},
                        {"eskl_sportmTog\r\n", toggleSportMode},
                        {"eskl_soundsTog\r\n", toggleSound},
                        {"eskl_bulbsTogg\r\n", toggleBulbs},
-                       {"eskl_requestSt\r\n", sendStatus}};
+                       {"eskl_requestSt\r\n", sendStatus},
+                       {"eskl_algCmpInc\r\n", algorithmComponentIncrement},
+                       {"eskl_algCmpDec\r\n", algorithmComponentDecrement}};
 
-VariableCommand variableCommands[] = {{"eskl_bri__", setFrontColdBrightness}};
+VariableCommand variableCommands[1] = {{"eskl_bri__", setFrontColdBrightness}};
 
 char* statusMessage;
 
@@ -106,7 +109,7 @@ void toggleThrottle() {
 
 void toggleSportMode() {
   togglePin(THR_SPORT_GPIO_Port, THR_SPORT_Pin);
-  playToggleSound(!sportModeDisabled);            // reverse logic here!
+  playToggleSound(!sportModeDisabled);  // reverse logic here!
   sendStatus();
 }
 
@@ -123,27 +126,48 @@ void toggleSound() {
   sendStatus();
 }
 
-/* status format: eskl_stABCDEFGHHH
- * A  =>  frontColdEnabled(bool 0:1)
- * B  =>  frontWarmEnabled(bool 0:1)
- * C  =>  rearEnabled(bool 0:1)
- * E  =>  throttleEnabled(bool 0:1)
- * E  =>  sportModeDisabled(bool 0:1)
- * F  =>  soundEnabled(bool 0:1)
- * G  =>  bulbsEnabled(bool 0:1)
- * HH =>  frontColdBrightness(uint8_t 0:999)
+void algorithmComponentIncrement() {
+  algorithm_eq_component = algorithm_eq_component >= ALGORITHM_EQ_COMPONENT_MAX ? ALGORITHM_EQ_COMPONENT_MAX : algorithm_eq_component + 0.1f;
+  algorithm_eq_component >= ALGORITHM_EQ_COMPONENT_MAX ? playErrorSound() : playToggleSound(1);
+  sendStatus();
+}
+
+void algorithmComponentDecrement() {
+  algorithm_eq_component = algorithm_eq_component <= ALGORITHM_EQ_COMPONENT_MIN ? ALGORITHM_EQ_COMPONENT_MIN : algorithm_eq_component - 0.1f;
+  algorithm_eq_component <= ALGORITHM_EQ_COMPONENT_MIN ? playErrorSound() : playToggleSound(0);
+  sendStatus();
+}
+
+/* status format: eskl_stABCDEFGHHHIII
+ * A   =>  frontColdEnabled(bool 0:1)
+ * B   =>  frontWarmEnabled(bool 0:1)
+ * C   =>  rearEnabled(bool 0:1)
+ * E   =>  throttleEnabled(bool 0:1)
+ * E   =>  sportModeDisabled(bool 0:1)
+ * F   =>  soundEnabled(bool 0:1)
+ * G   =>  bulbsEnabled(bool 0:1)
+ * HHH =>  frontColdBrightness(uint8_t 000:999)
+ * III =>  algorithm_eq_component(uint8_t 000:999) -> float (-9.9: 9.9)
+ *                    * 1st digit - sign (0 positive, 1 negative);
+ *                    * 2nd digit - whole part
+ *                    * 3rd digit - fractional part
  */
 void sendStatus() {
   char frontColdBrightnessHundreds = (frontColdBrightness / 100) + '0';
   char frontColdBrightnessTens = ((frontColdBrightness / 10) % 10) + '0';
   char frontColdBrightnessUnits = (frontColdBrightness % 10) + '0';
 
-  sprintf(statusMessage, "eskl_st%c%c%c%c%c%c%c%c%c%c\r\n",
+  char algorithm_eq_componentSign = algorithm_eq_component > 0 ? '0' : '1';
+  char algorithm_eq_componentWhole = (int)(algorithm_eq_component < 0 ? -algorithm_eq_component : algorithm_eq_component) + '0';
+  char algorithm_eq_componentFrac = (int)((algorithm_eq_component < 0 ? -algorithm_eq_component : algorithm_eq_component) * 10) % 10 + '0';
+
+  sprintf(statusMessage, "eskl_st%c%c%c%c%c%c%c%c%c%c%c%c%c\r\n",
           frontColdEnabled ? '1' : '0', frontWarmEnabled ? '1' : '0',
           rearEnabled ? '1' : '0', throttleEnabled ? '1' : '0',
           sportModeDisabled ? '1' : '0', soundEnabled ? '1' : '0',
-          bulbsEnabled ? '1' : '0', frontColdBrightnessHundreds,
-          frontColdBrightnessTens, frontColdBrightnessUnits);
+          bulbsEnabled ? '1' : '0', 
+          frontColdBrightnessHundreds, frontColdBrightnessTens, frontColdBrightnessUnits,
+          algorithm_eq_componentSign, algorithm_eq_componentWhole, algorithm_eq_componentFrac);
 
   send_string(statusMessage);
 }

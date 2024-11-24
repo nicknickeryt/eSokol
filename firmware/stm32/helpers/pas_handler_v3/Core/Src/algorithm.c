@@ -12,6 +12,8 @@
 
 #include "stm32f4xx_hal.h"
 
+float algorithm_eq_component = ALGORITHM_EQ_COMPONENT_DEFAULT;
+
 float pasTimeS = 0.0;
 
 // (-0.00000044 * (x*x*x*x*x)) - (0.000049 * (x*x*x*x)) + (0.00164 * (x*x*x)) +(
@@ -21,8 +23,7 @@ void calculateDutyCycle(float x) {
       ALGORITHM_EQ_FACTOR *
       ((-0.00000044 * (x * x * x * x * x)) - (0.000049 * (x * x * x * x)) +
        (0.00164 * (x * x * x)) + (0.0169 * (x * x)) + (1.1815 * x) + 18.912 +
-       ALGORITHM_EQ_COMPONENT);  // DUTY_EQ_COMPONENT to spin a bit FASTER than
-                                 // pedals
+       algorithm_eq_component);  // algorithm_eq_component can now be changed via command
   if (rawDutyCycle <= MIN_DUTY_CYCLE) {
     targetDutyCycle = 0;
   } else if (rawDutyCycle > WARN_DUTY_CYCLE) {
@@ -66,15 +67,19 @@ bool runAlgorithm() {
     calculateDutyCycle(targetVelocityWheel * 3.6);
     updateDutyCycle();
 
-    // Logging stuff (this does nothing if DEBUG_ENABLED is not defined)
+// TODO fix debug by moving to main -> logDebugProc or sth
+#ifdef DEBUG_ENABLED
     logDebugDegrees(pasTimeS);
     logDebugVWheel();
     logDebugDutyCycle();
-
+#endif
+ 
     resetPas(0);
   }
-  if (pasTimeS > 0.75 && pasActive) {
+  if (pasTimeS > PAS_INACTIVE_TIME_S && pasActive) {
+#ifdef DEBUG_ENABLED
     logDebugInactive();
+#endif
     resetPas(1);
   }
   return true;

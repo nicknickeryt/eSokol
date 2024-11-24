@@ -17,8 +17,6 @@
 
 #include "stm32f4xx_hal.h"
 
-// #define DEBUG_ENABLED            // enabled algorithm & friends debug mode
-
 #define TIM_THROTTLE_LEDS &htim1
 #define TIM_SOUND &htim3
 #define PWM_ENABLED 1

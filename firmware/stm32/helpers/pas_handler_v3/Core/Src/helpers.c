@@ -90,8 +90,8 @@ void setRealBikeVelocity(float velocity) {
 }
 
 void processRealVelocity() {
-  if (!(HAL_GetTick() - hallLastSendTick > 500)) return;
-  if (HAL_GetTick() - hallLastTick > 3000)
+  if (!(HAL_GetTick() - hallLastSendTick > 300)) return;
+  if (HAL_GetTick() - hallLastTick > 2500)
     currentRealBikeVelocity = 0.0f;
 
   sprintf(velocityBuffer, "eskl_evel%s\r\n", float_to_char(currentRealBikeVelocity));
