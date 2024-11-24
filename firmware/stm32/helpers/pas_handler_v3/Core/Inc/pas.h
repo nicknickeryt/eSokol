@@ -21,8 +21,6 @@
 // this is ratio to calculate target speed, 9:16 (motor gear, wheel gear)
 #define MOTOR_GEAR_RATIO 0.5625
 
-// π rounded value // TODO: do we really need so many decimal places?
-#define PI 3.141592
 // pas angle after which we calculate omega. 2pi/12 is 30° (we have 12 magnets)
 #define PAS_MAGNET_ANGLE (2.0 * PI) / 12.0
 // wheel radius [m]

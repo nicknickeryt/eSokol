@@ -19,8 +19,8 @@
 #include "sounds.h"
 
 Command commands[9] = {{"eskl_animStart\r\n", animStart},
-                       {"eskl_frontCTog\r\n", toggleFrontC},
-                       {"eskl_frontWTog\r\n", toggleFrontW},
+                       {"eskl_frontCTog\r\n", toggleFrontCold},
+                       {"eskl_frontWTog\r\n", toggleFrontWarm},
                        {"eskl_rearLETog\r\n", toggleRearLED},
                        {"eskl_handleTog\r\n", toggleThrottle},
                        {"eskl_sportmTog\r\n", toggleSportMode},
@@ -55,23 +55,25 @@ uint16_t frontColdBrightnessToDutyCycle() {
   return frontColdBrightness * (1000 / DUTY_PWM_MAX_CCR1);  // cnt is 10000
 }
 
-void toggleFrontC() {
+void toggleFrontCold() {
   frontColdEnabled = !frontColdEnabled;
   TIM1->CCR4 = frontColdEnabled ? frontColdBrightnessToDutyCycle() : 0;
   playToggleSound(frontColdEnabled);
+  sendStatus();
 }
 
-void toggleFrontCNoSound() {
+// this is used for animations
+void toggleFrontColdNoSound() {
   frontColdEnabled = !frontColdEnabled;
   TIM1->CCR4 = frontColdEnabled ? frontColdBrightnessToDutyCycle() : 0;
 }
 
-void enableFrontCNoSound() {
+void enableFrontColdNoSound() {
   frontColdEnabled = 1;
   TIM1->CCR4 = frontColdBrightnessToDutyCycle();
 }
 
-void disableFrontCNoSound() {
+void disableFrontColdNoSound() {
   frontColdEnabled = 0;
   TIM1->CCR4 = 0;
 }
@@ -83,36 +85,42 @@ void setFrontColdBrightness(uint16_t brightness) {
   TIM1->CCR4 = frontColdBrightnessToDutyCycle();
 }
 
-void toggleFrontW() {
+void toggleFrontWarm() {
   togglePin(FRONT_WARM_GPIO_Port, FRONT_WARM_Pin);
   playToggleSound(frontWarmEnabled);
+  sendStatus();
 }
 
 void toggleRearLED() {
   togglePin(REAR_LED_GPIO_Port, REAR_LED_Pin);
   playToggleSound(rearEnabled);
+  sendStatus();
 }
 
 void toggleThrottle() {
   togglePin(THR_DIS_GPIO_Port, THR_DIS_Pin);
   togglePWM(TIM_THROTTLE_LEDS, !throttleEnabled);
   playToggleSound(throttleEnabled);
+  sendStatus();
 }
 
 void toggleSportMode() {
   togglePin(THR_SPORT_GPIO_Port, THR_SPORT_Pin);
-  playToggleSound(sportModeDisabled);
+  playToggleSound(!sportModeDisabled);            // reverse logic here!
+  sendStatus();
 }
 
 void toggleBulbs() {
   togglePin(BULBS_GPIO_Port, BULBS_Pin);
   playToggleSound(bulbsEnabled);
+  sendStatus();
 }
 
 void toggleSound() {
   soundEnabled = !soundEnabled;
   playToggleSound(soundEnabled);
   togglePWM(TIM_SOUND, soundEnabled);
+  sendStatus();
 }
 
 /* status format: eskl_stABCDEFGHHH

@@ -44,7 +44,7 @@ void processAnimation() {
 
     case ANIM_STARTUP_PHASE1:
       if (now - animStartTime >= 30) {
-        toggleFrontCNoSound();
+        toggleFrontColdNoSound();
         togglePin(REAR_LED_GPIO_Port, REAR_LED_Pin);
         animStep++;
         animStartTime = now;
@@ -58,7 +58,7 @@ void processAnimation() {
 
     case ANIM_STARTUP_PHASE2:
       if (now - animStartTime >= 75) {
-        toggleFrontCNoSound();
+        toggleFrontColdNoSound();
         togglePin(REAR_LED_GPIO_Port, REAR_LED_Pin);
         animStep++;
         animStartTime = now;
@@ -72,14 +72,14 @@ void processAnimation() {
 
     case ANIM_STARTUP_PHASE3:
       if (now - animStartTime >= 250) {
-        toggleFrontCNoSound();
+        toggleFrontColdNoSound();
         togglePin(REAR_LED_GPIO_Port, REAR_LED_Pin);
         animStep++;
         animStartTime = now;
 
         if (animStep >= 2) {
           currentAnimState = ANIM_IDLE;
-          enableFrontCNoSound();
+          enableFrontColdNoSound();
           writePin(REAR_LED_GPIO_Port, REAR_LED_Pin, 1);
           shouldSendStatus = true;
         }
@@ -88,14 +88,14 @@ void processAnimation() {
 
     case ANIM_CONNECTED:
       if (now - animStartTime >= 75) {
-        toggleFrontCNoSound();
+        toggleFrontColdNoSound();
         togglePin(REAR_LED_GPIO_Port, REAR_LED_Pin);
         animStep++;
         animStartTime = now;
 
         if (animStep >= 5) {
           currentAnimState = ANIM_IDLE;
-          disableFrontCNoSound();
+          disableFrontColdNoSound();
           writePin(REAR_LED_GPIO_Port, REAR_LED_Pin, 0);
           shouldSendStatus = true;
         }
@@ -104,14 +104,14 @@ void processAnimation() {
 
     case ANIM_DISCONNECTED:
       if (now - animStartTime >= 30) {
-        toggleFrontCNoSound();
+        toggleFrontColdNoSound();
         togglePin(REAR_LED_GPIO_Port, REAR_LED_Pin);
         animStep++;
         animStartTime = now;
 
         if (animStep >= 10) {
           currentAnimState = ANIM_IDLE;
-          disableFrontCNoSound();
+          disableFrontColdNoSound();
           writePin(REAR_LED_GPIO_Port, REAR_LED_Pin, 0);
         }
       }
@@ -119,7 +119,7 @@ void processAnimation() {
 
     case ANIM_BLINK_DISCONNECTED:
       if (now - animStartTime >= 1000) {
-        toggleFrontCNoSound();
+        toggleFrontColdNoSound();
         togglePin(REAR_LED_GPIO_Port, REAR_LED_Pin);
         animStartTime = now;
       }

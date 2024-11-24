@@ -24,25 +24,21 @@
 #define PWM_ENABLED 1
 #define PWM_DISABLED 0
 
+// π rounded value // TODO: do we really need so many decimal places?
+#define PI 3.141592
+
 extern uint8_t pasCounter;
 extern int lastPasResetTick;
-extern const float pedalGearRatio;
-extern const float motorGearRatio;
-
-extern const float pi;
-extern const float pasMagnetAngle;
-
-extern const float rWheel;
 
 extern float omegaPedals;
-extern float omegaWheel;
-extern float vWheel;
+extern float targetOmegaWheel;
+extern float targetVelocityWheel;
 
 extern float pasActive;
 extern float targetDutyCycle;
 extern float previousDutyCycle;
 
-extern float timeS;
+extern float pasTimeS;
 
 extern bool bluetoothConnected;
 
@@ -58,6 +54,11 @@ void resetDutyCycle(void);
 void updateDutyCycle(void);
 void resetPas(bool inactive);
 
-void processDummyVelocityData(void);
+char* float_to_char(float f);
+
+float calculateRealBikeVelocity(uint32_t hallCurrTick);
+void setRealBikeVelocity(float velocity);
+
+void processRealVelocity(void);
 
 #endif /* __HELPERS_H */

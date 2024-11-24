@@ -31,6 +31,7 @@
 #include "animations.h"
 #include "gpio.h"
 #include "helpers.h"
+#include "logger.h"
 #include "sounds.h"
 #include "uart.h"
 /* USER CODE END Includes */
@@ -96,7 +97,8 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
       pasCounter++;
       break;
     case HALL_SPEED_Pin:
-      // TODO
+      if (readPin(HALL_SPEED_GPIO_Port, HALL_SPEED_Pin) == 1)
+        setRealBikeVelocity(calculateRealBikeVelocity(HAL_GetTick()));
       break;
   }
 }
@@ -151,7 +153,7 @@ int main(void) {
     processTone();
     processAnimation();
     blink1S();
-    processDummyVelocityData();
+    processRealVelocity();
 
     if (!runAlgorithm())
       continue;

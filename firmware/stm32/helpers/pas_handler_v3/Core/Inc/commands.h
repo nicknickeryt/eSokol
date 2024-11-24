@@ -38,12 +38,12 @@ extern bool bulbsEnabled;
 
 void initStatusMessage(void);
 void animStart(void);
-void toggleFrontC(void);
-void toggleFrontCNoSound(void);  // TODO CHANGE THIS AAAA
-void enableFrontCNoSound();
-void disableFrontCNoSound();
+void toggleFrontCold(void);
+void toggleFrontColdNoSound(void);  // TODO CHANGE THIS AAAA
+void enableFrontColdNoSound();
+void disableFrontColdNoSound();
 void setFrontColdBrightness(uint16_t brightness);
-void toggleFrontW(void);
+void toggleFrontWarm(void);
 void toggleRearLED(void);
 void toggleThrottle(void);
 void toggleSportMode(void);

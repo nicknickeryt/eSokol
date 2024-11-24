@@ -11,6 +11,7 @@
 #include <string.h>
 
 #include "main.h"
+#include "helpers.h"
 
 #include "stm32f4xx_hal.h"
 
@@ -31,14 +32,5 @@ void send_int(int num) {
 }
 
 void send_float(float num) {
-  int whole_part = (int)num;
-  int fractional_part = (int)((num - whole_part) * 100);
-
-  if (fractional_part < 0) {
-    fractional_part = -fractional_part;
-  }
-
-  char buffer[20];
-  sprintf(buffer, "%d.%02d", whole_part, fractional_part);
-  send_string(buffer);
+  send_string(float_to_char(num));
 }

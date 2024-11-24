@@ -12,7 +12,7 @@
 
 #include "stm32f4xx_hal.h"
 
-float timeS = 0.0;
+float pasTimeS = 0.0;
 
 // (-0.00000044 * (x*x*x*x*x)) - (0.000049 * (x*x*x*x)) + (0.00164 * (x*x*x)) +(
 // 0.0169 * (x*x)) + (1.1815 * x) + 18.912;
@@ -42,7 +42,7 @@ void calculateDutyCycle(float x) {
 }
 
 bool runAlgorithm() {
-  timeS = ((float)HAL_GetTick() - (float)lastPasResetTick) / 1000.0;
+  pasTimeS = ((float)HAL_GetTick() - (float)lastPasResetTick) / 1000.0;
 
   // If THR_DIS is set to high, then throttle is enabled, we don't need to run
   // algorithm.
@@ -51,38 +51,30 @@ bool runAlgorithm() {
 
   if (pasCounter >= 1) {
     // If bike is stationary, wait for 5 PAS counts before updating
-    if (vWheel == 0.0 && pasCounter < 5) {
+    if (targetVelocityWheel == 0.0 && pasCounter < 5) {
       if (pasCounter < 4)
         lastPasResetTick = HAL_GetTick();
       return false;
     }
 
-#ifdef DEBUG_ENABLED
-    logDebugDegrees(timeS);
-#endif
 
-    omegaPedals = PAS_MAGNET_ANGLE / timeS;
-    omegaWheel = omegaPedals * PEDAL_GEAR_RATIO;
+    omegaPedals = PAS_MAGNET_ANGLE / pasTimeS;
+    targetOmegaWheel = omegaPedals * PEDAL_GEAR_RATIO;
 
-    vWheel = omegaWheel * R_WHEEL;
+    targetVelocityWheel = targetOmegaWheel * R_WHEEL;
 
-#ifdef DEBUG_ENABLED
-    logDebugVWheel();
-#endif
-
-    calculateDutyCycle(vWheel * 3.6);
+    calculateDutyCycle(targetVelocityWheel * 3.6);
     updateDutyCycle();
 
-#ifdef DEBUG_ENABLED
+    // Logging stuff (this does nothing if DEBUG_ENABLED is not defined)
+    logDebugDegrees(pasTimeS);
+    logDebugVWheel();
     logDebugDutyCycle();
-#endif
 
     resetPas(0);
   }
-  if (timeS > 0.75 && pasActive) {
-#ifdef DEBUG_ENABLED
+  if (pasTimeS > 0.75 && pasActive) {
     logDebugInactive();
-#endif
     resetPas(1);
   }
   return true;

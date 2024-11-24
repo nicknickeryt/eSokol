@@ -18,8 +18,8 @@ uint8_t pasCounter = 0;    // counts rising edges of pas signal
 int lastPasResetTick = 0;  // last pas counter reset (at 12 counters)
 
 float omegaPedals = 0.0;
-float omegaWheel = 0.0;
-float vWheel = 0.0;
+float targetOmegaWheel = 0.0;
+float targetVelocityWheel = 0.0;
 
 float pasActive = 0;
 
@@ -43,7 +43,7 @@ void resetPas(bool inactive) {
     pasActive = 0;
     targetDutyCycle = 0.0;
     previousDutyCycle = 0.0;
-    vWheel = 0.0;  // Reset vWheel only if the bike is inactive!
+    targetVelocityWheel = 0.0;  // Reset vWheel only if the bike is inactive!
     TIM1->CCR1 = 0;
   } else {
     pasActive = 1;
@@ -51,6 +51,7 @@ void resetPas(bool inactive) {
   }
 }
 
+#ifdef DEBUG_ENABLED
 void logDebugDegrees(float timeS) {
   send_string("[DEBUG]: 30 stopni!\r\nczas: ");
 
@@ -60,9 +61,9 @@ void logDebugDegrees(float timeS) {
 
 void logDebugVWheel() {
   send_string("vWheel: ");
-  send_float(vWheel);
+  send_float(targetVelocityWheel);
   send_string(" [m/s] ");
-  send_float(vWheel * 3.6);
+  send_float(targetVelocityWheel * 3.6);
   send_string(" [km/h] \r\n");
 }
 
@@ -78,3 +79,10 @@ void logDebugDutyCycle() {
 void logDebugInactive() {
   send_string("[DEBUG]: ---- INACTIVE ----\r\n");
 }
+#else
+void logDebugVWheel() {}
+
+void logDebugDutyCycle() {}
+
+void logDebugInactive() {}
+#endif

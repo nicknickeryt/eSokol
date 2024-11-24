@@ -15,6 +15,7 @@
 #include "helpers.h"
 #include "logger.h"
 #include "main.h"
+#include "pas.h"
 #include "sounds.h"
 #include "uart.h"
 
@@ -60,22 +61,41 @@ void togglePWM(TIM_HandleTypeDef* htim, bool state) {
   }
 }
 
-static uint32_t seed = 1;
-uint32_t timeDummyVelocity = 0;
+char* float_to_char(float f) {
+  static char buffer[20];
 
-uint32_t generateRandomNum(void) {
-  seed = (seed * 1103515245 + 12345) & 0x7fffffff;
-  return seed % 31;
+  int whole_part = (int)f;
+  int fractional_part = (int)((f - whole_part) * 100);
+
+  if (fractional_part < 0)
+    fractional_part = -fractional_part;
+
+  sprintf(buffer, "%d.%02d", whole_part, fractional_part);
+
+  return buffer;
 }
 
-void processDummyVelocityData() {
-  if (!(HAL_GetTick() - timeDummyVelocity > 5000))
-    return;
+uint32_t hallLastTick = 0;
+uint32_t hallLastSendTick = 0;
+float currentRealBikeVelocity = 0;
 
-  timeDummyVelocity = HAL_GetTick();
-  uint8_t velocity = generateRandomNum();
+float calculateRealBikeVelocity(uint32_t hallCurrTick) {
+	float omega = (2.0f * PI) / ( (hallCurrTick - hallLastTick) / 1000.0f );
+	hallLastTick = hallCurrTick;
+	return omega * R_WHEEL * 3.6; // velocity in km/h
+}
 
-  sprintf(velocityBuffer, "eskl_evel%d\r\n", velocity);
+void setRealBikeVelocity(float velocity) {
+	currentRealBikeVelocity = velocity;
+}
+
+void processRealVelocity() {
+  if (!(HAL_GetTick() - hallLastSendTick > 500)) return;
+  if (HAL_GetTick() - hallLastTick > 3000)
+    currentRealBikeVelocity = 0.0f;
+
+  sprintf(velocityBuffer, "eskl_evel%s\r\n", float_to_char(currentRealBikeVelocity));
+  hallLastSendTick = HAL_GetTick();
 
   send_string(velocityBuffer);
 }
