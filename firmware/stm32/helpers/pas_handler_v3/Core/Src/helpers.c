@@ -21,6 +21,8 @@
 
 bool bluetoothConnected = 0;
 
+uint16_t batteryVoltage = 0;
+
 char* velocityBuffer;
 
 void initVelocityBuffer() {
@@ -39,6 +41,8 @@ void bikeInit() {
   HAL_TIM_PWM_Start(TIM_THROTTLE_LEDS, TIM_CHANNEL_1);  // OUT_PWM
   HAL_TIM_PWM_Start(TIM_THROTTLE_LEDS, TIM_CHANNEL_4);  // FRONT_COLD_PWM
   HAL_TIM_PWM_Start(TIM_SOUND, TIM_CHANNEL_1);          // SOUND
+
+  HAL_ADC_Start_IT(&hadc1);
 
   playAnim(ANIM_STARTUP_PHASE1);
   writePin(GPIOB, GPIO_PIN_3, 0);  // Throttle default disabled
@@ -80,22 +84,54 @@ uint32_t hallLastSendTick = 0;
 float currentRealBikeVelocity = 0;
 
 float calculateRealBikeVelocity(uint32_t hallCurrTick) {
-	float omega = (2.0f * PI) / ( (hallCurrTick - hallLastTick) / 1000.0f );
-	hallLastTick = hallCurrTick;
-	return omega * R_WHEEL * 3.6; // velocity in km/h
+  float omega = (2.0f * PI) / ((hallCurrTick - hallLastTick) / 1000.0f);
+  hallLastTick = hallCurrTick;
+  return omega * R_WHEEL * 3.6;  // velocity in km/h
 }
 
 void setRealBikeVelocity(float velocity) {
-	currentRealBikeVelocity = velocity;
+  currentRealBikeVelocity = velocity;
 }
 
 void processRealVelocity() {
-  if (!(HAL_GetTick() - hallLastSendTick > 300)) return;
+  if (!(HAL_GetTick() - hallLastSendTick > 300))
+    return;
   if (HAL_GetTick() - hallLastTick > 2500)
     currentRealBikeVelocity = 0.0f;
 
-  sprintf(velocityBuffer, "eskl_evel%s\r\n", float_to_char(currentRealBikeVelocity));
+  sprintf(velocityBuffer, "eskl_evel%s\r\n",
+          float_to_char(currentRealBikeVelocity));
   hallLastSendTick = HAL_GetTick();
 
   send_string(velocityBuffer);
+}
+
+uint32_t adcLastSendTick = 0;
+
+void processAdcMeasurement() {
+  if (!(HAL_GetTick() - adcLastSendTick > 10000))
+    return;
+
+  adcLastSendTick = HAL_GetTick();
+  HAL_ADC_Start_IT(&hadc1);
+}
+
+// TODO fix that uhh
+float adcValues[ADC_AVG_SAMPLES] = {0};
+uint8_t adcIndex = 0;
+float adcSum = 0.0f;
+float avgAdcValue = 0.0f;
+
+void handleAdcMeasurement(float rawAdcValue) {
+  adcValues[adcIndex] = rawAdcValue;
+  adcIndex = (adcIndex + 1) % ADC_AVG_SAMPLES;
+
+  adcSum = 0;
+  for (uint8_t i = 0; i < ADC_AVG_SAMPLES; i++) {
+    adcSum += adcValues[i];
+  }
+
+  avgAdcValue = adcSum / ADC_AVG_SAMPLES;
+
+  batteryVoltage = (100.0f * ((avgAdcValue * 3.3f) / 4096.0f)) + 23.0f;
 }

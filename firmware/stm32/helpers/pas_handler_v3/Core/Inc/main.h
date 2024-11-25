@@ -49,7 +49,7 @@ extern "C" {
 
 /* USER CODE END EM */
 
-void HAL_TIM_MspPostInit(TIM_HandleTypeDef* htim);
+void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
@@ -59,12 +59,12 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define BLINK_Pin GPIO_PIN_13
-#define BLINK_GPIO_Port GPIOC
+#define DEBUG_LED_Pin GPIO_PIN_13
+#define DEBUG_LED_GPIO_Port GPIOC
+#define BATT_SENSE_Pin GPIO_PIN_1
+#define BATT_SENSE_GPIO_Port GPIOA
 #define FRONT_WARM_Pin GPIO_PIN_2
 #define FRONT_WARM_GPIO_Port GPIOA
-#define SPEAKER_PWM_Pin GPIO_PIN_6
-#define SPEAKER_PWM_GPIO_Port GPIOA
 #define BULBS_Pin GPIO_PIN_0
 #define BULBS_GPIO_Port GPIOB
 #define THR_SPORT_Pin GPIO_PIN_1
@@ -82,6 +82,8 @@ void Error_Handler(void);
 #define FRONT_COLD_PWM_GPIO_Port GPIOA
 #define THR_DIS_Pin GPIO_PIN_3
 #define THR_DIS_GPIO_Port GPIOB
+#define SPEAKER_PWM_Pin GPIO_PIN_4
+#define SPEAKER_PWM_GPIO_Port GPIOB
 #define PAS_SIGNAL_Pin GPIO_PIN_5
 #define PAS_SIGNAL_GPIO_Port GPIOB
 #define PAS_SIGNAL_EXTI_IRQn EXTI9_5_IRQn
@@ -92,8 +94,11 @@ void Error_Handler(void);
 /* USER CODE BEGIN Private defines */
 
 /* Global variables ----------------------------------------------------------*/
+extern ADC_HandleTypeDef hadc1;
+
 extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim3;
+
 extern UART_HandleTypeDef huart1;
 
 /* USER CODE END Private defines */

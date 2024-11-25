@@ -151,6 +151,7 @@ void algorithmComponentDecrement() {
  *                    * 1st digit - sign (0 positive, 1 negative);
  *                    * 2nd digit - whole part
  *                    * 3rd digit - fractional part
+ * JJJ =>  batteryVoltage(uint8_t 0:30) -> float 
  */
 void sendStatus() {
   char frontColdBrightnessHundreds = (frontColdBrightness / 100) + '0';
@@ -161,13 +162,18 @@ void sendStatus() {
   char algorithm_eq_componentWhole = (int)(algorithm_eq_component < 0 ? -algorithm_eq_component : algorithm_eq_component) + '0';
   char algorithm_eq_componentFrac = (int)((algorithm_eq_component < 0 ? -algorithm_eq_component : algorithm_eq_component) * 10) % 10 + '0';
 
-  sprintf(statusMessage, "eskl_st%c%c%c%c%c%c%c%c%c%c%c%c%c\r\n",
+  char batteryVoltageHundreds = (batteryVoltage / 100) + '0';
+  char batteryVoltageTens = ((batteryVoltage / 10) % 10) + '0';
+  char batteryVoltageUnits = (batteryVoltage % 10) + '0';
+
+  sprintf(statusMessage, "eskl_st%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\r\n",
           frontColdEnabled ? '1' : '0', frontWarmEnabled ? '1' : '0',
           rearEnabled ? '1' : '0', throttleEnabled ? '1' : '0',
           sportModeDisabled ? '1' : '0', soundEnabled ? '1' : '0',
           bulbsEnabled ? '1' : '0', 
           frontColdBrightnessHundreds, frontColdBrightnessTens, frontColdBrightnessUnits,
-          algorithm_eq_componentSign, algorithm_eq_componentWhole, algorithm_eq_componentFrac);
+          algorithm_eq_componentSign, algorithm_eq_componentWhole, algorithm_eq_componentFrac,
+          batteryVoltageHundreds, batteryVoltageTens, batteryVoltageUnits);
 
   send_string(statusMessage);
 }

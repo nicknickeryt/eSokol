@@ -25,6 +25,8 @@
 // π rounded value // TODO: do we really need so many decimal places?
 #define PI 3.141592
 
+#define ADC_AVG_SAMPLES 20
+
 extern uint8_t pasCounter;
 extern int lastPasResetTick;
 
@@ -40,6 +42,8 @@ extern float pasTimeS;
 
 extern bool bluetoothConnected;
 
+extern uint16_t batteryVoltage;
+
 void bikeInit(void);
 
 void logDebugDegrees(float);
@@ -47,7 +51,7 @@ void logDebugVWheel(void);
 void logDebugDutyCycle(void);
 void logDebugInactive(void);
 
-void togglePWM(TIM_HandleTypeDef *htim, bool state);
+void togglePWM(TIM_HandleTypeDef* htim, bool state);
 void resetDutyCycle(void);
 void updateDutyCycle(void);
 void resetPas(bool inactive);
@@ -58,5 +62,8 @@ float calculateRealBikeVelocity(uint32_t hallCurrTick);
 void setRealBikeVelocity(float velocity);
 
 void processRealVelocity(void);
+void processAdcMeasurement(void);
+
+void handleAdcMeasurement(float rawAdcValue);
 
 #endif /* __HELPERS_H */
