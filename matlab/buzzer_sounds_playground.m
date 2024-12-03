@@ -1,0 +1,42 @@
+clc; clear; close all;
+fs = 44100;
+
+sound_mario = [659, 0, 659, 0, 659, 0, 523, 659, 784, 392, 0];
+sound_mario_dur = [150, 25,  300, 25,  150, 150, 150, 300, 600, 600, 300];
+
+sound_connected = [523, 440, 349, 659];
+sound_connected_dur = [250, 125, 125, 250];
+
+sound_disconnected = [440, 349, 330];
+sound_disconnected_dur = [125, 125, 250];
+
+sound_err = [370, 0, 370];
+sound_err_dur = [62, 25, 125];
+
+sound_on = [523, 659];
+sound_on_dur = [125, 62];
+
+sound_off = [659, 587];
+sound_off_dur = [125, 62];
+
+sound_click_on = [1000, 800, 0, 600]; 
+sound_click_on_dur = [12, 7, 5, 12]; 
+
+sound_click_off = [800, 600, 0, 400]; 
+sound_click_off_dur = [12, 7, 5, 12];
+
+N = 20;
+for k = 1:N
+    playSound(sound_click_on, sound_click_on_dur, fs);
+    pause(0.25); 
+    playSound(sound_click_off, sound_click_off_dur, fs);
+    pause(0.25); 
+end
+
+function playSound(sound_freq, sound_dur, fs)
+    for k=1:length(sound_freq)
+        y = sin(2 * pi * sound_freq(k) * (0:1/fs:sound_dur(k)/1000));
+        sound(y, fs);
+        pause(sound_dur(k) / 1000);
+    end
+end

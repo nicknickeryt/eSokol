@@ -16,8 +16,8 @@
 #define ALGORITHM_EQ_COMPONENT_DEFAULT -1.0
 #define ALGORITHM_EQ_FACTOR 1.05
 
-#define ALGORITHM_EQ_COMPONENT_MIN -2.0f
-#define ALGORITHM_EQ_COMPONENT_MAX 1.0f
+#define ALGORITHM_EQ_COMPONENT_MIN -3.0f
+#define ALGORITHM_EQ_COMPONENT_MAX 3.0f
 
 #define PAS_INACTIVE_TIME_S 0.5     // time in seconds after which targetDutyCycle is set to 0
 

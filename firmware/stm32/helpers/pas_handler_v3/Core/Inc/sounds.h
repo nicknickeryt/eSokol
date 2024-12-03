@@ -25,6 +25,9 @@
 #define SOUND_OFF 5
 
 #define SOUND_ERR 6
+#define SOUND_CLICK_ON 7
+#define SOUND_CLICK_OFF 8
+#define SOUND_ALGORITHM_START 9
 
 uint32_t presForFrequency(uint32_t frequency);
 void noTone(void);

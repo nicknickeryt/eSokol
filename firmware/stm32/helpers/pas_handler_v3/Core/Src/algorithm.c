@@ -8,7 +8,9 @@
 #include "algorithm.h"
 #include "gpio.h"
 #include "helpers.h"
+#include "logger.h"
 #include "pas.h"
+#include "sounds.h"
 
 #include "stm32f4xx_hal.h"
 
@@ -23,22 +25,26 @@ void calculateDutyCycle(float x) {
       ALGORITHM_EQ_FACTOR *
       ((-0.00000044 * (x * x * x * x * x)) - (0.000049 * (x * x * x * x)) +
        (0.00164 * (x * x * x)) + (0.0169 * (x * x)) + (1.1815 * x) + 18.912 +
-       algorithm_eq_component);  // algorithm_eq_component can now be changed via command
-  if (rawDutyCycle <= MIN_DUTY_CYCLE) {
+       algorithm_eq_component); // algorithm_eq_component can now be changed via
+                                // command
+  if (rawDutyCycle <= MIN_DUTY_CYCLE)
     targetDutyCycle = 0;
-  } else if (rawDutyCycle > WARN_DUTY_CYCLE) {
+  else if (rawDutyCycle > WARN_DUTY_CYCLE)
     targetDutyCycle = 0;
-  } else if (rawDutyCycle > MAX_DUTY_CYCLE && rawDutyCycle < WARN_DUTY_CYCLE) {
+  else if (rawDutyCycle > MAX_DUTY_CYCLE && rawDutyCycle < WARN_DUTY_CYCLE)
     targetDutyCycle = MAX_DUTY_CYCLE;
-  } else {
-    if (rawDutyCycle > previousDutyCycle) {  // speeding up
+  else {
+    if (rawDutyCycle > previousDutyCycle)
       targetDutyCycle = (DUTY_SMOOTH_FACTOR_UP * rawDutyCycle) +
                         ((1 - DUTY_SMOOTH_FACTOR_UP) * previousDutyCycle);
-    } else {  // slowing down
+    else
       targetDutyCycle = (DUTY_SMOOTH_FACTOR_DOWN * rawDutyCycle) +
                         ((1 - DUTY_SMOOTH_FACTOR_DOWN) * previousDutyCycle);
-    }
   }
+
+  if (rawDutyCycle > 0.0f && rawDutyCycle <= 30.0f)
+    playTone(SOUND_ALGORITHM_START);
+
   previousDutyCycle = targetDutyCycle;
 }
 
@@ -58,7 +64,6 @@ bool runAlgorithm() {
       return false;
     }
 
-
     omegaPedals = PAS_MAGNET_ANGLE / pasTimeS;
     targetOmegaWheel = omegaPedals * PEDAL_GEAR_RATIO;
 
@@ -73,7 +78,7 @@ bool runAlgorithm() {
     logDebugVWheel();
     logDebugDutyCycle();
 #endif
- 
+
     resetPas(0);
   }
   if (pasTimeS > PAS_INACTIVE_TIME_S && pasActive) {

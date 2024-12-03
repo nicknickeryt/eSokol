@@ -13,8 +13,8 @@
 #include <stdbool.h>
 
 #define MIN_DUTY_CYCLE 16.0
-#define MAX_DUTY_CYCLE 66.0
-#define WARN_DUTY_CYCLE 80.0
+#define MAX_DUTY_CYCLE 80.0
+#define WARN_DUTY_CYCLE 90.0
 
 // this is ratio to calculate target speed, 46:16 (pedals gear, wheel gear)
 #define PEDAL_GEAR_RATIO 2.875

@@ -33,6 +33,15 @@ uint32_t sound_on_dur[] = {125, 62};
 uint32_t sound_off[] = {659, 587};
 uint32_t sound_off_dur[] = {125, 62};
 
+uint32_t sound_click_on[] = {1000, 800, 0, 600}; 
+uint32_t sound_click_on_dur[] = {5, 3, 2, 5}; 
+
+uint32_t sound_click_off[] = {800, 600, 0, 400}; 
+uint32_t sound_click_off_dur[] = {5, 3, 2, 5};
+
+uint32_t sound_algorithm_start[] = {1000}; 
+uint32_t sound_algorithm_start_dur[] = {500};
+
 uint32_t presForFrequency(uint32_t frequency) {
   return frequency == 0 ? 0 : (TIM3_FREQ / (TIM3_MAX_CNT * frequency));
 }
@@ -92,30 +101,42 @@ void playTone(uint8_t number) {
   if (!soundEnabled)
     return;
   switch (number) {
-    case 1:
+    case SOUND_MARIO:
       startToneSequence(sound_mario, sound_mario_dur,
                         (sizeof(sound_mario) / sizeof(sound_mario[0])));
       break;
-    case 2:
+    case SOUND_CONNECTED:
       startToneSequence(sound_connected, sound_connected_dur,
                         (sizeof(sound_connected) / sizeof(sound_connected[0])));
       break;
-    case 3:
+    case SOUND_DISCONNECTED:
       startToneSequence(
           sound_disconnected, sound_disconnected_dur,
           (sizeof(sound_disconnected) / sizeof(sound_disconnected[0])));
       break;
-    case 4:
+    case SOUND_ON:
       startToneSequence(sound_on, sound_on_dur,
                         (sizeof(sound_on) / sizeof(sound_on[0])));
       break;
-    case 5:
+    case SOUND_OFF:
       startToneSequence(sound_off, sound_off_dur,
                         (sizeof(sound_off_dur) / sizeof(sound_off_dur[0])));
       break;
-    case 6:
+    case SOUND_ERR:
       startToneSequence(sound_err, sound_err_dur,
                         (sizeof(sound_err_dur) / sizeof(sound_err_dur[0])));
+      break;
+    case SOUND_CLICK_ON:
+      startToneSequence(sound_click_on, sound_click_on_dur,
+                        (sizeof(sound_click_on_dur) / sizeof(sound_click_on_dur[0])));
+      break;
+    case SOUND_CLICK_OFF:
+      startToneSequence(sound_click_off, sound_click_off_dur,
+                        (sizeof(sound_click_off_dur) / sizeof(sound_click_off_dur[0])));
+      break;
+    case SOUND_ALGORITHM_START:
+      startToneSequence(sound_algorithm_start, sound_algorithm_start_dur,
+                        (sizeof(sound_algorithm_start_dur) / sizeof(sound_algorithm_start_dur[0])));
       break;
     default:
       break;
