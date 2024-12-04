@@ -2152,6 +2152,18 @@
 		)
 		(uuid "809732db-39da-47ab-9080-96d07749b16c")
 	)
+	(text "THIS IS OUTDATED and will be removed soon"
+		(exclude_from_sim no)
+		(at 223.52 73.152 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.254)
+				(bold yes)
+			)
+		)
+		(uuid "0c45ebbb-1379-4e5a-a426-1053f181ce19")
+	)
 	(global_label "3V3_L"
 		(shape input)
 		(at 142.24 157.48 180)
