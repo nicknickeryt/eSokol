@@ -4704,6 +4704,16 @@
 	)
 	(wire
 		(pts
+			(xy 181.61 111.76) (xy 177.8 111.76)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0f554f02-01ae-4ed2-a880-a096c1c8d47a")
+	)
+	(wire
+		(pts
 			(xy 52.07 165.1) (xy 52.07 166.37)
 		)
 		(stroke
@@ -5439,6 +5449,16 @@
 		)
 		(uuid "2e871783-3535-4b3f-a02e-9bfdc55b47e9")
 	)
+	(text "GPIO_OUT [OD]\n"
+		(exclude_from_sim no)
+		(at 204.978 109.474 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "32d04674-59ff-4319-8850-daa5acbcc4c9")
+	)
 	(text "ADC1_IN4\n"
 		(exclude_from_sim no)
 		(at 202.946 96.774 0)
@@ -5509,6 +5529,16 @@
 			(justify left)
 		)
 		(uuid "770c2f2a-7b8c-4086-99bd-dab1061757b3")
+	)
+	(text "GPIO_OUT [OD]"
+		(exclude_from_sim no)
+		(at 206.248 112.014 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "78170052-81ed-4262-9da0-de612d9e19c5")
 	)
 	(text "ADC1_IN2\n"
 		(exclude_from_sim no)
@@ -6350,6 +6380,28 @@
 			)
 		)
 	)
+	(global_label "BLINKER_LEFT"
+		(shape output)
+		(at 181.61 109.22 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "c74cd763-1424-4659-9a5a-ac823c7db0b9")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 197.7185 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
 	(global_label "BUZZER"
 		(shape output)
 		(at 135.89 116.84 180)
@@ -6412,6 +6464,28 @@
 					(size 1.27 1.27)
 				)
 				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "BLINKER_RIGHT"
+		(shape output)
+		(at 181.61 111.76 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "fdd8d1ae-a730-4f88-933d-ffa8d3e1623f")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 198.9281 111.76 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
 				(hide yes)
 			)
 		)
