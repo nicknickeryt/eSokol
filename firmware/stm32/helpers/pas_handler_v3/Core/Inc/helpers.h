@@ -58,6 +58,8 @@ void resetPas(bool inactive);
 
 char* float_to_char(float f);
 
+extern float currentRealBikeVelocity;
+
 float calculateRealBikeVelocity(uint32_t hallCurrTick);
 void setRealBikeVelocity(float velocity);
 

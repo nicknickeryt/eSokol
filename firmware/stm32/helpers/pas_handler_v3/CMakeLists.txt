@@ -53,6 +53,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
     Core/Src/algorithm.c
     Core/Src/animations.c
+    Core/Src/blinkers.c
     Core/Src/commands.c
     Core/Src/gpio.c
     Core/Src/helpers.c

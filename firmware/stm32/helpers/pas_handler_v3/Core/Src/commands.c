@@ -17,9 +17,10 @@
 #include "main.h"
 #include "pas.h"
 #include "sounds.h"
+#include "blinkers.h"
 #include <algorithm.h>
 
-Command commands[11] = {{"eskl_animStart\r\n", animStart},
+Command commands[14] = {{"eskl_animStart\r\n", animStart},
                        {"eskl_frontCTog\r\n", toggleFrontCold},
                        {"eskl_frontWTog\r\n", toggleFrontWarm},
                        {"eskl_rearLETog\r\n", toggleRearLED},
@@ -28,6 +29,9 @@ Command commands[11] = {{"eskl_animStart\r\n", animStart},
                        {"eskl_soundsTog\r\n", toggleSound},
                        {"eskl_bulbsTogg\r\n", toggleBulbs},
                        {"eskl_requestSt\r\n", sendStatus},
+                       {"eskl_blinkLeft\r\n", blinkBlinkerLeft},
+                       {"eskl_blinkRigh\r\n", blinkBlinkerRight},
+                       {"eskl_blinkBoth\r\n", blinkBlinkerBoth},
                        {"eskl_algCmpInc\r\n", algorithmComponentIncrement},
                        {"eskl_algCmpDec\r\n", algorithmComponentDecrement}};
 
@@ -126,6 +130,21 @@ void toggleSound() {
   sendStatus();
 }
 
+void blinkBlinkerLeft() {
+  toggleLeftBlinker();
+  sendStatus();
+}
+
+void blinkBlinkerRight() {
+  toggleRightBlinker();
+  sendStatus();
+}
+
+void blinkBlinkerBoth() {
+  toggleBothBlinkers();
+  sendStatus();
+}
+
 void algorithmComponentIncrement() {
   algorithm_eq_component = algorithm_eq_component >= ALGORITHM_EQ_COMPONENT_MAX ? ALGORITHM_EQ_COMPONENT_MAX : algorithm_eq_component + 0.1f;
   algorithm_eq_component >= ALGORITHM_EQ_COMPONENT_MAX ? playErrorSound() : playToggleSound(1);
@@ -166,14 +185,15 @@ void sendStatus() {
   char batteryVoltageTens = ((batteryVoltage / 10) % 10) + '0';
   char batteryVoltageUnits = (batteryVoltage % 10) + '0';
 
-  sprintf(statusMessage, "eskl_st%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\r\n",
+  sprintf(statusMessage, "eskl_st%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\r\n",
           frontColdEnabled ? '1' : '0', frontWarmEnabled ? '1' : '0',
           rearEnabled ? '1' : '0', throttleEnabled ? '1' : '0',
           sportModeDisabled ? '1' : '0', soundEnabled ? '1' : '0',
           bulbsEnabled ? '1' : '0', 
           frontColdBrightnessHundreds, frontColdBrightnessTens, frontColdBrightnessUnits,
           algorithm_eq_componentSign, algorithm_eq_componentWhole, algorithm_eq_componentFrac,
-          batteryVoltageHundreds, batteryVoltageTens, batteryVoltageUnits);
+          batteryVoltageHundreds, batteryVoltageTens, batteryVoltageUnits,
+          blinkerLeftPinState ? '0' : '1', blinkerRightPinState ? '0' : '1');
 
   send_string(statusMessage);
 }

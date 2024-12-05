@@ -23,7 +23,7 @@ typedef struct {
   void (*action)(uint16_t arg);
 } VariableCommand;
 
-extern Command commands[11];
+extern Command commands[14];
 
 extern VariableCommand variableCommands[1];
 
@@ -38,6 +38,7 @@ extern bool bulbsEnabled;
 
 void initStatusMessage(void);
 void animStart(void);
+
 void toggleFrontCold(void);
 void toggleFrontColdNoSound(void);  // TODO CHANGE THIS AAAA
 void enableFrontColdNoSound();
@@ -45,10 +46,16 @@ void disableFrontColdNoSound();
 void setFrontColdBrightness(uint16_t brightness);
 void toggleFrontWarm(void);
 void toggleRearLED(void);
+
 void toggleThrottle(void);
 void toggleSportMode(void);
 void toggleSound(void);
 void toggleBulbs(void);
+
+void blinkBlinkerLeft(void);
+void blinkBlinkerRight(void);
+void blinkBlinkerBoth(void);
+
 void algorithmComponentIncrement(void);
 void algorithmComponentDecrement(void);
 

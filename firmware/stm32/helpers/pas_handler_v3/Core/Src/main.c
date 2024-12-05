@@ -32,6 +32,8 @@
 #include "logger.h"
 #include "sounds.h"
 #include "uart.h"
+#include "blinkers.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -105,29 +107,6 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc) {
   handleAdcMeasurement(HAL_ADC_GetValue(hadc));
 }
 
-uint32_t lastToneTime = 0;
-bool toggleTone = false;  
-
-void processDummyTone() {
-    uint32_t currentTime = HAL_GetTick(); // Pobierz aktualny czas (w ms)
-
-    // Sprawdzanie, czy minęła 1 sekunda
-    if (currentTime - lastToneTime >= 500) {
-        lastToneTime = currentTime;
-
-        // Przełączanie między dźwiękiem "on" i "off"
-        if (toggleTone) {
-            playTone(7); // Odtwórz dźwięk "click on"
-            HAL_GPIO_WritePin(BLINKER_LEFT_GPIO_Port, BLINKER_LEFT_Pin, 0);
-        } else {
-            playTone(8); // Odtwórz dźwięk "click off"
-            HAL_GPIO_WritePin(BLINKER_LEFT_GPIO_Port, BLINKER_LEFT_Pin, 1);
-        }
-
-        toggleTone = !toggleTone; // Zmień stan przełącznika
-    }
-}
-
 /* USER CODE END 0 */
 
 /**
@@ -166,7 +145,6 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   bikeInit();
-  HAL_GPIO_WritePin(BLINKER_RIGHT_GPIO_Port, BLINKER_RIGHT_Pin, 1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -179,7 +157,7 @@ int main(void)
     blink1S();
     processRealVelocity();
     processAdcMeasurement();
-    //processDummyTone();
+    processBlinkers();
 
     if (!runAlgorithm())
       continue;

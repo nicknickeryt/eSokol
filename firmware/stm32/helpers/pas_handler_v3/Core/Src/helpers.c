@@ -17,6 +17,7 @@
 #include "main.h"
 #include "pas.h"
 #include "sounds.h"
+#include "blinkers.h"
 #include "uart.h"
 
 bool bluetoothConnected = 0;
@@ -50,6 +51,7 @@ void bikeInit() {
   if (readPin(BT_STATE_GPIO_Port, BT_STATE_Pin))
     bluetoothConnected = true;
 
+  initBlinkers();
   initStatusMessage();
   initVelocityBuffer();
   playTone(2);

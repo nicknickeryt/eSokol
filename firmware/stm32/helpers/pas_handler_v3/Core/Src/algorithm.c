@@ -11,12 +11,20 @@
 #include "logger.h"
 #include "pas.h"
 #include "sounds.h"
+#include "main.h"
+#include "commands.h"
 
 #include "stm32f4xx_hal.h"
 
 float algorithm_eq_component = ALGORITHM_EQ_COMPONENT_DEFAULT;
 
 float pasTimeS = 0.0;
+
+bool algorithmStartTonePlayed = false;
+
+void playVVVFSound(float presc) {
+  if(soundEnabled) __HAL_TIM_SET_PRESCALER(&htim3, presc);
+}
 
 // (-0.00000044 * (x*x*x*x*x)) - (0.000049 * (x*x*x*x)) + (0.00164 * (x*x*x)) +(
 // 0.0169 * (x*x)) + (1.1815 * x) + 18.912;
@@ -42,8 +50,13 @@ void calculateDutyCycle(float x) {
                         ((1 - DUTY_SMOOTH_FACTOR_DOWN) * previousDutyCycle);
   }
 
-  if (rawDutyCycle > 0.0f && rawDutyCycle <= 30.0f)
+  if(rawDutyCycle > 28.0f && !isSoundPlaying())
+    playVVVFSound(300 - 3*targetDutyCycle);
+
+  else if (targetDutyCycle > 0.0f && previousDutyCycle == 0.0f && !algorithmStartTonePlayed && currentRealBikeVelocity < 10.0f) {
     playTone(SOUND_ALGORITHM_START);
+    algorithmStartTonePlayed = true;
+  }
 
   previousDutyCycle = targetDutyCycle;
 }
@@ -86,6 +99,9 @@ bool runAlgorithm() {
     logDebugInactive();
 #endif
     resetPas(1);
+    algorithmStartTonePlayed = false;
+
+    if(!isSoundPlaying()) __HAL_TIM_SET_PRESCALER(&htim3, 0);
   }
   return true;
 }
