@@ -20,23 +20,24 @@ sound_off = [659, 587];
 sound_off_dur = [125, 62];
 
 sound_click_on = [1000, 800, 0, 600]; 
-sound_click_on_dur = [25, 15, 10, 25]; 
+sound_click_on_dur = [12, 7, 5, 12]; 
 
 sound_click_off = [800, 600, 0, 400]; 
-sound_click_off_dur = [25, 15, 10, 25];
+sound_click_off_dur = [12, 7, 5, 12];
 
-N = 20;
-for k = 1:N
-    playSound(sound_click_on, sound_click_on_dur, fs);
-    pause(0.25); 
-    playSound(sound_click_off, sound_click_off_dur, fs);
-    pause(0.25); 
-end
+sound_vvvf = [311, 349, 392, 440, 494, 523, 587, 622, 698, 784, 0, 784, 0, 784, 0, 784, 0, 784, 0, 784, 0, 784, 0, 784, 0, 784, 0, 784, 0, 784, 0, 784, 0, 784, 0, 784, 0, 784, 0, 784, 0, 784, 0, 784, 0, 784, 0, 784, 0, 784, 0, 784, 0, 784, 0, 784, 0, 784, 0, 784, 0, 784, 0, 784, 0, 784, 0, 784, 0, 784, 0, 784, 0, 784, 0, 784, 0, 784, 0, 784, 0];
+sound_vvvf_dur = [34*8, 34*8, 34*7, 34*5, 34*5, 34*4, 34*4, 34*6, 34*7, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,  10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10];
 
-function playSound(sound_freq, sound_dur, fs)
-    for k=1:length(sound_freq)
-        y = sin(2 * pi * sound_freq(k) * (0:1/fs:sound_dur(k)/1000));
-        sound(y, fs);
-        pause(sound_dur(k) / 1000);
+
+sound_wave = generateSound(sound_vvvf, sound_vvvf_dur, fs);
+sound(sound_wave, fs);
+
+
+function wave = generateSound(freqs, durs, fs)
+    wave = [];
+    for k = 1:length(freqs)
+        t = 0:1/fs:durs(k)/1000; 
+        y = sin(2 * pi * freqs(k) * t); 
+        wave = [wave, y];
     end
 end
