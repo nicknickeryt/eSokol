@@ -61,6 +61,14 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define DEBUG_LED_Pin GPIO_PIN_13
 #define DEBUG_LED_GPIO_Port GPIOC
+#define BLINKER_RIGHT_IN_Pin GPIO_PIN_14
+#define BLINKER_RIGHT_IN_GPIO_Port GPIOC
+#define BLINKER_RIGHT_IN_EXTI_IRQn EXTI15_10_IRQn
+#define BLINKER_LEFT_IN_Pin GPIO_PIN_15
+#define BLINKER_LEFT_IN_GPIO_Port GPIOC
+#define BLINKER_LEFT_IN_EXTI_IRQn EXTI15_10_IRQn
+#define AMBIENTLIGHT_Pin GPIO_PIN_0
+#define AMBIENTLIGHT_GPIO_Port GPIOA
 #define BATT_SENSE_Pin GPIO_PIN_1
 #define BATT_SENSE_GPIO_Port GPIOA
 #define FRONT_WARM_Pin GPIO_PIN_2

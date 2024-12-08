@@ -50,10 +50,9 @@ void calculateDutyCycle(float x) {
                         ((1 - DUTY_SMOOTH_FACTOR_DOWN) * previousDutyCycle);
   }
 
-  if(rawDutyCycle > 28.0f && !isSoundPlaying())
+  if(rawDutyCycle > 28.0f && !isSoundPlaying() && algorithmSoundEnabled)
     playVVVFSound(300 - 3*targetDutyCycle);
-
-  else if (targetDutyCycle > 0.0f && previousDutyCycle == 0.0f && !algorithmStartTonePlayed && currentRealBikeVelocity < 10.0f) {
+  else if (targetDutyCycle > 0.0f && previousDutyCycle == 0.0f && !algorithmStartTonePlayed && currentRealBikeVelocity < 10.0f && algorithmSoundEnabled) {
     playTone(SOUND_ALGORITHM_START);
     algorithmStartTonePlayed = true;
   }
@@ -101,7 +100,7 @@ bool runAlgorithm() {
     resetPas(1);
     algorithmStartTonePlayed = false;
 
-    if(!isSoundPlaying()) __HAL_TIM_SET_PRESCALER(&htim3, 0);
+    if(!isSoundPlaying() && algorithmSoundEnabled) __HAL_TIM_SET_PRESCALER(&htim3, 0);
   }
   return true;
 }

@@ -10,6 +10,7 @@
 #include <stdint.h>
 
 #include "animations.h"
+#include "ambientlight.h"
 #include "commands.h"
 #include "gpio.h"
 #include "helpers.h"
@@ -98,6 +99,7 @@ void processAnimation() {
           disableFrontColdNoSound();
           writePin(REAR_LED_GPIO_Port, REAR_LED_Pin, 0);
           shouldSendStatus = true;
+          initAmbientLight(); // this is important!
         }
       }
       break;

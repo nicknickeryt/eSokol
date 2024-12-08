@@ -25,8 +25,10 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "adc.h"
 #include "algorithm.h"
 #include "animations.h"
+#include "ambientlight.h"
 #include "gpio.h"
 #include "helpers.h"
 #include "logger.h"
@@ -53,6 +55,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 ADC_HandleTypeDef hadc1;
+DMA_HandleTypeDef hdma_adc1;
 
 TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim3;
@@ -66,6 +69,7 @@ UART_HandleTypeDef huart1;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
+static void MX_DMA_Init(void);
 static void MX_TIM1_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_TIM3_Init(void);
@@ -93,8 +97,13 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
       pasCounter++;
       break;
     case HALL_SPEED_Pin:
-      if (readPin(HALL_SPEED_GPIO_Port, HALL_SPEED_Pin) == 1)
-        setRealBikeVelocity(calculateRealBikeVelocity(HAL_GetTick()));
+      if (readPin(HALL_SPEED_GPIO_Port, HALL_SPEED_Pin)) setRealBikeVelocity(calculateRealBikeVelocity(HAL_GetTick()));
+      break;
+    case BLINKER_LEFT_IN_Pin:
+      readPin(BLINKER_LEFT_IN_GPIO_Port, BLINKER_LEFT_IN_Pin) ? resetBlinkers() : enableLeftBlinker();
+      break;
+    case BLINKER_RIGHT_IN_Pin:
+      readPin(BLINKER_RIGHT_IN_GPIO_Port, BLINKER_RIGHT_IN_Pin) ? resetBlinkers() : enableRightBlinker();
       break;
   }
 }
@@ -104,7 +113,7 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef* huart, uint16_t size) {
 }
 
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc) {
-  handleAdcMeasurement(HAL_ADC_GetValue(hadc));
+  startAdcMeasurement();
 }
 
 /* USER CODE END 0 */
@@ -138,6 +147,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_TIM1_Init();
   MX_USART1_UART_Init();
   MX_TIM3_Init();
@@ -158,6 +168,7 @@ int main(void)
     processRealVelocity();
     processAdcMeasurement();
     processBlinkers();
+    processAmbientLight();
 
     if (!runAlgorithm())
       continue;
@@ -238,14 +249,14 @@ static void MX_ADC1_Init(void)
   hadc1.Instance = ADC1;
   hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV8;
   hadc1.Init.Resolution = ADC_RESOLUTION_12B;
-  hadc1.Init.ScanConvMode = DISABLE;
+  hadc1.Init.ScanConvMode = ENABLE;
   hadc1.Init.ContinuousConvMode = ENABLE;
   hadc1.Init.DiscontinuousConvMode = DISABLE;
   hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
   hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
   hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-  hadc1.Init.NbrOfConversion = 1;
-  hadc1.Init.DMAContinuousRequests = DISABLE;
+  hadc1.Init.NbrOfConversion = 2;
+  hadc1.Init.DMAContinuousRequests = ENABLE;
   hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
   if (HAL_ADC_Init(&hadc1) != HAL_OK)
   {
@@ -256,7 +267,16 @@ static void MX_ADC1_Init(void)
   */
   sConfig.Channel = ADC_CHANNEL_1;
   sConfig.Rank = 1;
-  sConfig.SamplingTime = ADC_SAMPLETIME_84CYCLES;
+  sConfig.SamplingTime = ADC_SAMPLETIME_480CYCLES;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
+  */
+  sConfig.Channel = ADC_CHANNEL_0;
+  sConfig.Rank = 2;
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
   {
     Error_Handler();
@@ -439,6 +459,22 @@ static void MX_USART1_UART_Init(void)
 }
 
 /**
+  * Enable DMA controller clock
+  */
+static void MX_DMA_Init(void)
+{
+
+  /* DMA controller clock enable */
+  __HAL_RCC_DMA2_CLK_ENABLE();
+
+  /* DMA interrupt init */
+  /* DMA2_Stream0_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA2_Stream0_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA2_Stream0_IRQn);
+
+}
+
+/**
   * @brief GPIO Initialization Function
   * @param None
   * @retval None
@@ -470,6 +506,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(DEBUG_LED_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : BLINKER_RIGHT_IN_Pin BLINKER_LEFT_IN_Pin */
+  GPIO_InitStruct.Pin = BLINKER_RIGHT_IN_Pin|BLINKER_LEFT_IN_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   /*Configure GPIO pin : FRONT_WARM_Pin */
   GPIO_InitStruct.Pin = FRONT_WARM_Pin;

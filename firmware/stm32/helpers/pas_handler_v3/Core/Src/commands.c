@@ -20,7 +20,7 @@
 #include "blinkers.h"
 #include <algorithm.h>
 
-Command commands[14] = {{"eskl_animStart\r\n", animStart},
+Command commands[16] = {{"eskl_animStart\r\n", animStart},
                        {"eskl_frontCTog\r\n", toggleFrontCold},
                        {"eskl_frontWTog\r\n", toggleFrontWarm},
                        {"eskl_rearLETog\r\n", toggleRearLED},
@@ -33,7 +33,9 @@ Command commands[14] = {{"eskl_animStart\r\n", animStart},
                        {"eskl_blinkRigh\r\n", blinkBlinkerRight},
                        {"eskl_blinkBoth\r\n", blinkBlinkerBoth},
                        {"eskl_algCmpInc\r\n", algorithmComponentIncrement},
-                       {"eskl_algCmpDec\r\n", algorithmComponentDecrement}};
+                       {"eskl_algCmpDec\r\n", algorithmComponentDecrement},
+                       {"eskl_algSndTog\r\n", toggleAlgorithmSound},
+                       {"eskl_ambienTog\r\n", toggleAmbientLight}};
 
 VariableCommand variableCommands[1] = {{"eskl_bri__", setFrontColdBrightness}};
 
@@ -48,6 +50,8 @@ bool throttleEnabled = false;
 bool sportModeDisabled = true;
 bool soundEnabled = true;
 bool bulbsEnabled = false;
+bool algorithmSoundEnabled = false;
+bool ambientLightEnabled = true;
 
 void initStatusMessage() {
   statusMessage = (char*)malloc(21 * sizeof(char));
@@ -104,6 +108,16 @@ void toggleRearLED() {
   sendStatus();
 }
 
+void enableRearLEDNoSound() {
+  writePin(REAR_LED_GPIO_Port, REAR_LED_Pin, 1);
+  sendStatus();
+}
+
+void disableRearLEDNoSound() {
+  writePin(REAR_LED_GPIO_Port, REAR_LED_Pin, 0);
+  sendStatus();
+}
+
 void toggleThrottle() {
   togglePin(THR_DIS_GPIO_Port, THR_DIS_Pin);
   togglePWM(TIM_THROTTLE_LEDS, !throttleEnabled);
@@ -145,6 +159,18 @@ void blinkBlinkerBoth() {
   sendStatus();
 }
 
+void toggleAlgorithmSound() {
+  algorithmSoundEnabled = !algorithmSoundEnabled;
+  playToggleSound(algorithmSoundEnabled);
+  sendStatus();
+}
+
+void toggleAmbientLight() {
+  ambientLightEnabled = !ambientLightEnabled;
+  playToggleSound(ambientLightEnabled);
+  sendStatus();
+}
+
 void algorithmComponentIncrement() {
   algorithm_eq_component = algorithm_eq_component >= ALGORITHM_EQ_COMPONENT_MAX ? ALGORITHM_EQ_COMPONENT_MAX : algorithm_eq_component + 0.1f;
   algorithm_eq_component >= ALGORITHM_EQ_COMPONENT_MAX ? playErrorSound() : playToggleSound(1);
@@ -157,7 +183,7 @@ void algorithmComponentDecrement() {
   sendStatus();
 }
 
-/* status format: eskl_stABCDEFGHHHIII
+/* status format: eskl_stABCDEFGHHHIIIJJJKLM
  * A   =>  frontColdEnabled(bool 0:1)
  * B   =>  frontWarmEnabled(bool 0:1)
  * C   =>  rearEnabled(bool 0:1)
@@ -171,6 +197,9 @@ void algorithmComponentDecrement() {
  *                    * 2nd digit - whole part
  *                    * 3rd digit - fractional part
  * JJJ =>  batteryVoltage(uint8_t 0:30) -> float 
+ * K   =>  blinkerLeftPinState(bool 0:1)
+ * L   =>  blinkerRightPinState(bool 0:1)
+ * M   =>  ambientLightEnabled(bool 0:1)
  */
 void sendStatus() {
   char frontColdBrightnessHundreds = (frontColdBrightness / 100) + '0';
@@ -185,7 +214,7 @@ void sendStatus() {
   char batteryVoltageTens = ((batteryVoltage / 10) % 10) + '0';
   char batteryVoltageUnits = (batteryVoltage % 10) + '0';
 
-  sprintf(statusMessage, "eskl_st%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\r\n",
+  sprintf(statusMessage, "eskl_st%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\r\n",
           frontColdEnabled ? '1' : '0', frontWarmEnabled ? '1' : '0',
           rearEnabled ? '1' : '0', throttleEnabled ? '1' : '0',
           sportModeDisabled ? '1' : '0', soundEnabled ? '1' : '0',
@@ -193,7 +222,8 @@ void sendStatus() {
           frontColdBrightnessHundreds, frontColdBrightnessTens, frontColdBrightnessUnits,
           algorithm_eq_componentSign, algorithm_eq_componentWhole, algorithm_eq_componentFrac,
           batteryVoltageHundreds, batteryVoltageTens, batteryVoltageUnits,
-          blinkerLeftPinState ? '0' : '1', blinkerRightPinState ? '0' : '1');
+          blinkerLeftPinState ? '0' : '1', blinkerRightPinState ? '0' : '1',
+          algorithmSoundEnabled ? '1' : '0', ambientLightEnabled ? '1' : '0');
 
   send_string(statusMessage);
 }
