@@ -38,7 +38,6 @@ void processTone(void);
 void playTone(uint8_t number);
 
 void playToggleSound(bool state);
-void playErrorSound(void);
 
 bool isSoundPlaying(void);
 

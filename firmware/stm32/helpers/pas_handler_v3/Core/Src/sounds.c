@@ -65,7 +65,6 @@ void noTone() {
   __HAL_TIM_SET_PRESCALER(TIM_SOUND, 0);
 }
 
-// Deklaracja zmiennych globalnych dla sekwencji dźwięków
 uint32_t* currentToneSequence = NULL;
 uint32_t* currentDurationSequence = NULL;
 uint32_t sequenceSize = 0;
@@ -82,30 +81,25 @@ void startToneSequence(uint32_t* tone, uint32_t* duration, uint32_t size) {
 }
 
 void processTone() {
-  if (currentToneSequence == NULL || currentIndex >= sequenceSize) {
-    return;  // Brak sekwencji lub zakończenie odtwarzania
-  }
+  if (currentToneSequence == NULL || currentIndex >= sequenceSize)
+    return;
 
   uint32_t now = HAL_GetTick();
 
-  // Sprawdzamy, czy czas trwania tonu upłynął
-  if (isToneActive &&
-      (now - toneStartTime >= currentDurationSequence[currentIndex])) {
-    noTone();          // Zatrzymujemy ton
-    isToneActive = 0;  // Przechodzimy do pauzy
+  if (isToneActive && (now - toneStartTime >= currentDurationSequence[currentIndex])) {
+    noTone();         
+    isToneActive = 0; 
     currentIndex++;
   }
 
-  // Rozpoczynamy nowy ton
   if (!isToneActive && currentIndex < sequenceSize) {
     int frequency = currentToneSequence[currentIndex];
     if (frequency > 0) {
       int prescaler = presForFrequency(frequency);
       __HAL_TIM_SET_PRESCALER(TIM_SOUND, prescaler);
-      toneStartTime = HAL_GetTick();  // Ustawienie nowego czasu startu
+      toneStartTime = HAL_GetTick();  
       isToneActive = 1;
     } else {
-      // Jeśli częstotliwość to 0, pauzujemy bez dźwięku
       toneStartTime = HAL_GetTick();
       isToneActive = 1;
     }
@@ -165,10 +159,6 @@ void playTone(uint8_t number) {
 void playToggleSound(bool state) {
   uint8_t tone = state == true ? SOUND_ON : SOUND_OFF;
   playTone(tone);
-}
-
-void playErrorSound() {
-  playTone(SOUND_ERR);
 }
 
 bool isSoundPlaying() {

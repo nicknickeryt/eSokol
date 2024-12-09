@@ -10,6 +10,7 @@
 #include <stdlib.h>
 
 #include "animations.h"
+#include "ambientlight.h"
 #include "commands.h"
 #include "gpio.h"
 #include "helpers.h"
@@ -73,7 +74,6 @@ void toggleFrontCold() {
   sendStatus();
 }
 
-// this is used for animations
 void toggleFrontColdNoSound() {
   frontColdEnabled = !frontColdEnabled;
   TIM1->CCR4 = frontColdEnabled ? frontColdBrightnessToDutyCycle() : 0;
@@ -167,19 +167,20 @@ void toggleAlgorithmSound() {
 
 void toggleAmbientLight() {
   ambientLightEnabled = !ambientLightEnabled;
+  if(ambientLightEnabled) initAmbientLight();
   playToggleSound(ambientLightEnabled);
   sendStatus();
 }
 
 void algorithmComponentIncrement() {
   algorithm_eq_component = algorithm_eq_component >= ALGORITHM_EQ_COMPONENT_MAX ? ALGORITHM_EQ_COMPONENT_MAX : algorithm_eq_component + 0.1f;
-  algorithm_eq_component >= ALGORITHM_EQ_COMPONENT_MAX ? playErrorSound() : playToggleSound(1);
+  algorithm_eq_component >= ALGORITHM_EQ_COMPONENT_MAX ? playTone(SOUND_ERR) : playToggleSound(1);
   sendStatus();
 }
 
 void algorithmComponentDecrement() {
   algorithm_eq_component = algorithm_eq_component <= ALGORITHM_EQ_COMPONENT_MIN ? ALGORITHM_EQ_COMPONENT_MIN : algorithm_eq_component - 0.1f;
-  algorithm_eq_component <= ALGORITHM_EQ_COMPONENT_MIN ? playErrorSound() : playToggleSound(0);
+  algorithm_eq_component <= ALGORITHM_EQ_COMPONENT_MIN ? playTone(SOUND_ERR) : playToggleSound(0);
   sendStatus();
 }
 
