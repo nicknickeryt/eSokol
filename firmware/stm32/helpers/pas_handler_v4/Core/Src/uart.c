@@ -69,6 +69,6 @@ void processSendStatus() {
 }
 
 void sendStatus1s() {
-    shouldSendStatus1s = HAL_GetTick() - shouldSendStatus1sTime > 1000;
+    shouldSendStatus1s = HAL_GetTick() - shouldSendStatus1sTime > 100;
     if (shouldSendStatus1s) shouldSendStatus1sTime = HAL_GetTick();
 }
