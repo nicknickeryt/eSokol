@@ -10,7 +10,7 @@
 
 #include <stdint.h>
 
-#define ADC_AVG_SAMPLES 20
+#define ADC_AVG_SAMPLES 10
 
 #define ADC_BATTERY_CHANNEL 0
 #define ADC_LDR_CHANNEL 1
