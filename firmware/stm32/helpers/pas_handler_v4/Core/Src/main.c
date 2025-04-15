@@ -83,7 +83,8 @@ static void MX_ADC1_Init(void);
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
   switch (GPIO_Pin) {
     case BT_STATE_Pin:
-      if (readPin(BT_STATE_GPIO_Port, BT_STATE_Pin)) {
+      if(isSoundPlaying()) return;
+      else if (readPin(BT_STATE_GPIO_Port, BT_STATE_Pin)) {
         bluetoothConnected = true;
         playTone(SOUND_CONNECTED);
         playAnim(ANIM_CONNECTED);

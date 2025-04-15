@@ -28,6 +28,8 @@
 #define SOUND_CLICK_ON 7
 #define SOUND_CLICK_OFF 8
 
+#define SOUND_RUDOLF 10
+
 uint32_t presForFrequency(uint32_t frequency);
 void noTone(void);
 

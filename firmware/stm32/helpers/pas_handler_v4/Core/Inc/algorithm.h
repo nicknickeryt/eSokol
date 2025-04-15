@@ -21,10 +21,13 @@
 
 #define PAS_INACTIVE_TIME_S 0.5     // time in seconds after which targetDutyCycle is set to 0
 
+#define MINIMUM_THROTTLE_VOLTAGE 1.1 // voltage below which duty cycle is 0, throttle voltage at idle is ~ 1.04V
+
+#define ALGORITM_DISABLE // temp!! disable algorithm for now...
+
 // this should be a value between -9.9 and 9.9
 extern float algorithm_eq_component;
 
-void calculateDutyCycle(float x);
 bool runAlgorithm();
 
 #endif /* __ALGORITHM_H_ */

@@ -23,10 +23,10 @@ float targetVelocityWheel = 0.0;
 
 float pasActive = 0;
 
-float targetDutyCycle = 0.0;  // PWM duty cycle
+float targetDutyCycle = 0.0f;  // PWM duty cycle
 
 // TODO proper .h/macro!!!
-float previousDutyCycle = 0.0;  // Przechowuje poprzednią wartość duty cycle
+float previousDutyCycle = 0.0f;  // Przechowuje poprzednią wartość duty cycle
 
 void resetDutyCycle() {
   TIM1->CCR1 = 0;

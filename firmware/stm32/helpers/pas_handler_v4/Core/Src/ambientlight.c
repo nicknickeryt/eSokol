@@ -5,17 +5,16 @@
  *      Author: nick
  */
 
+#include "ambientlight.h"
+
 #include <stdint.h>
 
 #include "adc.h"
-#include "ambientlight.h"
 #include "commands.h"
 
 uint32_t lastDimTick = 0;
-bool previousAmbientLightState = 0; // 0 - day, 1 - night
+bool previousAmbientLightState = 0;  // 0 - day, 1 - night
 bool currentAmbientLightState = 0;
-
-
 
 void enableDefaultLights() {
     enableFrontColdNoSound();
@@ -32,15 +31,14 @@ void processAmbientLightState() {
 }
 
 void setAmbientLight() {
-    switch (currentAmbientLightState)
-        {
+    switch (currentAmbientLightState) {
         case 0:
             disableDefaultLights();
             break;
         case 1:
             enableDefaultLights();
             break;
-        }
+    }
 }
 
 void initAmbientLight() {
@@ -49,11 +47,11 @@ void initAmbientLight() {
 }
 
 void processAmbientLight() {
-    if(!ambientLightEnabled) return;
+    if (!ambientLightEnabled) return;
 
     processAmbientLightState();
 
-    if(currentAmbientLightState != previousAmbientLightState) {
+    if (currentAmbientLightState != previousAmbientLightState) {
         previousAmbientLightState = currentAmbientLightState;
         setAmbientLight();
     }

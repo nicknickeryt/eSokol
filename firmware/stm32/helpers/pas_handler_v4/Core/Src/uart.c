@@ -6,7 +6,6 @@
  */
 
 #include "uart.h"
-#include "logger.h"
 
 #include <stdbool.h>
 #include <stdlib.h>
@@ -15,6 +14,7 @@
 #include "commands.h"
 #include "gpio.h"
 #include "helpers.h"
+#include "logger.h"
 #include "main.h"
 #include "sounds.h"
 

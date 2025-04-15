@@ -131,7 +131,7 @@ void playTone(uint8_t number) {
                 sound_click_off, sound_click_off_dur,
                 (sizeof(sound_click_off_dur) / sizeof(sound_click_off_dur[0])));
             break;
-        case 10:
+        case SOUND_RUDOLF:
             startToneSequence(sound_rudolf_czerwononosy,
                               sound_rudolf_czerwononosy_dur,
                               (sizeof(sound_rudolf_czerwononosy_dur) /

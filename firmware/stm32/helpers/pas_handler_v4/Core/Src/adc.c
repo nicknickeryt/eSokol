@@ -88,7 +88,4 @@ void processAdcMeasurement() {
   processBatteryCurrent();
 
   adcConvCompleted = 0;
-
-  // // milivolts
-  // send_uint32(1000 * batteryCurrent);
 }
