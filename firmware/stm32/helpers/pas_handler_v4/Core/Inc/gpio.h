@@ -18,7 +18,7 @@
 #include "stm32f4xx_hal.h"
 
 void togglePin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);
-void writePin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, bool newState);
+void gpio_write(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, bool newState);
 bool gpio_read(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);
 
 #endif /* __GPIO_H */

@@ -26,15 +26,15 @@ float pasTimeS = 0.0;
 float currentDutyCycle = 0.0f;
 const float alpha = 0.001f;
 
-bool algorithm_proc() {
-    if (!throttleEnabled) return false;
+void algorithm_proc() {
+    if (!throttleEnabled) return;
 
-    if (throttleVoltage < MINIMUM_THROTTLE_VOLTAGE) {
+    if (adc_throttleVoltage < MINIMUM_THROTTLE_VOLTAGE) {
         targetDutyCycle = 0.0f;
         currentDutyCycle = 0.0f;
         TIM1->PSC = 168 - 1;
     } else {
-        float normalizedVoltage = (throttleVoltage - MINIMUM_THROTTLE_VOLTAGE) / (2.55f - MINIMUM_THROTTLE_VOLTAGE);
+        float normalizedVoltage = (adc_throttleVoltage - MINIMUM_THROTTLE_VOLTAGE) / (2.55f - MINIMUM_THROTTLE_VOLTAGE);
         if (normalizedVoltage > 1.0f) normalizedVoltage = 1.0f;
         if (normalizedVoltage < 0.0f) normalizedVoltage = 0.0f;
 
@@ -50,8 +50,8 @@ bool algorithm_proc() {
         float rangeSize = (2.55f - 0.9f) / 4.0f;
         float V_start = 0.9f;
 
-        int rangeIndex = (throttleVoltage - V_start) / rangeSize;
-        float V_local = throttleVoltage - (V_start + rangeIndex * rangeSize);
+        int rangeIndex = (adc_throttleVoltage - V_start) / rangeSize;
+        float V_local = adc_throttleVoltage - (V_start + rangeIndex * rangeSize);
 
         int PSC_max = 209 + (rangeIndex * 30);
         int PSC_min = 111 + (rangeIndex * 10);
@@ -60,5 +60,4 @@ bool algorithm_proc() {
     }
 
     updateDutyCycle();  // actually write duty cycle
-    return true;
 }

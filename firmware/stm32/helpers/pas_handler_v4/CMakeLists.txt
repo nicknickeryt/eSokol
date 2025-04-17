@@ -64,6 +64,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     Core/Src/sounds.c
     Core/Src/uart.c
     Core/Src/speedometer.c
+    Core/Src/bike.c
 )
 
 # Add include paths

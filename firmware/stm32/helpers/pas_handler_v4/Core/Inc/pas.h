@@ -11,6 +11,7 @@
 #define __PAS_H_
 
 #include <stdbool.h>
+#include <stdint.h>
 
 #define MIN_DUTY_CYCLE 16.0
 #define MAX_DUTY_CYCLE 100.0
@@ -31,10 +32,26 @@
 #define DUTY_SMOOTH_FACTOR_DOWN 0.8
 #define DUTY_PWM_MAX_CCR1 1000.0
 
+extern uint8_t pas_counter;
+extern int pas_lastResetTick;
+
+extern float omegaPedals;
+extern float targetOmegaWheel;
+extern float targetVelocityWheel;
+
+extern float pasActive;
+extern float targetDutyCycle;
+extern float previousDutyCycle;
+
+extern float pasTimeS;
+
 void resetDutyCycle();
-
 void updateDutyCycle();
-
 void resetPas(bool inactive);
+
+void logDebugDegrees(float);
+void logDebugVWheel(void);
+void logDebugDutyCycle(void);
+void logDebugInactive(void);
 
 #endif /* __PAS_H_ */

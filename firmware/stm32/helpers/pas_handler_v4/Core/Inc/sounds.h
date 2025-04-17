@@ -17,28 +17,24 @@
 #define TIM3_MAX_CNT 1000
 
 #define SOUND_MARIO 1
-
 #define SOUND_CONNECTED 2
 #define SOUND_DISCONNECTED 3
-
 #define SOUND_ON 4
 #define SOUND_OFF 5
-
 #define SOUND_ERR 6
 #define SOUND_CLICK_ON 7
 #define SOUND_CLICK_OFF 8
-
 #define SOUND_RUDOLF 10
 
-uint32_t presForFrequency(uint32_t frequency);
-void noTone(void);
+uint32_t sound_getPSCForFreq(uint32_t frequency);
 
-void startToneSequence(uint32_t* tone, uint32_t* duration, uint32_t size);
+void sound_startSequence(uint32_t* tone, uint32_t* duration, uint32_t size);
+
 void sound_proc(void);
 
 void sound_play(uint8_t number);
-
-void playToggleSound(bool state);
+void sound_playToggle(bool state);
+void sound_nothing(void);
 
 bool sound_isPlaying(void);
 

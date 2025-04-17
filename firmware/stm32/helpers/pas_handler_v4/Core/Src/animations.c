@@ -38,7 +38,7 @@ void anim_proc() {
 
     switch (currentAnimState) {
         case ANIM_IDLE:
-            if (!bluetoothConnected) {
+            if (!bike_bluetoothConnected) {
                 currentAnimState = ANIM_BLINK_DISCONNECTED;
                 animStartTime = now;
             }
@@ -82,7 +82,7 @@ void anim_proc() {
                 if (animStep >= 2) {
                     currentAnimState = ANIM_IDLE;
                     enableFrontColdNoSound();
-                    writePin(REAR_LED_GPIO_Port, REAR_LED_Pin, 1);
+                    gpio_write(REAR_LED_GPIO_Port, REAR_LED_Pin, 1);
                     shouldSendStatus = true;
                 }
             }
@@ -98,7 +98,7 @@ void anim_proc() {
                 if (animStep >= 5) {
                     currentAnimState = ANIM_IDLE;
                     disableFrontColdNoSound();
-                    writePin(REAR_LED_GPIO_Port, REAR_LED_Pin, 0);
+                    gpio_write(REAR_LED_GPIO_Port, REAR_LED_Pin, 0);
                     shouldSendStatus = true;
                     initAmbientLight();  // this is important!
                 }
@@ -115,7 +115,7 @@ void anim_proc() {
                 if (animStep >= 10) {
                     currentAnimState = ANIM_IDLE;
                     disableFrontColdNoSound();
-                    writePin(REAR_LED_GPIO_Port, REAR_LED_Pin, 0);
+                    gpio_write(REAR_LED_GPIO_Port, REAR_LED_Pin, 0);
                 }
             }
             break;
@@ -130,7 +130,7 @@ void anim_proc() {
     }
 }
 
-void blink1S() {
+void anim_blinkProc() {
     if (HAL_GetTick() - blink1STime > 1000) {
         togglePin(GPIOC, GPIO_PIN_13);
         blink1STime = HAL_GetTick();

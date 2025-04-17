@@ -11,7 +11,7 @@ uint32_t hallLastTick = 0;
 uint32_t hallLastSendTick = 0;
 float currentRealBikeVelocity = 0;
 
-void initVelocityBuffer() { velocityBuffer = (char*)malloc(18 * sizeof(char)); }
+void speedometer_init() { velocityBuffer = (char*)malloc(18 * sizeof(char)); }
 
 float speedometer_calculateVelocity(uint32_t hallCurrTick) {
     float omega = (2.0f * PI) / ((hallCurrTick - hallLastTick) / 1000.0f);
@@ -21,13 +21,15 @@ float speedometer_calculateVelocity(uint32_t hallCurrTick) {
 
 void speedometer_setVelocity(float velocity) { currentRealBikeVelocity = velocity; }
 
+float speedometer_getVelocity() { return currentRealBikeVelocity;}
+
 void speedometer_proc() {
     if (!(HAL_GetTick() - hallLastSendTick > 300)) return;
     if (HAL_GetTick() - hallLastTick > 2500) currentRealBikeVelocity = 0.0f;
 
     sprintf(velocityBuffer, "eskl_evel%s\r\n",
-            float_to_char(currentRealBikeVelocity));
+            logger_floatToChar(currentRealBikeVelocity));
     hallLastSendTick = HAL_GetTick();
 
-    send_string(velocityBuffer);
+    logger_sendChar(velocityBuffer);
 }

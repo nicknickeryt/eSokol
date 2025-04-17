@@ -23,7 +23,7 @@
 #include "pas.h"
 #include "sounds.h"
 
-Command commands[14] = {{"eskl_animStart\r\n", animStart},
+Command commands[14] = {{"eskl_animStart\r\n", anim_start},
                         {"eskl_frontCTog\r\n", toggleFrontCold},
                         {"eskl_frontWTog\r\n", toggleFrontWarm},
                         {"eskl_rearLETog\r\n", toggleRearLED},
@@ -54,9 +54,9 @@ bool ambientLightEnabled = true;
 
 void initStatusMessage() { statusMessage = (char*)malloc(21 * sizeof(char)); }
 
-void animStart() {
+void anim_start() {
     animation_play(ANIM_STARTUP_PHASE1);
-    playToggleSound(1);
+    sound_playToggle(1);
 }
 
 uint16_t frontColdBrightnessToDutyCycle() {
@@ -66,7 +66,7 @@ uint16_t frontColdBrightnessToDutyCycle() {
 void toggleFrontCold() {
     frontColdEnabled = !frontColdEnabled;
     TIM1->CCR4 = frontColdEnabled ? frontColdBrightnessToDutyCycle() : 0;
-    playToggleSound(frontColdEnabled);
+    sound_playToggle(frontColdEnabled);
     sendStatus();
 }
 
@@ -93,42 +93,42 @@ void setFrontColdBrightness(uint16_t brightness) {
 
 void toggleFrontWarm() {
     togglePin(FRONT_WARM_GPIO_Port, FRONT_WARM_Pin);
-    playToggleSound(frontWarmEnabled);
+    sound_playToggle(frontWarmEnabled);
     sendStatus();
 }
 
 void toggleRearLED() {
     togglePin(REAR_LED_GPIO_Port, REAR_LED_Pin);
-    playToggleSound(rearEnabled);
+    sound_playToggle(rearEnabled);
     sendStatus();
 }
 
 void enableRearLEDNoSound() {
-    writePin(REAR_LED_GPIO_Port, REAR_LED_Pin, 1);
+    gpio_write(REAR_LED_GPIO_Port, REAR_LED_Pin, 1);
     sendStatus();
 }
 
 void disableRearLEDNoSound() {
-    writePin(REAR_LED_GPIO_Port, REAR_LED_Pin, 0);
+    gpio_write(REAR_LED_GPIO_Port, REAR_LED_Pin, 0);
     sendStatus();
 }
 
 void toggleThrottle() {
     throttleEnabled = !throttleEnabled;
-    playToggleSound(throttleEnabled);
+    sound_playToggle(throttleEnabled);
     sendStatus();
 }
 
 void toggleBulbs() {
     togglePin(BULBS_GPIO_Port, BULBS_Pin);
-    playToggleSound(bulbsEnabled);
+    sound_playToggle(bulbsEnabled);
     sendStatus();
 }
 
 void toggleSound() {
     soundEnabled = !soundEnabled;
-    playToggleSound(soundEnabled);
-    togglePWM(TIM_SOUND, soundEnabled);
+    sound_playToggle(soundEnabled);
+    pwm_toggle(TIM_SOUND, soundEnabled);
     sendStatus();
 }
 
@@ -150,7 +150,7 @@ void blinkBlinkerBoth() {
 void toggleAmbientLight() {
     ambientLightEnabled = !ambientLightEnabled;
     if (ambientLightEnabled) initAmbientLight();
-    playToggleSound(ambientLightEnabled);
+    sound_playToggle(ambientLightEnabled);
     sendStatus();
 }
 
@@ -160,7 +160,7 @@ void algorithmComponentIncrement() {
             ? ALGORITHM_EQ_COMPONENT_MAX
             : algorithm_eq_component + 0.1f;
     algorithm_eq_component >= ALGORITHM_EQ_COMPONENT_MAX ? sound_play(SOUND_ERR)
-                                                         : playToggleSound(1);
+                                                         : sound_playToggle(1);
     sendStatus();
 }
 
@@ -170,7 +170,7 @@ void algorithmComponentDecrement() {
             ? ALGORITHM_EQ_COMPONENT_MIN
             : algorithm_eq_component - 0.1f;
     algorithm_eq_component <= ALGORITHM_EQ_COMPONENT_MIN ? sound_play(SOUND_ERR)
-                                                         : playToggleSound(0);
+                                                         : sound_playToggle(0);
     sendStatus();
 }
 
@@ -209,14 +209,14 @@ void sendStatus() {
             10 +
         '0';
 
-    char batteryVoltageHundreds = (batteryVoltage / 100) + '0';
-    char batteryVoltageTens = ((batteryVoltage / 10) % 10) + '0';
-    char batteryVoltageUnits = (batteryVoltage % 10) + '0';
+    char batteryVoltageHundreds = (adc_batteryVoltage / 100) + '0';
+    char batteryVoltageTens = ((adc_batteryVoltage / 10) % 10) + '0';
+    char batteryVoltageUnits = (adc_batteryVoltage % 10) + '0';
 
-    char batteryCurrentThousands = (batteryCurrent / 1000) + '0';
-    char batteryCurrentHundreds = ((batteryCurrent / 100) % 10) + '0';
-    char batteryCurrentTens = ((batteryCurrent / 10) % 10) + '0';
-    char batteryCurrentUnits = (batteryCurrent % 10) + '0';
+    char batteryCurrentThousands = (adc_batteryCurrent / 1000) + '0';
+    char batteryCurrentHundreds = ((adc_batteryCurrent / 100) % 10) + '0';
+    char batteryCurrentTens = ((adc_batteryCurrent / 10) % 10) + '0';
+    char batteryCurrentUnits = (adc_batteryCurrent % 10) + '0';
 
     sprintf(statusMessage,
             "eskl_st%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\r\n",
@@ -235,5 +235,5 @@ void sendStatus() {
 
             batteryCurrentThousands, batteryCurrentHundreds, batteryCurrentTens,
             batteryCurrentUnits);
-    send_string(statusMessage);
+    logger_sendChar(statusMessage);
 }

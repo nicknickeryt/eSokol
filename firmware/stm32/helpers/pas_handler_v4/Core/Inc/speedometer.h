@@ -11,16 +11,11 @@
 
 #include <stdint.h> 
 
-extern char* velocityBuffer;
-
-extern uint32_t hallLastTick;
-extern uint32_t hallLastSendTick;
-extern float currentRealBikeVelocity;
-
-void initVelocityBuffer(void);
+void speedometer_init(void);
 
 float speedometer_calculateVelocity(uint32_t hallCurrTick);
 void speedometer_setVelocity(float velocity);
+float speedometer_getVelocity(void);
 
 void speedometer_proc(void);
 

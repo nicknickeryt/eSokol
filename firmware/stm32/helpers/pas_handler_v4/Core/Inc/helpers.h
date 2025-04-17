@@ -25,33 +25,17 @@
 // π rounded value // TODO: do we really need so many decimal places?
 #define PI 3.141592
 
-extern uint8_t pasCounter;
-extern int lastPasResetTick;
 
-extern float omegaPedals;
-extern float targetOmegaWheel;
-extern float targetVelocityWheel;
 
-extern float pasActive;
-extern float targetDutyCycle;
-extern float previousDutyCycle;
+extern bool bike_bluetoothConnected;
 
-extern float pasTimeS;
-
-extern bool bluetoothConnected;
-
-extern uint16_t batteryVoltage;
+extern uint16_t adc_batteryVoltage;
 
 void bike_init(void);
+void bike_proc(void);
+void bike_handleGpioInterrupt(uint16_t GPIO_Pin);
 
-void logDebugDegrees(float);
-void logDebugVWheel(void);
-void logDebugDutyCycle(void);
-void logDebugInactive(void);
 
-void togglePWM(TIM_HandleTypeDef* htim, bool state);
-void resetDutyCycle(void);
-void updateDutyCycle(void);
-void resetPas(bool inactive);
+void pwm_toggle(TIM_HandleTypeDef* htim, bool state);
 
 #endif /* __HELPERS_H */

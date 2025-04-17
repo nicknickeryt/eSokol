@@ -14,8 +14,8 @@
 
 #include "stm32f4xx_hal.h"
 
-uint8_t pasCounter = 0;    // counts rising edges of pas signal
-int lastPasResetTick = 0;  // last pas counter reset (at 12 counters)
+uint8_t pas_counter = 0;    // counts rising edges of pas signal
+int pas_lastResetTick = 0;  // last pas counter reset (at 12 counters)
 
 float omegaPedals = 0.0;
 float targetOmegaWheel = 0.0;
@@ -37,7 +37,7 @@ void updateDutyCycle() {
 }
 
 void resetPas(bool inactive) {
-  lastPasResetTick = HAL_GetTick();
+  pas_lastResetTick = HAL_GetTick();
 
   if (inactive) {
     pasActive = 0;
@@ -47,34 +47,34 @@ void resetPas(bool inactive) {
     TIM1->CCR1 = 0;
   } else {
     pasActive = 1;
-    pasCounter = 0;
+    pas_counter = 0;
   }
 }
 
 void logDebugDegrees(float timeS) {
-  send_string("[DEBUG]: 30 stopni!\r\nczas: ");
+  logger_sendChar("[DEBUG]: 30 stopni!\r\nczas: ");
 
-  send_float(timeS);
-  send_string("sekund\r\n");
+  logger_sendFloat(timeS);
+  logger_sendChar("sekund\r\n");
 }
 
 void logDebugVWheel() {
-  send_string("vWheel: ");
-  send_float(targetVelocityWheel);
-  send_string(" [m/s] ");
-  send_float(targetVelocityWheel * 3.6);
-  send_string(" [km/h] \r\n");
+  logger_sendChar("vWheel: ");
+  logger_sendFloat(targetVelocityWheel);
+  logger_sendChar(" [m/s] ");
+  logger_sendFloat(targetVelocityWheel * 3.6);
+  logger_sendChar(" [km/h] \r\n");
 }
 
 void logDebugDutyCycle() {
-  send_string("dutyCycle: ");
-  send_float(targetDutyCycle);
-  send_string(" [%] \r\n");
-  send_string("targetDutyCycle: ");
-  send_float(targetDutyCycle);
-  send_string(" [%] \r\n");
+  logger_sendChar("dutyCycle: ");
+  logger_sendFloat(targetDutyCycle);
+  logger_sendChar(" [%] \r\n");
+  logger_sendChar("targetDutyCycle: ");
+  logger_sendFloat(targetDutyCycle);
+  logger_sendChar(" [%] \r\n");
 }
 
 void logDebugInactive() {
-  send_string("[DEBUG]: ---- INACTIVE ----\r\n");
+  logger_sendChar("[DEBUG]: ---- INACTIVE ----\r\n");
 }

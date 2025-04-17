@@ -14,7 +14,7 @@
 #include "main.h"
 #include "stm32f4xx_hal.h"
 
-char* float_to_char(float f) {
+char* logger_floatToChar(float f) {
     static char buffer[20];
 
     int whole_part = (int)f;
@@ -27,26 +27,26 @@ char* float_to_char(float f) {
     return buffer;
 }
 
-void send_string(char* s) {
+void logger_sendChar(char* s) {
     HAL_UART_Transmit_IT(&huart1, (uint8_t*)s, strlen(s));
 }
 
-void send_uint8(uint8_t num) {
+void logger_sendUint8(uint8_t num) {
     char buffer[6];
     sprintf(buffer, "%u\n", num);
-    send_string(buffer);
+    logger_sendChar(buffer);
 }
 
-void send_uint32(uint32_t num) {
+void logger_sendUint32(uint32_t num) {
     char string[32];
     HAL_UART_Transmit(&huart1, (uint8_t*)string, sprintf(string, "%lu\n", num),
                       HAL_MAX_DELAY);
 }
 
-void send_int(int num) {
+void logger_sendInt(int num) {
     char buffer[12];
     sprintf(buffer, "%d", num);
-    send_string(buffer);
+    logger_sendChar(buffer);
 }
 
-void send_float(float num) { send_string(float_to_char(num)); }
+void logger_sendFloat(float num) { logger_sendChar(logger_floatToChar(num)); }

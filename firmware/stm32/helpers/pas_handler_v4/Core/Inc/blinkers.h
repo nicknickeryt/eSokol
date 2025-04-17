@@ -17,7 +17,7 @@ void toggleBothBlinkers(void);
 void blinkers_enableLeft(void);
 void blinkers_enableRight(void);
 
-void initBlinkers(void);
+void blinkers_init(void);
 void blinkers_reset(void);
 void blinkers_proc(void);
 

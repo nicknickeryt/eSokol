@@ -21,9 +21,9 @@ uint32_t lastToneTime = 0;
 uint32_t lastSwitchCheckTime = 0;
 bool toggleTone = false;
 
-void initBlinkers() {
-    writePin(BLINKER_LEFT_GPIO_Port, BLINKER_LEFT_Pin, 1);
-    writePin(BLINKER_RIGHT_GPIO_Port, BLINKER_RIGHT_Pin, 1);
+void blinkers_init() {
+    gpio_write(BLINKER_LEFT_GPIO_Port, BLINKER_LEFT_Pin, 1);
+    gpio_write(BLINKER_RIGHT_GPIO_Port, BLINKER_RIGHT_Pin, 1);
     blinkerLeftPinState = 1;
     blinkerRightPinState = 1;
 }
@@ -31,48 +31,48 @@ void initBlinkers() {
 void blinkers_reset() {
     blinkerRightBlink = 0;
     blinkerLeftBlink = 0;
-    initBlinkers();
+    blinkers_init();
 }
 
 void toggleLeftBlinker() {
     blinkerLeftBlink = !blinkerLeftBlink;
-    initBlinkers();
+    blinkers_init();
     if (blinkerLeftBlink) blinkerRightBlink = 0;
 }
 
 void toggleRightBlinker() {
     blinkerRightBlink = !blinkerRightBlink;
-    initBlinkers();
+    blinkers_init();
     if (blinkerRightBlink) blinkerLeftBlink = 0;
 }
 
 void blinkers_enableLeft() {
-    initBlinkers();
+    blinkers_init();
     blinkerLeftBlink = 1;
     blinkerRightBlink = 0;
 }
 
 void blinkers_enableRight() {
-    initBlinkers();
+    blinkers_init();
     blinkerRightBlink = 1;
     blinkerLeftBlink = 0;
 }
 
 void toggleBothBlinkers() {
-    initBlinkers();
+    blinkers_init();
     bothBlinkersBlink = !bothBlinkersBlink;
 }
 
 void blinkLeft(bool state) {
     if (blinkerLeftBlink || bothBlinkersBlink) {
-        writePin(BLINKER_LEFT_GPIO_Port, BLINKER_LEFT_Pin, state);
+        gpio_write(BLINKER_LEFT_GPIO_Port, BLINKER_LEFT_Pin, state);
         blinkerLeftPinState = state;
     }
 }
 
 void blinkRight(bool state) {
     if (blinkerRightBlink || bothBlinkersBlink) {
-        writePin(BLINKER_RIGHT_GPIO_Port, BLINKER_RIGHT_Pin, state);
+        gpio_write(BLINKER_RIGHT_GPIO_Port, BLINKER_RIGHT_Pin, state);
         blinkerRightPinState = state;
     }
 }
@@ -97,7 +97,7 @@ void blinkers_proc() {
     processBlinkerSwitch();
 
     if (!blinkerLeftBlink && !blinkerRightBlink && !bothBlinkersBlink) {
-        if (!blinkerLeftPinState || !blinkerRightPinState) initBlinkers();
+        if (!blinkerLeftPinState || !blinkerRightPinState) blinkers_init();
         return;
     }
 

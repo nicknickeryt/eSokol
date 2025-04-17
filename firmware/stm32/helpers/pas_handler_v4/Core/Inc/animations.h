@@ -10,7 +10,7 @@
 #ifndef __ANIMATIONS_H
 #define __ANIMATIONS_H
 
-void blink_proc(void);
+void anim_blinkProc(void);
 
 void anim_proc(void);
 

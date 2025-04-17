@@ -12,12 +12,12 @@
 
 #include <stdint.h>
 
-char* float_to_char(float f);
+char* logger_floatToChar(float f);
 
-void send_string(char *s);
-void send_uint8(uint8_t num);
-void send_uint32(uint32_t num);
-void send_int(int num);
-void send_float(float num);
+void logger_sendChar(char *s);
+void logger_sendUint8(uint8_t num);
+void logger_sendUint32(uint32_t num);
+void logger_sendInt(int num);
+void logger_sendFloat(float num);
 
 #endif /* __LOGGER_H */

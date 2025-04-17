@@ -27,7 +27,7 @@ void disableDefaultLights() {
 }
 
 void processAmbientLightState() {
-    currentAmbientLightState = ldrVoltage < 0.7f ? 1 : 0;
+    currentAmbientLightState = adc_ldrVoltage < 0.7f ? 1 : 0;
 }
 
 void setAmbientLight() {

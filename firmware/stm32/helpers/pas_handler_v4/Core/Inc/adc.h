@@ -17,14 +17,14 @@
 #define ADC_THROTTLE_AIN_CHANNEL 2
 #define ADC_BATTERY_CURRENT_CHANNEL 3
 
-extern uint16_t batteryVoltage;
-extern uint16_t batteryCurrent;
-extern float ldrVoltage;
-extern float throttleVoltage;
+extern uint16_t adc_batteryVoltage;
+extern uint16_t adc_batteryCurrent;
+extern float adc_ldrVoltage;
+extern float adc_throttleVoltage;
 
-extern uint16_t rawAdcValues[4];
+extern uint16_t adc_rawValues[4];
 
-void adc_initMeasurement(void);
+void adc_startMeasurement(void);
 void adc_proc(void);
 
 #endif /* __ADC_H_ */

@@ -43,11 +43,7 @@ uint32_t sound_click_on_dur[] = {5, 3, 2, 5};
 uint32_t sound_click_off[] = {800, 600, 0, 400};
 uint32_t sound_click_off_dur[] = {5, 3, 2, 5};
 
-uint32_t presForFrequency(uint32_t frequency) {
-    return frequency == 0 ? 0 : (TIM3_FREQ / (TIM3_MAX_CNT * frequency));
-}
-
-void noTone() { __HAL_TIM_SET_PRESCALER(TIM_SOUND, 0); }
+void sound_nothing() { __HAL_TIM_SET_PRESCALER(TIM_SOUND, 0); }
 
 uint32_t* currentToneSequence = NULL;
 uint32_t* currentDurationSequence = NULL;
@@ -56,7 +52,11 @@ uint32_t currentIndex = 0;
 uint32_t toneStartTime = 0;
 bool isToneActive = 0;
 
-void startToneSequence(uint32_t* tone, uint32_t* duration, uint32_t size) {
+uint32_t sound_getPSCForFreq(uint32_t frequency) {
+    return frequency == 0 ? 0 : (TIM3_FREQ / (TIM3_MAX_CNT * frequency));
+}
+
+void sound_startSequence(uint32_t* tone, uint32_t* duration, uint32_t size) {
     currentToneSequence = tone;
     currentDurationSequence = duration;
     sequenceSize = size;
@@ -71,7 +71,7 @@ void sound_proc() {
 
     if (isToneActive &&
         (now - toneStartTime >= currentDurationSequence[currentIndex])) {
-        noTone();
+        sound_nothing();
         isToneActive = 0;
         currentIndex++;
     }
@@ -79,7 +79,7 @@ void sound_proc() {
     if (!isToneActive && currentIndex < sequenceSize) {
         int frequency = currentToneSequence[currentIndex];
         if (frequency > 0) {
-            int prescaler = presForFrequency(frequency);
+            int prescaler = sound_getPSCForFreq(frequency);
             __HAL_TIM_SET_PRESCALER(TIM_SOUND, prescaler);
             toneStartTime = HAL_GetTick();
             isToneActive = 1;
@@ -94,45 +94,45 @@ void sound_play(uint8_t number) {
     if (!soundEnabled) return;
     switch (number) {
         case SOUND_MARIO:
-            startToneSequence(sound_mario, sound_mario_dur,
+            sound_startSequence(sound_mario, sound_mario_dur,
                               (sizeof(sound_mario) / sizeof(sound_mario[0])));
             break;
         case SOUND_CONNECTED:
-            startToneSequence(
+            sound_startSequence(
                 sound_connected, sound_connected_dur,
                 (sizeof(sound_connected) / sizeof(sound_connected[0])));
             break;
         case SOUND_DISCONNECTED:
-            startToneSequence(
+            sound_startSequence(
                 sound_disconnected, sound_disconnected_dur,
                 (sizeof(sound_disconnected) / sizeof(sound_disconnected[0])));
             break;
         case SOUND_ON:
-            startToneSequence(sound_on, sound_on_dur,
+            sound_startSequence(sound_on, sound_on_dur,
                               (sizeof(sound_on) / sizeof(sound_on[0])));
             break;
         case SOUND_OFF:
-            startToneSequence(
+            sound_startSequence(
                 sound_off, sound_off_dur,
                 (sizeof(sound_off_dur) / sizeof(sound_off_dur[0])));
             break;
         case SOUND_ERR:
-            startToneSequence(
+            sound_startSequence(
                 sound_err, sound_err_dur,
                 (sizeof(sound_err_dur) / sizeof(sound_err_dur[0])));
             break;
         case SOUND_CLICK_ON:
-            startToneSequence(
+            sound_startSequence(
                 sound_click_on, sound_click_on_dur,
                 (sizeof(sound_click_on_dur) / sizeof(sound_click_on_dur[0])));
             break;
         case SOUND_CLICK_OFF:
-            startToneSequence(
+            sound_startSequence(
                 sound_click_off, sound_click_off_dur,
                 (sizeof(sound_click_off_dur) / sizeof(sound_click_off_dur[0])));
             break;
         case SOUND_RUDOLF:
-            startToneSequence(sound_rudolf_czerwononosy,
+            sound_startSequence(sound_rudolf_czerwononosy,
                               sound_rudolf_czerwononosy_dur,
                               (sizeof(sound_rudolf_czerwononosy_dur) /
                                sizeof(sound_rudolf_czerwononosy_dur[0])));
@@ -142,7 +142,7 @@ void sound_play(uint8_t number) {
     }
 }
 
-void playToggleSound(bool state) {
+void sound_playToggle(bool state) {
     uint8_t tone = state == true ? SOUND_ON : SOUND_OFF;
     sound_play(tone);
 }

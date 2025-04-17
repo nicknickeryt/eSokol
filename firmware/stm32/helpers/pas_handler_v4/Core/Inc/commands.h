@@ -38,7 +38,7 @@ extern bool bulbsEnabled;
 extern bool ambientLightEnabled;
 
 void initStatusMessage(void);
-void animStart(void);
+void anim_start(void);
 
 void toggleFrontCold(void);
 void toggleFrontColdNoSound(void);  // TODO CHANGE THIS AAAA

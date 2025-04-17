@@ -15,7 +15,7 @@
 
 #include "stm32f4xx_hal.h"
 
-void writePin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, bool newState) {
+void gpio_write(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, bool newState) {
   switch (GPIO_Pin) {
     case FRONT_WARM_Pin:
       if (GPIOx == FRONT_WARM_GPIO_Port)
@@ -41,5 +41,5 @@ bool gpio_read(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin) {
 
 void togglePin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin) {
   bool newState = !gpio_read(GPIOx, GPIO_Pin);
-  writePin(GPIOx, GPIO_Pin, newState);
+  gpio_write(GPIOx, GPIO_Pin, newState);
 }
