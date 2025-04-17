@@ -33,68 +33,58 @@ uint16_t adc_rawValues[4] = {0};
 
 void adc_startMeasurement() { adc_convCmplt = 1; }
 
-void adc_batteryVoltageProc() {
-    uint16_t adc_measurementsSum = 0;
-    for (uint8_t i = 0; i < ADC_AVG_SAMPLES; i++)
-        adc_measurementsSum += adc_rawBatteryValues[i];
+static float adc_toVoltage(uint16_t adcValue) {
+    return (adcValue * 3.3f) / 4096.0f;
+}
 
-    adc_batteryVoltage =
-        adc_initialMeasurementCmplt
-            ? (100.0f *
-               (((adc_measurementsSum / ADC_AVG_SAMPLES) * 3.3f) / 4096.0f)) +
-                  23.0f
-            : (100.0f *
-               ((adc_rawValues[ADC_BATTERY_CHANNEL] * 3.3f) / 4096.0f)) +
-                  23.0f;
+static void adc_storeRawValues(void) {
+    adc_rawBatteryValues[adc_currentIdx]          = adc_rawValues[ADC_BATTERY_CHANNEL];
+    adc_rawLdrValues[adc_currentIdx]              = adc_rawValues[ADC_LDR_CHANNEL];
+    adc_rawThrottleValues[adc_currentIdx]         = adc_rawValues[ADC_THROTTLE_AIN_CHANNEL];
+    adc_rawBatteryCurrentValues[adc_currentIdx]   = adc_rawValues[ADC_BATTERY_CURRENT_CHANNEL];
+}
+
+static uint16_t adc_average(const uint16_t* values) {
+    uint32_t sum = 0;
+    for (uint8_t i = 0; i < ADC_AVG_SAMPLES; i++) sum += values[i];
+    return sum / ADC_AVG_SAMPLES;
+}
+
+void adc_batteryVoltageProc() {
+    float voltage = adc_toVoltage(adc_initialMeasurementCmplt
+                                      ? adc_average(adc_rawBatteryValues)
+                                      : adc_rawValues[ADC_BATTERY_CHANNEL]);
+    adc_batteryVoltage = 100.0f * voltage + 23.0f;
 }
 
 void adc_batteryCurrentProc() {
-    uint16_t adc_measurementsSum = 0;
-    for (uint8_t i = 0; i < ADC_AVG_SAMPLES; i++)
-        adc_measurementsSum += adc_rawBatteryCurrentValues[i];
-
-    adc_batteryCurrent =
-        adc_initialMeasurementCmplt
-            ? (1000.0f *
-               (((adc_measurementsSum / ADC_AVG_SAMPLES) * 3.3f) / 4096.0f))
-            : (1000.0f *
-               ((adc_rawValues[ADC_BATTERY_CURRENT_CHANNEL] * 3.3f) / 4096.0f));
+    float voltage =
+        adc_toVoltage(adc_initialMeasurementCmplt
+                          ? adc_average(adc_rawBatteryCurrentValues)
+                          : adc_rawValues[ADC_BATTERY_CURRENT_CHANNEL]);
+    adc_batteryCurrent = 1000.0f * voltage;
 }
 
 void adc_ldrVoltageProc() {
-    uint16_t adc_measurementsSum = 0;
-    for (uint8_t i = 0; i < ADC_AVG_SAMPLES; i++)
-        adc_measurementsSum += adc_rawLdrValues[i];
-
-    adc_ldrVoltage =
-        adc_initialMeasurementCmplt
-            ? (((adc_measurementsSum / ADC_AVG_SAMPLES) * 3.3f) / 4096.0f)
-            : ((adc_rawValues[ADC_LDR_CHANNEL] * 3.3f) / 4096.0f);
+    adc_ldrVoltage = adc_toVoltage(adc_initialMeasurementCmplt
+                                       ? adc_average(adc_rawLdrValues)
+                                       : adc_rawValues[ADC_LDR_CHANNEL]);
 }
 
 void adc_throttleVoltageProc() {
-    uint16_t adc_measurementsSum = 0;
-    for (uint8_t i = 0; i < ADC_AVG_SAMPLES; i++)
-        adc_measurementsSum += adc_rawThrottleValues[i];
-
-    adc_throttleVoltage =
-        adc_initialMeasurementCmplt
-            ? (((adc_measurementsSum / ADC_AVG_SAMPLES) * 3.3f) / 4096.0f)
-            : ((adc_rawValues[ADC_THROTTLE_AIN_CHANNEL] * 3.3f) / 4096.0f);
+    adc_throttleVoltage = adc_toVoltage(
+        adc_initialMeasurementCmplt ? adc_average(adc_rawThrottleValues)
+                                    : adc_rawValues[ADC_THROTTLE_AIN_CHANNEL]);
 }
 
 void adc_proc() {
-    if (!(HAL_GetTick() - adc_lastSendTick > 10) || !adc_convCmplt) return;
+    if (!(HAL_GetTick() - adc_lastSendTick > ADC_SEND_PERIOD_MS) || !adc_convCmplt) return;
+
     adc_lastSendTick = HAL_GetTick();
 
-    adc_rawBatteryValues[adc_currentIdx] = adc_rawValues[ADC_BATTERY_CHANNEL];
-    adc_rawLdrValues[adc_currentIdx] = adc_rawValues[ADC_LDR_CHANNEL];
-    adc_rawThrottleValues[adc_currentIdx] =
-        adc_rawValues[ADC_THROTTLE_AIN_CHANNEL];
-    adc_rawBatteryCurrentValues[adc_currentIdx] =
-        adc_rawValues[ADC_BATTERY_CURRENT_CHANNEL];
-    adc_currentIdx = (adc_currentIdx + 1) % ADC_AVG_SAMPLES;
+    adc_storeRawValues();
 
+    adc_currentIdx = (adc_currentIdx + 1) % ADC_AVG_SAMPLES;
     if (adc_currentIdx == ADC_AVG_SAMPLES - 1) adc_initialMeasurementCmplt = 1;
 
     adc_batteryVoltageProc();
