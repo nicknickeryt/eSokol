@@ -19,8 +19,7 @@
 #include "stm32f4xx_hal.h"
 #include "uart.h"
 
-uint32_t blink1STime =
-    0;  // blink every 1s, TODO: magicDiodCompositio-like blink
+uint32_t blink1STime = 0;  // blink every 1s
 uint32_t blinkDisconnectedTime = 0;  // blink every 1s if disconnected
 
 AnimState currentAnimState = ANIM_IDLE;

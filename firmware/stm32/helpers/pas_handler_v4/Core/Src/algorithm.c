@@ -24,7 +24,7 @@ float algorithm_eq_component = ALGORITHM_EQ_COMPONENT_DEFAULT;
 float pasTimeS = 0.0;
 
 float currentDutyCycle = 0.0f;
-const float alpha = 0.001f;
+const float throttle_alpha = 0.001f;
 
 void algorithm_proc() {
     if (!throttleEnabled) return;
@@ -40,7 +40,7 @@ void algorithm_proc() {
 
         float rawDuty = 100.0f * powf(normalizedVoltage, 2.5f);  // 0-100%
 
-        currentDutyCycle += alpha * (rawDuty - currentDutyCycle); // EMA
+        currentDutyCycle += throttle_alpha * (rawDuty - currentDutyCycle); // EMA
 
         if(currentDutyCycle - targetDutyCycle > 3.0f) currentDutyCycle = targetDutyCycle + 3.0f;
 
