@@ -35,6 +35,7 @@
 #include "sounds.h"
 #include "uart.h"
 #include "blinkers.h"
+#include "speedometer.h"
 
 /* USER CODE END Includes */
 

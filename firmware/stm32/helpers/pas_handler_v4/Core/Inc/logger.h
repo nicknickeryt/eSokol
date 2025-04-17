@@ -12,6 +12,8 @@
 
 #include <stdint.h>
 
+char* float_to_char(float f);
+
 void send_string(char *s);
 void send_uint8(uint8_t num);
 void send_uint32(uint32_t num);

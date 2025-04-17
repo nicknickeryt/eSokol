@@ -54,11 +54,4 @@ void resetDutyCycle(void);
 void updateDutyCycle(void);
 void resetPas(bool inactive);
 
-extern float currentRealBikeVelocity;
-
-float calculateRealBikeVelocity(uint32_t hallCurrTick);
-void setRealBikeVelocity(float velocity);
-
-void processRealVelocity(void);
-
 #endif /* __HELPERS_H */

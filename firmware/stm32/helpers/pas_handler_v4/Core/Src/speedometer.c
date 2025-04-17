@@ -1,0 +1,33 @@
+#include "speedometer.h"
+#include "helpers.h"
+#include "pas.h"
+#include "logger.h"
+
+#include <stdlib.h>
+
+char* velocityBuffer = 0;
+
+uint32_t hallLastTick = 0;
+uint32_t hallLastSendTick = 0;
+float currentRealBikeVelocity = 0;
+
+void initVelocityBuffer() { velocityBuffer = (char*)malloc(18 * sizeof(char)); }
+
+float calculateRealBikeVelocity(uint32_t hallCurrTick) {
+    float omega = (2.0f * PI) / ((hallCurrTick - hallLastTick) / 1000.0f);
+    hallLastTick = hallCurrTick;
+    return omega * R_WHEEL * 3.6;  // velocity in km/h
+}
+
+void setRealBikeVelocity(float velocity) { currentRealBikeVelocity = velocity; }
+
+void processRealVelocity() {
+    if (!(HAL_GetTick() - hallLastSendTick > 300)) return;
+    if (HAL_GetTick() - hallLastTick > 2500) currentRealBikeVelocity = 0.0f;
+
+    sprintf(velocityBuffer, "eskl_evel%s\r\n",
+            float_to_char(currentRealBikeVelocity));
+    hallLastSendTick = HAL_GetTick();
+
+    send_string(velocityBuffer);
+}
