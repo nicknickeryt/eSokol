@@ -28,6 +28,6 @@
 // this should be a value between -9.9 and 9.9
 extern float algorithm_eq_component;
 
-bool runAlgorithm();
+bool algorithm_proc();
 
 #endif /* __ALGORITHM_H_ */

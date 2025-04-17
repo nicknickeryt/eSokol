@@ -46,7 +46,7 @@ void initAmbientLight() {
     setAmbientLight();
 }
 
-void processAmbientLight() {
+void ambientlight_proc() {
     if (!ambientLightEnabled) return;
 
     processAmbientLightState();

@@ -24,7 +24,7 @@ extern float throttleVoltage;
 
 extern uint16_t rawAdcValues[4];
 
-void startAdcMeasurement(void);
-void processAdcMeasurement(void);
+void adc_initMeasurement(void);
+void adc_proc(void);
 
 #endif /* __ADC_H_ */

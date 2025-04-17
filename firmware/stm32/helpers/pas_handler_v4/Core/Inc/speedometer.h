@@ -19,9 +19,9 @@ extern float currentRealBikeVelocity;
 
 void initVelocityBuffer(void);
 
-float calculateRealBikeVelocity(uint32_t hallCurrTick);
-void setRealBikeVelocity(float velocity);
+float speedometer_calculateVelocity(uint32_t hallCurrTick);
+void speedometer_setVelocity(float velocity);
 
-void processRealVelocity(void);
+void speedometer_proc(void);
 
 #endif /* __SPEEDOMETER_H */

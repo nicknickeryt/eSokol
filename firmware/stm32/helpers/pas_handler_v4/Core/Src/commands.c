@@ -55,7 +55,7 @@ bool ambientLightEnabled = true;
 void initStatusMessage() { statusMessage = (char*)malloc(21 * sizeof(char)); }
 
 void animStart() {
-    playAnim(ANIM_STARTUP_PHASE1);
+    animation_play(ANIM_STARTUP_PHASE1);
     playToggleSound(1);
 }
 
@@ -159,7 +159,7 @@ void algorithmComponentIncrement() {
         algorithm_eq_component >= ALGORITHM_EQ_COMPONENT_MAX
             ? ALGORITHM_EQ_COMPONENT_MAX
             : algorithm_eq_component + 0.1f;
-    algorithm_eq_component >= ALGORITHM_EQ_COMPONENT_MAX ? playTone(SOUND_ERR)
+    algorithm_eq_component >= ALGORITHM_EQ_COMPONENT_MAX ? sound_play(SOUND_ERR)
                                                          : playToggleSound(1);
     sendStatus();
 }
@@ -169,7 +169,7 @@ void algorithmComponentDecrement() {
         algorithm_eq_component <= ALGORITHM_EQ_COMPONENT_MIN
             ? ALGORITHM_EQ_COMPONENT_MIN
             : algorithm_eq_component - 0.1f;
-    algorithm_eq_component <= ALGORITHM_EQ_COMPONENT_MIN ? playTone(SOUND_ERR)
+    algorithm_eq_component <= ALGORITHM_EQ_COMPONENT_MIN ? sound_play(SOUND_ERR)
                                                          : playToggleSound(0);
     sendStatus();
 }

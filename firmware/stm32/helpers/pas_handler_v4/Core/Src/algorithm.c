@@ -26,7 +26,7 @@ float pasTimeS = 0.0;
 float currentDutyCycle = 0.0f;
 const float alpha = 0.001f;
 
-bool runAlgorithm() {
+bool algorithm_proc() {
     if (!throttleEnabled) return false;
 
     if (throttleVoltage < MINIMUM_THROTTLE_VOLTAGE) {

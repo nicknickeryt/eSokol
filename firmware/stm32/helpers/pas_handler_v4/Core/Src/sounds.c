@@ -64,7 +64,7 @@ void startToneSequence(uint32_t* tone, uint32_t* duration, uint32_t size) {
     isToneActive = 0;
 }
 
-void processTone() {
+void sound_proc() {
     if (currentToneSequence == NULL || currentIndex >= sequenceSize) return;
 
     uint32_t now = HAL_GetTick();
@@ -90,7 +90,7 @@ void processTone() {
     }
 }
 
-void playTone(uint8_t number) {
+void sound_play(uint8_t number) {
     if (!soundEnabled) return;
     switch (number) {
         case SOUND_MARIO:
@@ -144,7 +144,7 @@ void playTone(uint8_t number) {
 
 void playToggleSound(bool state) {
     uint8_t tone = state == true ? SOUND_ON : SOUND_OFF;
-    playTone(tone);
+    sound_play(tone);
 }
 
-bool isSoundPlaying() { return isToneActive; }
+bool sound_isPlaying() { return isToneActive; }

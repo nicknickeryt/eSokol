@@ -19,6 +19,6 @@
 
 void togglePin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);
 void writePin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, bool newState);
-bool readPin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);
+bool gpio_read(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);
 
 #endif /* __GPIO_H */

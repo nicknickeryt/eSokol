@@ -25,7 +25,7 @@
 
 bool bluetoothConnected = 0;
 
-void bikeInit() {
+void bike_init() {
     HAL_UARTEx_ReceiveToIdle_IT(&huart1, rxBuffer, 16);
 
     lastPasResetTick = HAL_GetTick();
@@ -39,15 +39,15 @@ void bikeInit() {
 
     HAL_ADC_Start_DMA(&hadc1, (uint32_t*)rawAdcValues, 4);
 
-    playAnim(ANIM_STARTUP_PHASE1);
+    animation_play(ANIM_STARTUP_PHASE1);
 
-    if (readPin(BT_STATE_GPIO_Port, BT_STATE_Pin)) bluetoothConnected = true;
+    if (gpio_read(BT_STATE_GPIO_Port, BT_STATE_Pin)) bluetoothConnected = true;
 
     initBlinkers();
     initStatusMessage();
     initVelocityBuffer();
 
-    playTone(SOUND_RUDOLF);
+    sound_play(SOUND_RUDOLF);
 
     TIM1->PSC = 168 - 1;
 }

@@ -10,9 +10,9 @@
 #ifndef __ANIMATIONS_H
 #define __ANIMATIONS_H
 
-void blink1S(void);
+void blink_proc(void);
 
-void processAnimation(void);
+void anim_proc(void);
 
 typedef enum {
   ANIM_IDLE,
@@ -24,6 +24,6 @@ typedef enum {
   ANIM_BLINK_DISCONNECTED
 } AnimState;
 
-void playAnim(AnimState animState);
+void animation_play(AnimState animState);
 
 #endif /* __ANIMATIONS_H */

@@ -27,7 +27,7 @@ bool shouldSendStatus = false;
 uint32_t shouldSendStatus1sTime = 0;
 bool shouldSendStatus1s = false;
 
-void handleRxInterrupt(UART_HandleTypeDef* huart, uint16_t size) {
+void uart_handleRxInterrupt(UART_HandleTypeDef* huart, uint16_t size) {
     if (huart != &huart1 || size == 0) {
         HAL_UARTEx_ReceiveToIdle_IT(huart, rxBuffer, sizeof(rxBuffer));
         return;
@@ -60,7 +60,7 @@ void handleRxInterrupt(UART_HandleTypeDef* huart, uint16_t size) {
     HAL_UARTEx_ReceiveToIdle_IT(huart, rxBuffer, sizeof(rxBuffer));
 }
 
-void processSendStatus() {
+void status_proc() {
     sendStatus1s();
     if (shouldSendStatus || shouldSendStatus1s) {
         shouldSendStatus = false, shouldSendStatus1s = false;

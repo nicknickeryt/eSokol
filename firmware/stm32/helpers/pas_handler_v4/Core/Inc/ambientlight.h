@@ -9,6 +9,6 @@
 #define __AMBIENTLIGHT_H_
 
 void initAmbientLight(void);
-void processAmbientLight(void);
+void ambientlight_proc(void);
 
 #endif /* __AMBIENTLIGHT_H_ */

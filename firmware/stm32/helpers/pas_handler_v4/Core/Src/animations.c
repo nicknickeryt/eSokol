@@ -27,13 +27,13 @@ AnimState currentAnimState = ANIM_IDLE;
 uint32_t animStartTime = 0;
 uint8_t animStep = 0;
 
-void playAnim(AnimState animState) {
+void animation_play(AnimState animState) {
     currentAnimState = animState;
     animStartTime = HAL_GetTick();
     animStep = 0;
 }
 
-void processAnimation() {
+void anim_proc() {
     uint32_t now = HAL_GetTick();
 
     switch (currentAnimState) {

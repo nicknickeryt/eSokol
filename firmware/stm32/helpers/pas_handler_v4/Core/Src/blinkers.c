@@ -28,7 +28,7 @@ void initBlinkers() {
     blinkerRightPinState = 1;
 }
 
-void resetBlinkers() {
+void blinkers_reset() {
     blinkerRightBlink = 0;
     blinkerLeftBlink = 0;
     initBlinkers();
@@ -46,13 +46,13 @@ void toggleRightBlinker() {
     if (blinkerRightBlink) blinkerLeftBlink = 0;
 }
 
-void enableLeftBlinker() {
+void blinkers_enableLeft() {
     initBlinkers();
     blinkerLeftBlink = 1;
     blinkerRightBlink = 0;
 }
 
-void enableRightBlinker() {
+void blinkers_enableRight() {
     initBlinkers();
     blinkerRightBlink = 1;
     blinkerLeftBlink = 0;
@@ -86,14 +86,14 @@ void processBlinkerSwitch() {
     uint32_t currentTime = HAL_GetTick();
     if (currentTime - lastSwitchCheckTime >= 1000) {
         lastSwitchCheckTime = currentTime;
-        if (!readPin(BLINKER_LEFT_IN_GPIO_Port, BLINKER_LEFT_IN_Pin))
+        if (!gpio_read(BLINKER_LEFT_IN_GPIO_Port, BLINKER_LEFT_IN_Pin))
             blinkerLeftBlink = 1;
-        if (!readPin(BLINKER_RIGHT_IN_GPIO_Port, BLINKER_RIGHT_IN_Pin))
+        if (!gpio_read(BLINKER_RIGHT_IN_GPIO_Port, BLINKER_RIGHT_IN_Pin))
             blinkerRightBlink = 1;
     }
 }
 
-void processBlinkers() {
+void blinkers_proc() {
     processBlinkerSwitch();
 
     if (!blinkerLeftBlink && !blinkerRightBlink && !bothBlinkersBlink) {
@@ -106,7 +106,7 @@ void processBlinkers() {
         lastToneTime = currentTime;
 
         blinkBlinkers(toggleTone);
-        playTone(toggleTone ? SOUND_CLICK_OFF : SOUND_CLICK_ON);
+        sound_play(toggleTone ? SOUND_CLICK_OFF : SOUND_CLICK_ON);
 
         toggleTone = !toggleTone;
         sendStatus();

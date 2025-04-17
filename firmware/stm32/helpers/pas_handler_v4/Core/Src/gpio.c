@@ -35,11 +35,11 @@ void writePin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, bool newState) {
   HAL_GPIO_WritePin(GPIOx, GPIO_Pin, newState);
 }
 
-bool readPin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin) {
+bool gpio_read(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin) {
   return HAL_GPIO_ReadPin(GPIOx, GPIO_Pin);
 }
 
 void togglePin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin) {
-  bool newState = !readPin(GPIOx, GPIO_Pin);
+  bool newState = !gpio_read(GPIOx, GPIO_Pin);
   writePin(GPIOx, GPIO_Pin, newState);
 }

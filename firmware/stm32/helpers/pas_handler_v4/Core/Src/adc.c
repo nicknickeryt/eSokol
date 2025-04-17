@@ -32,7 +32,7 @@ uint16_t rawBatteryCurrentValues[ADC_AVG_SAMPLES] = {0};
 uint16_t rawLdrValues[ADC_AVG_SAMPLES] = {0};
 uint16_t rawThrottleValues[ADC_AVG_SAMPLES] = {0};
 
-void startAdcMeasurement() {
+void adc_initMeasurement() {
     adcConvCompleted = 1;
 }
 
@@ -69,7 +69,7 @@ void processThrottleVoltage() {
   throttleVoltage = initialAdcMeasurementCompleted ? (((adcSum/ADC_AVG_SAMPLES) * 3.3f) / 4096.0f) : ((rawAdcValues[ADC_THROTTLE_AIN_CHANNEL] * 3.3f) / 4096.0f);
 }
 
-void processAdcMeasurement() {
+void adc_proc() {
   if (!(HAL_GetTick() - adcLastSendTick > 10) || !adcConvCompleted)
     return;
   adcLastSendTick = HAL_GetTick();

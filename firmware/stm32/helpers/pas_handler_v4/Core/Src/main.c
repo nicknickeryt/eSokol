@@ -84,38 +84,38 @@ static void MX_ADC1_Init(void);
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
   switch (GPIO_Pin) {
     case BT_STATE_Pin:
-      if(isSoundPlaying()) return;
-      else if (readPin(BT_STATE_GPIO_Port, BT_STATE_Pin)) {
+      if(sound_isPlaying()) return;
+      else if (gpio_read(BT_STATE_GPIO_Port, BT_STATE_Pin)) {
         bluetoothConnected = true;
-        playTone(SOUND_CONNECTED);
-        playAnim(ANIM_CONNECTED);
+        sound_play(SOUND_CONNECTED);
+        animation_play(ANIM_CONNECTED);
       } else {
         bluetoothConnected = false;
-        playTone(SOUND_DISCONNECTED);
-        playAnim(ANIM_DISCONNECTED);
+        sound_play(SOUND_DISCONNECTED);
+        animation_play(ANIM_DISCONNECTED);
       }
       break;
     case PAS_SIGNAL_Pin:
       pasCounter++;
       break;
     case HALL_SPEED_Pin:
-      if (readPin(HALL_SPEED_GPIO_Port, HALL_SPEED_Pin)) setRealBikeVelocity(calculateRealBikeVelocity(HAL_GetTick()));
+      if (gpio_read(HALL_SPEED_GPIO_Port, HALL_SPEED_Pin)) speedometer_setVelocity(speedometer_calculateVelocity(HAL_GetTick()));
       break;
     case BLINKER_LEFT_IN_Pin:
-      readPin(BLINKER_LEFT_IN_GPIO_Port, BLINKER_LEFT_IN_Pin) ? resetBlinkers() : enableLeftBlinker();
+      gpio_read(BLINKER_LEFT_IN_GPIO_Port, BLINKER_LEFT_IN_Pin) ? blinkers_reset() : blinkers_enableLeft();
       break;
     case BLINKER_RIGHT_IN_Pin:
-      readPin(BLINKER_RIGHT_IN_GPIO_Port, BLINKER_RIGHT_IN_Pin) ? resetBlinkers() : enableRightBlinker();
+      gpio_read(BLINKER_RIGHT_IN_GPIO_Port, BLINKER_RIGHT_IN_Pin) ? blinkers_reset() : blinkers_enableRight();
       break;
   }
 }
 
 void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef* huart, uint16_t size) {
-  handleRxInterrupt(huart, size);
+  uart_handleRxInterrupt(huart, size);
 }
 
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc) {
-  startAdcMeasurement();
+  adc_initMeasurement();
 }
 
 /* USER CODE END 0 */
@@ -156,7 +156,7 @@ int main(void)
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
 
-  bikeInit();
+  bike_init();
 
   /* USER CODE END 2 */
 
@@ -164,16 +164,16 @@ int main(void)
   /* USER CODE BEGIN WHILE */
 
   while (1) {
-    processSendStatus();
-    processTone();
-    processAnimation();
-    blink1S();
-    processRealVelocity();
-    processAdcMeasurement();
-    processBlinkers();
-    processAmbientLight();
+    status_proc();
+    sound_proc();
+    anim_proc();
+    blinkers_proc();
+    speedometer_proc();
+    adc_proc();
+    blinkers_proc();
+    ambientlight_proc();
 
-    if (!runAlgorithm())
+    if (!algorithm_proc())
       continue;
 
     /* USER CODE END WHILE */

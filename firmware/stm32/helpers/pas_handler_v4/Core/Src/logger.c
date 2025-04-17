@@ -39,7 +39,7 @@ void send_uint8(uint8_t num) {
 
 void send_uint32(uint32_t num) {
     char string[32];
-    HAL_UART_Transmit(&huart1, (uint8_t*)string, sprintf(string, "%u\n", num),
+    HAL_UART_Transmit(&huart1, (uint8_t*)string, sprintf(string, "%lu\n", num),
                       HAL_MAX_DELAY);
 }
 

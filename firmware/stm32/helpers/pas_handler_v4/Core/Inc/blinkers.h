@@ -14,11 +14,11 @@ extern bool blinkerRightPinState;
 void toggleLeftBlinker(void);
 void toggleRightBlinker(void);
 void toggleBothBlinkers(void);
-void enableLeftBlinker(void);
-void enableRightBlinker(void);
+void blinkers_enableLeft(void);
+void blinkers_enableRight(void);
 
 void initBlinkers(void);
-void resetBlinkers(void);
-void processBlinkers(void);
+void blinkers_reset(void);
+void blinkers_proc(void);
 
 #endif /* __BLINKERS_H */

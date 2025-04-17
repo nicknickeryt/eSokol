@@ -34,12 +34,12 @@ uint32_t presForFrequency(uint32_t frequency);
 void noTone(void);
 
 void startToneSequence(uint32_t* tone, uint32_t* duration, uint32_t size);
-void processTone(void);
+void sound_proc(void);
 
-void playTone(uint8_t number);
+void sound_play(uint8_t number);
 
 void playToggleSound(bool state);
 
-bool isSoundPlaying(void);
+bool sound_isPlaying(void);
 
 #endif /* __SOUNDS_H */

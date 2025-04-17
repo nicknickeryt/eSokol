@@ -42,7 +42,7 @@ extern bool bluetoothConnected;
 
 extern uint16_t batteryVoltage;
 
-void bikeInit(void);
+void bike_init(void);
 
 void logDebugDegrees(float);
 void logDebugVWheel(void);
