@@ -13,6 +13,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#include "helpers.h"
+
 #define MIN_DUTY_CYCLE 16.0
 #define MAX_DUTY_CYCLE 100.0
 
@@ -23,8 +25,11 @@
 
 // pas angle after which we calculate omega. 2pi/12 is 30° (we have 12 magnets)
 #define PAS_MAGNET_ANGLE (2.0 * PI) / 12.0
+
 // wheel radius [m]
 #define R_WHEEL 0.25
+// wheel circumference [m]
+#define CIRCUMFERENCE_WHEEL_M (2.0 * PI * R_WHEEL)
 
 // duty cycle EMA smoothing factor (acceleration)
 #define DUTY_SMOOTH_FACTOR_UP 0.4

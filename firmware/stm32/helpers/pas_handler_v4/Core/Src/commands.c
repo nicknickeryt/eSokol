@@ -21,6 +21,7 @@
 #include "logger.h"
 #include "main.h"
 #include "pas.h"
+#include "odometer.h"
 #include "sounds.h"
 
 Command commands[14] = {{"eskl_animStart\r\n", anim_start},
@@ -52,7 +53,7 @@ bool soundEnabled = true;
 bool bulbsEnabled = false;
 bool ambientLightEnabled = true;
 
-void initStatusMessage() { statusMessage = (char*)malloc(21 * sizeof(char)); }
+void initStatusMessage() { statusMessage = (char*)malloc(38 * sizeof(char)); }
 
 void anim_start() {
     animation_play(ANIM_STARTUP_PHASE1);
@@ -174,7 +175,7 @@ void algorithmComponentDecrement() {
     sendStatus();
 }
 
-/* status format: eskl_stABCDEFGHHHIIIJJJKLM
+/* status format: eskl_stABCDEFGHHHIIIJJJKLMNNNN
  * A   =>  frontColdEnabled(bool 0:1)
  * B   =>  frontWarmEnabled(bool 0:1)
  * C   =>  rearEnabled(bool 0:1)
@@ -191,6 +192,7 @@ void algorithmComponentDecrement() {
  * K   =>  blinkerLeftPinState(bool 0:1)
  * L   =>  blinkerRightPinState(bool 0:1)
  * M   =>  ambientLightEnabled(bool 0:1)
+ * NNNN=>  batteryCurrent(0:9999) (miliVolts!)
  */
 void sendStatus() {
     char frontColdBrightnessHundreds = (frontColdBrightness / 100) + '0';
@@ -218,8 +220,17 @@ void sendStatus() {
     char batteryCurrentTens = ((adc_batteryCurrent / 10) % 10) + '0';
     char batteryCurrentUnits = (adc_batteryCurrent % 10) + '0';
 
+    // Odometer
+    uint32_t distanceMeters = (uint32_t)(odometer_getDistanceMeters());
+    if (distanceMeters > 9999) distanceMeters = 9999;
+
+    char distanceThousands = (distanceMeters / 1000) + '0';
+    char distanceHundreds = ((distanceMeters / 100) % 10) + '0';
+    char distanceTens = ((distanceMeters / 10) % 10) + '0';
+    char distanceUnits = (distanceMeters % 10) + '0';
+
     sprintf(statusMessage,
-            "eskl_st%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\r\n",
+            "eskl_st%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\r\n",
             frontColdEnabled ? '1' : '0', frontWarmEnabled ? '1' : '0',
             rearEnabled ? '1' : '0', throttleEnabled ? '1' : '0',
             sportModeDisabled ? '1' : '0', soundEnabled ? '1' : '0',
@@ -234,6 +245,9 @@ void sendStatus() {
             '0', ambientLightEnabled ? '1' : '0',
 
             batteryCurrentThousands, batteryCurrentHundreds, batteryCurrentTens,
-            batteryCurrentUnits);
+            batteryCurrentUnits,
+
+            distanceThousands, distanceHundreds, distanceTens, distanceUnits);
+            
     logger_sendChar(statusMessage);
 }

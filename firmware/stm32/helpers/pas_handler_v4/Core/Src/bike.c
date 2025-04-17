@@ -8,6 +8,7 @@
 #include "commands.h"
 #include "gpio.h"
 #include "main.h"
+#include "odometer.h"
 #include "pas.h"
 #include "sounds.h"
 #include "speedometer.h"
@@ -34,9 +35,11 @@ void bike_handleGpioInterrupt(uint16_t GPIO_Pin) {
             pas_counter++;
             break;
         case HALL_SPEED_Pin:
-            if (gpio_read(HALL_SPEED_GPIO_Port, HALL_SPEED_Pin))
+            if (gpio_read(HALL_SPEED_GPIO_Port, HALL_SPEED_Pin)) {
                 speedometer_setVelocity(
                     speedometer_calculateVelocity(HAL_GetTick()));
+                odometer_addPulse();
+            }
             break;
         case BLINKER_LEFT_IN_Pin:
             gpio_read(BLINKER_LEFT_IN_GPIO_Port, BLINKER_LEFT_IN_Pin)
@@ -73,6 +76,7 @@ void bike_init() {
     blinkers_init();
     initStatusMessage();
     speedometer_init();
+    odometer_init();
 
     sound_play(SOUND_RUDOLF);
 
