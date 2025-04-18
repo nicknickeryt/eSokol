@@ -4,12 +4,16 @@
 #include "pas.h"
 #include <stdint.h>
 
-void odometer_init(void);
+#define ODOMETER_DISTANCE_SAVE_METERS 500
 
-void odometer_addPulse(void);
+void odometer_init();
 
-float odometer_getDistanceMeters(void);
+void odometer_pulseInterrupt();
 
-void odometer_reset(void);
+float odometer_getDistanceMeters();
+
+void odometer_reset();
+
+void odometer_proc();
 
 #endif // __ODOMETER_H

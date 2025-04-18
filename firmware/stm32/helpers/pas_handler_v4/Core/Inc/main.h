@@ -75,6 +75,8 @@ void Error_Handler(void);
 #define FRONT_WARM_GPIO_Port GPIOA
 #define THROTTLE_AIN_Pin GPIO_PIN_3
 #define THROTTLE_AIN_GPIO_Port GPIOA
+#define SPI1_CS_Pin GPIO_PIN_4
+#define SPI1_CS_GPIO_Port GPIOA
 #define BLINKER_RIGHT_Pin GPIO_PIN_0
 #define BLINKER_RIGHT_GPIO_Port GPIOB
 #define BATT_CURR_TODO_ENABLEME_Pin GPIO_PIN_1
@@ -110,6 +112,8 @@ extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim3;
 
 extern UART_HandleTypeDef huart1;
+
+extern SPI_HandleTypeDef hspi1;
 
 /* USER CODE END Private defines */
 

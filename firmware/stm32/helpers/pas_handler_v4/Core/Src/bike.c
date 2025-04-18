@@ -38,7 +38,7 @@ void bike_handleGpioInterrupt(uint16_t GPIO_Pin) {
             if (gpio_read(HALL_SPEED_GPIO_Port, HALL_SPEED_Pin)) {
                 speedometer_setVelocity(
                     speedometer_calculateVelocity(HAL_GetTick()));
-                odometer_addPulse();
+                odometer_pulseInterrupt();
             }
             break;
         case BLINKER_LEFT_IN_Pin:
@@ -90,6 +90,7 @@ void bike_proc() {
     anim_blinkProc();
     blinkers_proc();
     speedometer_proc();
+    odometer_proc();
     adc_proc();
     blinkers_proc();
     ambientlight_proc();

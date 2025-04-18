@@ -53,7 +53,7 @@ bool soundEnabled = true;
 bool bulbsEnabled = false;
 bool ambientLightEnabled = true;
 
-void initStatusMessage() { statusMessage = (char*)malloc(38 * sizeof(char)); }
+void initStatusMessage() { statusMessage = (char*)malloc(41 * sizeof(char)); }
 
 void anim_start() {
     animation_play(ANIM_STARTUP_PHASE1);
@@ -222,32 +222,42 @@ void sendStatus() {
 
     // Odometer
     uint32_t distanceMeters = (uint32_t)(odometer_getDistanceMeters());
-    if (distanceMeters > 9999) distanceMeters = 9999;
-
-    char distanceThousands = (distanceMeters / 1000) + '0';
-    char distanceHundreds = ((distanceMeters / 100) % 10) + '0';
-    char distanceTens = ((distanceMeters / 10) % 10) + '0';
-    char distanceUnits = (distanceMeters % 10) + '0';
+    if (distanceMeters > 9999999) distanceMeters = 9999999;
+    
+    uint32_t distanceKilometers = distanceMeters / 1000;
+    uint32_t distanceFraction = (distanceMeters % 1000);  // metry jako część po przecinku
+    
+    char distanceThousands = (distanceKilometers / 1000) + '0';
+    char distanceHundreds = ((distanceKilometers / 100) % 10) + '0';
+    char distanceTens = ((distanceKilometers / 10) % 10) + '0';
+    char distanceUnits = (distanceKilometers % 10) + '0';
+    
+    char distanceFracHundreds = (distanceFraction / 100) + '0';
+    char distanceFracTens = ((distanceFraction / 10) % 10) + '0';
+    char distanceFracUnits = (distanceFraction % 10) + '0';
+    
 
     sprintf(statusMessage,
-            "eskl_st%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\r\n",
-            frontColdEnabled ? '1' : '0', frontWarmEnabled ? '1' : '0',
-            rearEnabled ? '1' : '0', throttleEnabled ? '1' : '0',
-            sportModeDisabled ? '1' : '0', soundEnabled ? '1' : '0',
-            bulbsEnabled ? '1' : '0',
+        "eskl_st%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\r\n",
+        frontColdEnabled ? '1' : '0', frontWarmEnabled ? '1' : '0',
+        rearEnabled ? '1' : '0', throttleEnabled ? '1' : '0',
+        sportModeDisabled ? '1' : '0', soundEnabled ? '1' : '0',
+        bulbsEnabled ? '1' : '0',
 
-            frontColdBrightnessHundreds, frontColdBrightnessTens,
-            frontColdBrightnessUnits, algorithm_eq_componentSign,
-            algorithm_eq_componentWhole, algorithm_eq_componentFrac,
-            batteryVoltageHundreds, batteryVoltageTens, batteryVoltageUnits,
+        frontColdBrightnessHundreds, frontColdBrightnessTens,
+        frontColdBrightnessUnits, algorithm_eq_componentSign,
+        algorithm_eq_componentWhole, algorithm_eq_componentFrac,
+        batteryVoltageHundreds, batteryVoltageTens, batteryVoltageUnits,
 
-            blinkerLeftPinState ? '0' : '1', blinkerRightPinState ? '0' : '1',
-            '0', ambientLightEnabled ? '1' : '0',
+        blinkerLeftPinState ? '0' : '1', blinkerRightPinState ? '0' : '1',
+        '0', ambientLightEnabled ? '1' : '0',
 
-            batteryCurrentThousands, batteryCurrentHundreds, batteryCurrentTens,
-            batteryCurrentUnits,
+        batteryCurrentThousands, batteryCurrentHundreds, batteryCurrentTens,
+        batteryCurrentUnits,
 
-            distanceThousands, distanceHundreds, distanceTens, distanceUnits);
+        distanceThousands, distanceHundreds, distanceTens, distanceUnits,
+        distanceFracHundreds, distanceFracTens, distanceFracUnits);
+
             
     logger_sendChar(statusMessage);
 }
