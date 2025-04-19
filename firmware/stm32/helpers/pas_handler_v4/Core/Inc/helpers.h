@@ -25,17 +25,24 @@
 // π rounded value // TODO: do we really need so many decimal places?
 #define PI 3.141592
 
-
-
 extern bool bike_bluetoothConnected;
 
 extern uint16_t adc_batteryVoltage;
 
-void bike_init(void);
-void bike_proc(void);
-void bike_handleGpioInterrupt(uint16_t GPIO_Pin);
+typedef struct {
+    float value;
+    float alpha;
+    uint32_t lastUpdateMs;  // czas ostatniej aktualizacji
+    uint32_t intervalMs;    // co ile ms liczyć EMA
+} EMAFilter;
 
+void emaFilter_init(EMAFilter* filter, float initialValue, float alpha,
+                    uint32_t intervalMs);
+float emaFilter_update(EMAFilter* filter, float target);
+void emaFilter_reset(EMAFilter* filter);
 
 void pwm_toggle(TIM_HandleTypeDef* htim, bool state);
+
+float clamp(float value, float min, float max);
 
 #endif /* __HELPERS_H */
