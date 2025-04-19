@@ -3,6 +3,8 @@
 #include "main.h"
 #include "spif.h"
 
+#include "logger.h"
+
 static uint32_t odometer_pulseCount = 0;
 static uint32_t odometer_distanceMeters = 0;
 
@@ -13,6 +15,8 @@ static uint32_t odometer_currentFlashSlot = 0;
 SPIF_HandleTypeDef spif;
 
 void odometer_writeToFlash() {
+    odometer_currentFlashSlot++; // fist increase flash slot, then write!
+
     uint8_t writeBuffer[4];
 
     writeBuffer[0] = (uint8_t)(odometer_distanceMeters & 0xFF);
@@ -25,11 +29,12 @@ void odometer_writeToFlash() {
 
     SPIF_WritePage(&spif, 0, writeBuffer, 4, offset);
 
-    odometer_currentFlashSlot++;
 
     if (odometer_currentFlashSlot >= ODOMETER_FLASH_SLOT_COUNT) {
         SPIF_EraseSector(&spif, 0);
         odometer_currentFlashSlot = 0;
+
+        odometer_writeToFlash();
     }
 }
 
