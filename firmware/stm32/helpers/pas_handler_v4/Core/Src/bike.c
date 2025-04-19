@@ -9,7 +9,7 @@
 #include "gpio.h"
 #include "main.h"
 #include "odometer.h"
-#include "pas.h"
+#include "motor.h"
 #include "sounds.h"
 #include "speedometer.h"
 #include "uart.h"
@@ -34,7 +34,7 @@ void bike_handleGpioInterrupt(uint16_t GPIO_Pin) {
             }
             break;
         case PAS_SIGNAL_Pin:
-            pas_counter++;
+            algorithm_handlePasPulse();
             break;
         case HALL_SPEED_Pin:
             if (gpio_read(HALL_SPEED_GPIO_Port, HALL_SPEED_Pin)) {
@@ -59,9 +59,7 @@ void bike_handleGpioInterrupt(uint16_t GPIO_Pin) {
 void bike_init() {
     HAL_UARTEx_ReceiveToIdle_IT(&huart1, rxBuffer, 16);
 
-    pas_lastResetTick = HAL_GetTick();
-
-    TIM1->CCR1 = targetDutyCycle;  // OUT_PWM
+    TIM1->CCR1 = 0;  // OUT_PWM
     TIM1->CCR4 = 500;              // FRONT_COLD_PWM
 
     HAL_TIM_PWM_Start(TIM_THROTTLE_LEDS, TIM_CHANNEL_1);  // OUT_PWM
@@ -115,8 +113,8 @@ void bike_measurementMode() {
     uint32_t startTick;
 
     for (uint8_t i = 0; i <= 100; i++) {
-        targetDutyCycle = i;
-        updateDutyCycle();
+        motor_setDutyCycle(i);
+        motor_updateDutyCycle();
 
         startTick = HAL_GetTick();
         while (HAL_GetTick() - startTick < 5000) {

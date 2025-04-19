@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#include "pas.h"
+#include "motor.h"
 
 #define ODOMETER_DISTANCE_SAVE_METERS 500
 

@@ -33,6 +33,7 @@
 #include "uart.h"
 #include "blinkers.h"
 #include "speedometer.h"
+#include "bike.h"
 
 /* USER CODE END Includes */
 

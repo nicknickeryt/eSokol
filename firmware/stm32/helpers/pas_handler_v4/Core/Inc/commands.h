@@ -15,7 +15,7 @@
 
 typedef struct {
   const char *command;
-  void (*action)(void);
+  void (*action)();
 } Command;
 
 typedef struct {
@@ -23,7 +23,7 @@ typedef struct {
   void (*action)(uint16_t arg);
 } VariableCommand;
 
-extern Command commands[14];
+extern Command commands[16];
 
 extern VariableCommand variableCommands[1];
 
@@ -32,38 +32,41 @@ extern uint16_t frontColdBrightness;
 extern bool frontWarmEnabled;
 extern bool rearEnabled;
 extern bool throttleEnabled;
+extern bool pasEnabled;
 extern bool sportModeDisabled;
 extern bool soundEnabled;
 extern bool bulbsEnabled;
 extern bool ambientLightEnabled;
 
-void initStatusMessage(void);
-void anim_start(void);
+void initStatusMessage();
+void anim_start();
 
-void toggleFrontCold(void);
-void toggleFrontColdNoSound(void);  // TODO CHANGE THIS AAAA
+void toggleFrontCold();
+void toggleFrontColdNoSound();  // TODO CHANGE THIS AAAA
 void enableFrontColdNoSound();
 void disableFrontColdNoSound();
 void setFrontColdBrightness(uint16_t brightness);
-void toggleFrontWarm(void);
-void toggleRearLED(void);
-void enableRearLEDNoSound(void);
-void disableRearLEDNoSound(void);
+void toggleFrontWarm();
+void toggleRearLED();
+void enableRearLEDNoSound();
+void disableRearLEDNoSound();
 
 
-void toggleThrottle(void);
-void toggleSound(void);
-void toggleBulbs(void);
+void toggleThrottle();
+void toggleSound();
+void toggleBulbs();
 
-void blinkBlinkerLeft(void);
-void blinkBlinkerRight(void);
-void blinkBlinkerBoth(void);
+void blinkBlinkerLeft();
+void blinkBlinkerRight();
+void blinkBlinkerBoth();
 
-void toggleAmbientLight(void);
+void toggleAmbientLight();
 
-void algorithmComponentIncrement(void);
-void algorithmComponentDecrement(void);
+void algorithmComponentIncrement();
+void algorithmComponentDecrement();
+void algorithmFactorIncrement();
+void algorithmFactorDecrement();
 
-void sendStatus(void);
+void sendStatus();
 
 #endif /* __COMMANDS_H */

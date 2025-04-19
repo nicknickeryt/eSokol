@@ -1,5 +1,5 @@
 #include "odometer.h"
-
+#include "algorithm.h"
 #include "main.h"
 #include "spif.h"
 

@@ -20,11 +20,11 @@
 #include "helpers.h"
 #include "logger.h"
 #include "main.h"
-#include "pas.h"
+#include "motor.h"
 #include "odometer.h"
 #include "sounds.h"
 
-Command commands[14] = {{"eskl_animStart\r\n", anim_start},
+Command commands[16] = {{"eskl_animStart\r\n", anim_start},
                         {"eskl_frontCTog\r\n", toggleFrontCold},
                         {"eskl_frontWTog\r\n", toggleFrontWarm},
                         {"eskl_rearLETog\r\n", toggleRearLED},
@@ -37,6 +37,8 @@ Command commands[14] = {{"eskl_animStart\r\n", anim_start},
                         {"eskl_blinkBoth\r\n", blinkBlinkerBoth},
                         {"eskl_algCmpInc\r\n", algorithmComponentIncrement},
                         {"eskl_algCmpDec\r\n", algorithmComponentDecrement},
+                        {"eskl_algFacInc\r\n", algorithmFactorIncrement},
+                        {"eskl_algFacDec\r\n", algorithmFactorDecrement},
                         {"eskl_ambienTog\r\n", toggleAmbientLight}};
 
 VariableCommand variableCommands[1] = {{"eskl_bri__", setFrontColdBrightness}};
@@ -48,12 +50,13 @@ uint16_t frontColdBrightness = 75;  // [0,999]
 bool frontWarmEnabled = false;
 bool rearEnabled = false;
 bool throttleEnabled = false;
+bool pasEnabled = true;
 bool sportModeDisabled = true;
 bool soundEnabled = true;
 bool bulbsEnabled = false;
 bool ambientLightEnabled = true;
 
-void initStatusMessage() { statusMessage = (char*)malloc(41 * sizeof(char)); }
+void initStatusMessage() { statusMessage = (char*)malloc(43 * sizeof(char)); }
 
 void anim_start() {
     animation_play(ANIM_STARTUP_PHASE1);
@@ -116,6 +119,7 @@ void disableRearLEDNoSound() {
 
 void toggleThrottle() {
     throttleEnabled = !throttleEnabled;
+    pasEnabled = !throttleEnabled;
     sound_playToggle(throttleEnabled);
     sendStatus();
 }
@@ -156,22 +160,57 @@ void toggleAmbientLight() {
 }
 
 void algorithmComponentIncrement() {
-    algorithm_eq_component =
-        algorithm_eq_component >= ALGORITHM_EQ_COMPONENT_MAX
-            ? ALGORITHM_EQ_COMPONENT_MAX
-            : algorithm_eq_component + 0.1f;
-    algorithm_eq_component >= ALGORITHM_EQ_COMPONENT_MAX ? sound_play(SOUND_ERR)
-                                                         : sound_playToggle(1);
+    float algoritm_offset = algorithm_getDutyOffset();
+
+    algoritm_offset = algoritm_offset >= ALGORITHM_OFFSET_MAX
+                          ? ALGORITHM_OFFSET_MAX
+                          : algoritm_offset + 0.1f;
+    algoritm_offset >= ALGORITHM_OFFSET_MAX ? sound_play(SOUND_ERR)
+                                            : sound_playToggle(1);
+    algorithm_setDutyOffset(algoritm_offset);
+
     sendStatus();
 }
 
 void algorithmComponentDecrement() {
-    algorithm_eq_component =
-        algorithm_eq_component <= ALGORITHM_EQ_COMPONENT_MIN
-            ? ALGORITHM_EQ_COMPONENT_MIN
-            : algorithm_eq_component - 0.1f;
-    algorithm_eq_component <= ALGORITHM_EQ_COMPONENT_MIN ? sound_play(SOUND_ERR)
-                                                         : sound_playToggle(0);
+    float algoritm_offset = algorithm_getDutyOffset();
+
+    algoritm_offset = algoritm_offset <= ALGORITHM_OFFSET_MIN
+                          ? ALGORITHM_OFFSET_MIN
+                          : algoritm_offset - 0.1f;
+
+    algoritm_offset <= ALGORITHM_OFFSET_MIN ? sound_play(SOUND_ERR)
+                                            : sound_playToggle(0);
+    algorithm_setDutyOffset(algoritm_offset);
+
+    sendStatus();
+}
+
+void algorithmFactorIncrement() {
+    float algoritm_factor = algorithm_getDutyFactor();
+
+    algoritm_factor = algoritm_factor >= ALGORITHM_FACTOR_MAX
+                          ? ALGORITHM_FACTOR_MAX
+                          : algoritm_factor + 0.00001f;
+
+    algoritm_factor >= ALGORITHM_FACTOR_MAX ? sound_play(SOUND_ERR)
+                                            : sound_playToggle(1);
+    algorithm_setDutyFactor(algoritm_factor);
+
+    sendStatus();
+}
+
+void algorithmFactorDecrement() {
+    float algoritm_factor = algorithm_getDutyFactor();
+
+    algoritm_factor = algoritm_factor <= ALGORITHM_FACTOR_MIN
+                          ? ALGORITHM_FACTOR_MIN
+                          : algoritm_factor - 0.00001f;
+
+    algoritm_factor <= ALGORITHM_FACTOR_MIN ? sound_play(SOUND_ERR)
+                                            : sound_playToggle(0);
+    algorithm_setDutyFactor(algoritm_factor);
+
     sendStatus();
 }
 
@@ -199,15 +238,12 @@ void sendStatus() {
     char frontColdBrightnessTens = ((frontColdBrightness / 10) % 10) + '0';
     char frontColdBrightnessUnits = (frontColdBrightness % 10) + '0';
 
-    char algorithm_eq_componentSign = algorithm_eq_component > 0 ? '0' : '1';
+    float algoritm_offset = algorithm_getDutyOffset();
+    char algorithm_offsetSign = algoritm_offset > 0 ? '0' : '1';
     char algorithm_eq_componentWhole =
-        (int)(algorithm_eq_component < 0 ? -algorithm_eq_component
-                                         : algorithm_eq_component) +
-        '0';
-    char algorithm_eq_componentFrac =
-        (int)((algorithm_eq_component < 0 ? -algorithm_eq_component
-                                          : algorithm_eq_component) *
-              10) %
+        (int)(algoritm_offset < 0 ? -algoritm_offset : algoritm_offset) + '0';
+    char algorithm_offsetFrac =
+        (int)((algoritm_offset < 0 ? -algoritm_offset : algoritm_offset) * 10) %
             10 +
         '0';
 
@@ -223,41 +259,52 @@ void sendStatus() {
     // Odometer
     uint32_t distanceMeters = (uint32_t)(odometer_getDistanceMeters());
     if (distanceMeters > 9999999) distanceMeters = 9999999;
-    
+
     uint32_t distanceKilometers = distanceMeters / 1000;
-    uint32_t distanceFraction = (distanceMeters % 1000);  // metry jako część po przecinku
-    
+    uint32_t distanceFraction =
+        (distanceMeters % 1000);  // metry jako część po przecinku
+
     char distanceThousands = (distanceKilometers / 1000) + '0';
     char distanceHundreds = ((distanceKilometers / 100) % 10) + '0';
     char distanceTens = ((distanceKilometers / 10) % 10) + '0';
     char distanceUnits = (distanceKilometers % 10) + '0';
-    
+
     char distanceFracHundreds = (distanceFraction / 100) + '0';
     char distanceFracTens = ((distanceFraction / 10) % 10) + '0';
     char distanceFracUnits = (distanceFraction % 10) + '0';
-    
+
+    float algorithm_factor = algorithm_getDutyFactor();
+    int algorithmFactorValue =
+        (int)(algorithm_factor * 100000.0f);  // 0.00001 -> 10, 0.00020 -> 200
+    if (algorithmFactorValue < 1) algorithmFactorValue = 1;
+    if (algorithmFactorValue > 20) algorithmFactorValue = 20;
+
+    char algorithmFactorTens = (algorithmFactorValue / 10) + '0';
+    char algorithmFactorUnits = (algorithmFactorValue % 10) + '0';
 
     sprintf(statusMessage,
-        "eskl_st%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\r\n",
-        frontColdEnabled ? '1' : '0', frontWarmEnabled ? '1' : '0',
-        rearEnabled ? '1' : '0', throttleEnabled ? '1' : '0',
-        sportModeDisabled ? '1' : '0', soundEnabled ? '1' : '0',
-        bulbsEnabled ? '1' : '0',
+            "eskl_st%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%"
+            "c%c%c%c\r\n",
+            frontColdEnabled ? '1' : '0', frontWarmEnabled ? '1' : '0',
+            rearEnabled ? '1' : '0', throttleEnabled ? '1' : '0',
+            sportModeDisabled ? '1' : '0', soundEnabled ? '1' : '0',
+            bulbsEnabled ? '1' : '0',
 
-        frontColdBrightnessHundreds, frontColdBrightnessTens,
-        frontColdBrightnessUnits, algorithm_eq_componentSign,
-        algorithm_eq_componentWhole, algorithm_eq_componentFrac,
-        batteryVoltageHundreds, batteryVoltageTens, batteryVoltageUnits,
+            frontColdBrightnessHundreds, frontColdBrightnessTens,
+            frontColdBrightnessUnits, algorithm_offsetSign,
+            algorithm_eq_componentWhole, algorithm_offsetFrac,
+            batteryVoltageHundreds, batteryVoltageTens, batteryVoltageUnits,
 
-        blinkerLeftPinState ? '0' : '1', blinkerRightPinState ? '0' : '1',
-        '0', ambientLightEnabled ? '1' : '0',
+            blinkerLeftPinState ? '0' : '1', blinkerRightPinState ? '0' : '1',
+            '0', ambientLightEnabled ? '1' : '0',
 
-        batteryCurrentThousands, batteryCurrentHundreds, batteryCurrentTens,
-        batteryCurrentUnits,
+            batteryCurrentThousands, batteryCurrentHundreds, batteryCurrentTens,
+            batteryCurrentUnits,
 
-        distanceThousands, distanceHundreds, distanceTens, distanceUnits,
-        distanceFracHundreds, distanceFracTens, distanceFracUnits);
+            distanceThousands, distanceHundreds, distanceTens, distanceUnits,
+            distanceFracHundreds, distanceFracTens, distanceFracUnits,
 
-            
+            algorithmFactorTens, algorithmFactorUnits);
+
     logger_sendChar(statusMessage);
 }

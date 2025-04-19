@@ -1,6 +1,6 @@
 #include "speedometer.h"
 #include "helpers.h"
-#include "pas.h"
+#include "algorithm.h"
 #include "logger.h"
 
 #include <stdlib.h>

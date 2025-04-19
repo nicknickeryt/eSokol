@@ -60,7 +60,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     Core/Src/gpio.c
     Core/Src/helpers.c
     Core/Src/logger.c
-    Core/Src/pas.c
+    Core/Src/motor.c
     Core/Src/sounds.c
     Core/Src/uart.c
     Core/Src/speedometer.c
