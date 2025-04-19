@@ -11,8 +11,6 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-// #define DEBUG_ENABLED            // enabled algorithm & friends debug mode
-
 #define ALGORITHM_EQ_COMPONENT_DEFAULT -9.0
 #define ALGORITHM_EQ_FACTOR 1.5
 
@@ -23,11 +21,10 @@
 
 #define MINIMUM_THROTTLE_VOLTAGE 1.1 // voltage below which duty cycle is 0, throttle voltage at idle is ~ 1.04V
 
-#define ALGORITM_DISABLE // temp!! disable algorithm for now...
-
 // this should be a value between -9.9 and 9.9
 extern float algorithm_eq_component;
 
+void algorithm_init();
 void algorithm_proc();
 
 #endif /* __ALGORITHM_H_ */

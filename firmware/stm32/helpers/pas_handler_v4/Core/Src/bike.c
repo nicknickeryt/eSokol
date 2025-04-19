@@ -14,6 +14,8 @@
 #include "speedometer.h"
 #include "uart.h"
 
+#include "logger.h"
+
 bool bike_bluetoothConnected = false;
 
 void bike_handleGpioInterrupt(uint16_t GPIO_Pin) {
@@ -81,6 +83,8 @@ void bike_init() {
     sound_play(SOUND_RUDOLF);
 
     TIM1->PSC = 168 - 1;
+
+    algorithm_init();
 }
 
 void bike_proc() {
@@ -95,4 +99,30 @@ void bike_proc() {
     blinkers_proc();
     ambientlight_proc();
     algorithm_proc();
+}
+
+void sendMeasurement(uint8_t dutyCycle, float velocity) {
+    char message[64];
+
+    int velocityWhole = (int)velocity;
+    int velocityFrac = (int)((velocity - velocityWhole) * 10);  // jedna cyfra po przecinku
+
+    sprintf(message, "eskl_measure: DUTY %d VKMH %d.%d\r\n", dutyCycle, velocityWhole, velocityFrac);
+    logger_sendChar(message);
+}
+
+void bike_measurementMode() {
+    uint32_t startTick;
+
+    for (uint8_t i = 0; i <= 100; i++) {
+        targetDutyCycle = i;
+        updateDutyCycle();
+
+        startTick = HAL_GetTick();
+        while (HAL_GetTick() - startTick < 5000) {
+            speedometer_proc();
+        }
+
+        sendMeasurement(i, speedometer_getVelocity());
+    }
 }

@@ -29,10 +29,12 @@
  
  extern uint16_t adc_batteryVoltage;
  
- void bike_init(void);
- void bike_proc(void);
+ void bike_init();
+ void bike_proc();
  void bike_handleGpioInterrupt(uint16_t GPIO_Pin);
  
+ void sendMeasurement(uint8_t dutyCycle, float velocity);
+ void bike_measurementMode();
  
  #endif /* __BIKE_H */
  
