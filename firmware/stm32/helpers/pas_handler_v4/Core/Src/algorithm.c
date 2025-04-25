@@ -18,6 +18,8 @@
 #include "motor.h"
 #include "sounds.h"
 #include "stm32f4xx_hal.h"
+#include "pid.h"
+#include "speedometer.h"
 
 float currentDutyCycle = 0.0f;
 
@@ -26,7 +28,7 @@ EMAFilter pasFilter;
 const float throttleFilterAlpha = 0.0009f;
 const float pasFilterAlpha = 0.01f;
 
-static uint32_t lastPasTime = 0;
+static uint32_t lastPasPulseTime = 0;
 static uint32_t pasPulses = 0;
 
 float omegaPedals = 0.0f;
@@ -77,10 +79,10 @@ void algorithm_handlePasPulse() {
 
     uint32_t now = HAL_GetTick();
 
-    uint32_t delta = now - lastPasTime;
+    uint32_t delta = now - lastPasPulseTime;
     if (delta < 5) return;  // debounce
 
-    lastPasTime = now;
+    lastPasPulseTime = now;
 
     if (pasPulses <= 2)
         return;  // require at least 3 pulses if bike was stationary
@@ -118,7 +120,7 @@ void algorithm_init() {
 void algorithm_pasProc() {
     uint32_t now = HAL_GetTick();
 
-    if (now - lastPasTime > ALGORITHM_PAS_INACTIVE_TIME_MS) {
+    if (now - lastPasPulseTime > ALGORITHM_PAS_INACTIVE_TIME_MS) {
         currentDutyCycle = 0.0f;
         motor_setDutyCycle(currentDutyCycle);
         emaFilter_reset(&pasFilter);
@@ -128,6 +130,74 @@ void algorithm_pasProc() {
 
     currentDutyCycle = emaFilter_update(&pasFilter, rawDutyCycle);
     currentDutyCycle = limitDutyCycleIncrease(currentDutyCycle);
+}
+
+
+// TODO rename this garbage 
+
+float last_v_kolo = 0.0f;
+uint32_t lastTick = 0;
+uint32_t lastNewPasProcTick = 0;
+float filteredSpeedDrop = 0.0f;
+
+//                         Kp    Ki    Kd    I  LE Max
+PID motorWheelSpeedPID = { 1.0f, 0.5f, 0.0f, 0, 0, 100 };
+PID adjustmentPID = {1.0, 0.2, 0.05, 0, 0, 2.0};   // PID agresji :))
+
+#define PEDAL_SYNC_THRESHOLD 0.15f
+#define FILTER_ALPHA 0.1f   
+
+void algorithm_newPasProc() {
+    uint32_t now = HAL_GetTick();
+
+    if (now - lastPasPulseTime > ALGORITHM_PAS_INACTIVE_TIME_MS) {
+        currentDutyCycle = 0.0f;
+        motor_setDutyCycle(currentDutyCycle);
+        pasPulses = 0;
+        return;
+    }
+
+    uint32_t dt = now - lastTick;
+
+    if (now - lastNewPasProcTick < 10) return; // proc every 10m
+    lastNewPasProcTick = now;
+
+    float v_kolo = speedometer_getWheelVelocityKmh();           // v kola bezposrednio mierzone
+    float v_pedaly = targetVelocityWheelKmh;                    // v kola obliczone z PAS
+    float v_silnik = speedometer_getMotorWheelVelocityKmh();    // v kola obliczone z silnika
+
+    float delta_v_kolo = v_kolo - last_v_kolo;                 
+    float speed_drop = delta_v_kolo / dt;                       // przyspieszenie 
+
+    // Filtracja (EMA)
+    filteredSpeedDrop = FILTER_ALPHA * speed_drop + (1 - FILTER_ALPHA) * filteredSpeedDrop;
+
+    // TODO shouldnt it be just < threshold?
+    if (fabsf(v_pedaly - v_kolo) < PEDAL_SYNC_THRESHOLD * v_kolo) {
+        // nie powinno byc spadku predkosci
+        float aggression = PID_Calculate(&adjustmentPID, 0.0f, filteredSpeedDrop);
+        aggression = constrain(aggression, 0.0f, 2.0f);
+
+        // adjust motor PID params
+        float Kp_dyn = constrain(1.0f + aggression, 1.0f, 3.0f);
+        float Ki_dyn = constrain(0.5f - aggression * 0.3f, 0.1f, 0.5f);
+
+        PID_SetTunings(&motorWheelSpeedPID, Kp_dyn, Ki_dyn, motorWheelSpeedPID.Kd);
+
+        // Now we can calculate PWM, motor speed 105% of wheel speed
+        float target_speed = v_kolo * 1.05f;
+        float pwm = PID_Calculate(&motorWheelSpeedPID, target_speed, v_silnik);
+        pwm = constrain(pwm, 0.0f, 100.0f);
+
+        last_v_kolo = v_kolo;
+        lastTick = now;
+
+        currentDutyCycle = pwm;
+    } else { // pedals moving too slow
+        motorWheelSpeedPID.integral = 0;
+        motorWheelSpeedPID.last_error = 0;
+        currentDutyCycle = 0.0f;
+    }    
 }
 
 void algorithm_throttleProc() {
@@ -154,7 +224,8 @@ void algorithm_proc() {
     if (throttleEnabled)
         algorithm_throttleProc();
     else if (pasEnabled)
-        algorithm_pasProc();
+        // algorithm_pasProc();
+        algorithm_newPasProc();
     else
         currentDutyCycle = 0.0f;
 

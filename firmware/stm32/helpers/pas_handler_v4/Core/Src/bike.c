@@ -38,10 +38,15 @@ void bike_handleGpioInterrupt(uint16_t GPIO_Pin) {
             break;
         case SPEED_WHEEL_Pin:
             if (gpio_read(SPEED_WHEEL_GPIO_Port, SPEED_WHEEL_Pin)) {
-                speedometer_setVelocity(
-                    speedometer_calculateVelocity(HAL_GetTick()));
+                speedometer_setWheelVelocity(
+                    speedometer_calculateWheelVelocity(HAL_GetTick()));
                 odometer_pulseInterrupt();
             }
+            break;
+        case SPEED_MOTOR_Pin:
+            if (gpio_read(SPEED_MOTOR_GPIO_Port, SPEED_MOTOR_Pin)) 
+                speedometer_setMotorWheelVelocity(
+                    speedometer_calculateMotorWheelVelocity(HAL_GetTick()));
             break;
         case BLINKER_LEFT_IN_Pin:
             gpio_read(BLINKER_LEFT_IN_GPIO_Port, BLINKER_LEFT_IN_Pin)
@@ -121,6 +126,6 @@ void bike_measurementMode() {
             speedometer_proc();
         }
 
-        sendMeasurement(i, speedometer_getVelocity());
+        sendMeasurement(i, speedometer_getWheelVelocityKmh());
     }
 }
