@@ -22,7 +22,7 @@ extern uint8_t rxBuffer[16];
 
 void uart_handleRxInterrupt(UART_HandleTypeDef* huart, uint16_t size);
 
-void status_proc(void);
-void sendStatus1s(void);
+void status_proc();
+void sendStatus1s();
 
 #endif /* __UART_H */

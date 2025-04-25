@@ -30,12 +30,12 @@ uint32_t sound_getPSCForFreq(uint32_t frequency);
 
 void sound_startSequence(uint32_t* tone, uint32_t* duration, uint32_t size);
 
-void sound_proc(void);
+void sound_proc();
 
 void sound_play(uint8_t number);
 void sound_playToggle(bool state);
-void sound_nothing(void);
+void sound_nothing();
 
-bool sound_isPlaying(void);
+bool sound_isPlaying();
 
 #endif /* __SOUNDS_H */
