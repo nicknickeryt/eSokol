@@ -224,8 +224,8 @@ void algorithm_proc() {
     if (throttleEnabled)
         algorithm_throttleProc();
     else if (pasEnabled)
-        // algorithm_pasProc();
-        algorithm_newPasProc();
+        algorithm_pasProc();
+        // algorithm_newPasProc();
     else
         currentDutyCycle = 0.0f;
 

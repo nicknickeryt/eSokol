@@ -556,21 +556,21 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin : SPEED_MOTOR_Pin */
   GPIO_InitStruct.Pin = SPEED_MOTOR_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(SPEED_MOTOR_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PAS_SIGNAL_Pin SPEED_WHEEL_Pin */
-  GPIO_InitStruct.Pin = PAS_SIGNAL_Pin|SPEED_WHEEL_Pin;
+  /*Configure GPIO pin : PAS_SIGNAL_Pin */
+  GPIO_InitStruct.Pin = PAS_SIGNAL_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_PULLDOWN;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+  HAL_GPIO_Init(PAS_SIGNAL_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : BT_STATE_Pin */
-  GPIO_InitStruct.Pin = BT_STATE_Pin;
+  /*Configure GPIO pins : BT_STATE_Pin SPEED_WHEEL_Pin */
+  GPIO_InitStruct.Pin = BT_STATE_Pin|SPEED_WHEEL_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
   GPIO_InitStruct.Pull = GPIO_PULLDOWN;
-  HAL_GPIO_Init(BT_STATE_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI9_5_IRQn, 0, 0);

@@ -24,6 +24,8 @@
 #include "odometer.h"
 #include "sounds.h"
 
+#include "speedometer.h"
+
 Command commands[16] = {{"eskl_animStart\r\n", anim_start},
                         {"eskl_frontCTog\r\n", toggleFrontCold},
                         {"eskl_frontWTog\r\n", toggleFrontWarm},
@@ -283,8 +285,7 @@ void sendStatus() {
     char algorithmFactorUnits = (algorithmFactorValue % 10) + '0';
 
     sprintf(statusMessage,
-            "eskl_st%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%"
-            "c%c%c%c\r\n",
+            "eskl_st%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%s\r\n",
             frontColdEnabled ? '1' : '0', frontWarmEnabled ? '1' : '0',
             rearEnabled ? '1' : '0', throttleEnabled ? '1' : '0',
             sportModeDisabled ? '1' : '0', soundEnabled ? '1' : '0',
@@ -304,7 +305,9 @@ void sendStatus() {
             distanceThousands, distanceHundreds, distanceTens, distanceUnits,
             distanceFracHundreds, distanceFracTens, distanceFracUnits,
 
-            algorithmFactorTens, algorithmFactorUnits);
+            algorithmFactorTens, algorithmFactorUnits,
+        
+            logger_floatToChar(speedometer_getMotorWheelVelocityKmh()));
 
     logger_sendChar(statusMessage);
 }
