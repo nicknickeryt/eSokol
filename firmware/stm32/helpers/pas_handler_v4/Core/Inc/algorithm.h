@@ -25,7 +25,7 @@
 #define ALGORITHM_MIN_THROTTLE_VOLTAGE 1.1                  // throttle voltage at idle is ~ 1.04V
 
 #define ALGORITHM_PEDAL_GEAR_RATIO 2.875                    // this is ratio to calculate target speed, 46:16 (pedals gear, wheel gear)
-#define MOTOR_GEAR_RATIO 0.5625                             // this is ratio to calculate target speed, 9:16 (motor gear, wheel gear)
+#define MOTOR_GEAR_RATIO 0.8125                            // this is ratio to calculate target speed, 13:16 (motor gear, wheel gear)
 #define ALGORITHM_PAS_MAGNET_ANGLE (2.0 * PI) / 12.0        // pas angle after which we calculate omega. 2pi/12 is 30° (we have 12 magnets)
 
 #define R_WHEEL 0.25
