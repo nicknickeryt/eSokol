@@ -83,6 +83,9 @@ void Error_Handler(void);
 #define BATT_CURR_TODO_ENABLEME_GPIO_Port GPIOB
 #define BLINKER_LEFT_Pin GPIO_PIN_10
 #define BLINKER_LEFT_GPIO_Port GPIOB
+#define SPEED_MOTOR_Pin GPIO_PIN_12
+#define SPEED_MOTOR_GPIO_Port GPIOB
+#define SPEED_MOTOR_EXTI_IRQn EXTI15_10_IRQn
 #define OUT_PWM_Pin GPIO_PIN_8
 #define OUT_PWM_GPIO_Port GPIOA
 #define FRONT_COLD_PWM_Pin GPIO_PIN_11
@@ -99,9 +102,9 @@ void Error_Handler(void);
 #define BT_STATE_Pin GPIO_PIN_8
 #define BT_STATE_GPIO_Port GPIOB
 #define BT_STATE_EXTI_IRQn EXTI9_5_IRQn
-#define HALL_SPEED_Pin GPIO_PIN_9
-#define HALL_SPEED_GPIO_Port GPIOB
-#define HALL_SPEED_EXTI_IRQn EXTI9_5_IRQn
+#define SPEED_WHEEL_Pin GPIO_PIN_9
+#define SPEED_WHEEL_GPIO_Port GPIOB
+#define SPEED_WHEEL_EXTI_IRQn EXTI9_5_IRQn
 
 /* USER CODE BEGIN Private defines */
 

@@ -36,8 +36,8 @@ void bike_handleGpioInterrupt(uint16_t GPIO_Pin) {
         case PAS_SIGNAL_Pin:
             algorithm_handlePasPulse();
             break;
-        case HALL_SPEED_Pin:
-            if (gpio_read(HALL_SPEED_GPIO_Port, HALL_SPEED_Pin)) {
+        case SPEED_WHEEL_Pin:
+            if (gpio_read(SPEED_WHEEL_GPIO_Port, SPEED_WHEEL_Pin)) {
                 speedometer_setVelocity(
                     speedometer_calculateVelocity(HAL_GetTick()));
                 odometer_pulseInterrupt();
