@@ -29,3 +29,8 @@ float PID_Calculate(PID* pid, float target, float current) {
 
     return output;
 }
+
+void PID_Reset(PID* pid) {
+    pid->integral = 0.0f;
+    pid->last_error = 0.0f;
+}

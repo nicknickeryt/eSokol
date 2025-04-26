@@ -47,9 +47,7 @@ void speedometer_setMotorWheelVelocity(float velocity) {
 }
 
 float speedometer_getWheelVelocityKmh() { return wheelCurrentVelocityKmh; }
-float speedometer_getMotorWheelVelocityKmh() {
-    return motorWheelCurrentVelocityKmh;
-}
+float speedometer_getMotorWheelVelocityKmh() { return motorWheelCurrentVelocityKmh; }
 
 void speedometer_proc() {
     if (!(HAL_GetTick() - hallLastSendTick > 100)) return;
