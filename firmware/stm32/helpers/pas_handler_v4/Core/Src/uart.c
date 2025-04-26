@@ -38,7 +38,7 @@ void uart_handleRxInterrupt(UART_HandleTypeDef* huart, uint16_t size) {
                     strlen(commands[i].command)) == 0) {
             if (commands[i].action == NULL) {
                 logger_sendChar("ERROR: NULL action pointer!\r\n");
-                return;
+                break;
             }
             commands[i].action();
             break;
