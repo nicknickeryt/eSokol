@@ -56,7 +56,7 @@ bool soundEnabled = true;
 bool bulbsEnabled = false;
 bool ambientLightEnabled = true;
 
-void initStatusMessage() { statusMessage = (char*)malloc(46 * sizeof(char)); }
+void initStatusMessage() { statusMessage = (char*)malloc(50 * sizeof(char)); }
 
 void anim_start() {
     animation_play(ANIM_STARTUP_PHASE1);
@@ -251,8 +251,17 @@ void sendStatus() {
     char motorWheelVelocityFracTens = '0' + (motorWheelVelocityFrac / 10);
     char motorWheelVelocityFracUnits = '0' + (motorWheelVelocityFrac % 10);
 
+    float wheelVelocity = speedometer_getWheelVelocityKmh();
+    int wheelVelocityInt = (int)wheelVelocity;
+    int wheelVelocityFrac = (int)((wheelVelocity - wheelVelocityInt) * 100.0f + 0.5f);
+    
+    char wheelVelocityTens = '0' + (wheelVelocityInt / 10);
+    char wheelVelocityUnits = '0' + (wheelVelocityInt % 10);
+    char wheelVelocityFracTens = '0' + (wheelVelocityFrac / 10);
+    char wheelVelocityFracUnits = '0' + (wheelVelocityFrac % 10);
+    
     sprintf(statusMessage,
-            "eskl_st%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\r\n",
+            "eskl_st%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\r\n",
             frontColdEnabled ? '1' : '0', frontWarmEnabled ? '1' : '0',
             rearEnabled ? '1' : '0', throttleEnabled ? '1' : '0',
             sportModeDisabled ? '1' : '0', soundEnabled ? '1' : '0',
@@ -276,8 +285,10 @@ void sendStatus() {
             distanceFracHundreds, distanceFracTens, distanceFracUnits,
 
             motorWheelVelocityTens, motorWheelVelocityUnits, motorWheelVelocityFracTens, motorWheelVelocityFracUnits,
+
+            algorithm_isEnabled() ? '1' : '0',
         
-            algorithm_isEnabled() ? '1' : '0');
+            wheelVelocityTens, wheelVelocityUnits, wheelVelocityFracTens, wheelVelocityFracUnits);
 
     logger_sendChar(statusMessage);
 }

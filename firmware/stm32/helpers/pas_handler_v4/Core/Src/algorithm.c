@@ -21,7 +21,7 @@
 #include "speedometer.h"
 #include "stm32f4xx_hal.h"
 
-bool algorithmEnabled = false;
+bool algorithmEnabled = true;
 
 float currentDutyCycle = 0.0f;
 
@@ -101,8 +101,9 @@ uint32_t lastTick = 0;
 uint32_t lastNewPasProcTick = 0;
 float filteredSpeedDrop = 0.0f;
 
-PID motorWheelSpeedPID = {0.4f, 0.07f, 0.04f,
-                          0,    0,     100};  // TODO PID agresjI >:)
+PID motorWheelSpeedPID = {10.25f, 0.1f, 0.0f, 0, 0, 100};  // TODO PID agresjI >:)
+
+// ku = 4.5
 
 #define ALGORITHM_PEDAL_SYNC_THRESHOLD 0.3f  // is it ok? idk
 
@@ -114,6 +115,8 @@ void algorithm_newPasProc() {
         motor_setDutyCycle(currentDutyCycle);
         pasPulses = 0;
         PID_Reset(&motorWheelSpeedPID);
+        last_v_kolo = 0;
+        emaFilter_reset(&pasFilter);
         return;
     }
 
@@ -127,11 +130,10 @@ void algorithm_newPasProc() {
         speedometer_getMotorWheelVelocityKmh();  // v kola obliczone z silnika
 
     if (fabsf(v_pedaly - v_kolo) < ALGORITHM_PEDAL_SYNC_THRESHOLD * v_kolo) {
-        float target_speed =
-            v_kolo * targetSpeedPercentage;  // motor speed 105% of wheel speed
+        float target_speed = v_pedaly * targetSpeedPercentage;  // motor speed 105% of wheel speed
         float rawDutyCycle =
             PID_Calculate(&motorWheelSpeedPID, target_speed, v_silnik);
-        rawDutyCycle = constrain(rawDutyCycle, 0.0f, 30.0f);
+        rawDutyCycle = constrain(rawDutyCycle, 0.0f, 60.0f);                                        // TODOOOOO
 
         last_v_kolo = v_kolo;
         lastTick = now;
