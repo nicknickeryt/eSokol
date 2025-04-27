@@ -39,8 +39,32 @@ float targetVelocityWheelKmh = 0.0f;
 
 float rawDutyCycle = 0.0f;
 
-float targetSpeedPercentage =
-    ALGORITHM_TARGET_SPEED_PERCENTAGE_DEFAULT;  // 1.05 = 105%
+float targetSpeedPercentage = ALGORITHM_TARGET_SPEED_PERCENTAGE_DEFAULT;
+
+// FEEDFORWARD
+float lastFeedforwardDuty = 0.0f;
+float feedforwardDuty = 0.0f;
+const float feedforwardAlpha = 0.01f;
+
+uint32_t getDutyCycleFromVWheelKmh(float x) {
+    // f(x) = 0,0001227995637 x⁵ − 0,0061246087742 x⁴ + 0,1124919694247 x³ −
+    // 0,8730248662225 x² + 3,9743492255457 x + 1,6789618357226
+    if (x > 27.0f) return 0;
+
+    float duty =
+        ((((0.0001228f * x - 0.0061246f) * x + 0.1124920f) * x - 0.8730249f) *
+             x +
+         3.9743492f) *
+            x +
+        1.6789618f;
+
+    duty = duty + (duty * duty * 0.001f);
+
+    if (duty < 0.0f) duty = 0.0f;
+    if (duty > 100.0f) duty = 100.0f;
+
+    return (uint32_t)duty;
+}
 
 void algorithm_setTargetSpeedPercentage(float value) {
     targetSpeedPercentage = value;
@@ -95,51 +119,53 @@ void algorithm_init() {
 }
 
 // TODO rename this garbage
-float last_v_kolo = 0.0f;
 uint32_t lastTick = 0;
 uint32_t lastNewPasProcTick = 0;
 float filteredSpeedDrop = 0.0f;
 
-PID motorWheelSpeedPID = {0.6f, 0.05f, 0.0f, 0, 0, 100};  // TODO PID agresjI >:)
+PID motorWheelSpeedPID = {0.6f, 0.05f, 0.1f, 0, 0, 100};
 
 void algorithm_newPasProc() {
     uint32_t now = HAL_GetTick();
+
+    if (now - lastNewPasProcTick < 10) return;  // proc every 10ms
 
     if (now - lastPasPulseTime > ALGORITHM_PAS_INACTIVE_TIME_MS) {
         currentDutyCycle = 0.0f;
         pasPulses = 0;
         PID_Reset(&motorWheelSpeedPID);
-        last_v_kolo = 0;
         emaFilter_reset(&pasFilter);
+        feedforwardDuty = 0.0f;
+        lastFeedforwardDuty = 0.0f;
         return;
     }
 
-    if (now - lastNewPasProcTick < 10) return;  // proc every 10ms
     lastNewPasProcTick = now;
 
-    float v_kolo =
-        speedometer_getWheelVelocityKmh();    // v kola bezposrednio mierzone
-    float v_pedaly = targetVelocityWheelKmh;  // v kola obliczone z PAS
-    float v_silnik =
-        speedometer_getMotorWheelVelocityKmh();  // v kola obliczone z silnika
+    float v_kolo = speedometer_getWheelVelocityKmh();
+    float v_pedaly = targetVelocityWheelKmh;
+    float v_silnik = speedometer_getMotorWheelVelocityKmh();
 
-    float effectiveSpeed = fminf(v_pedaly, 25.0f);  
-    float dynamicTargetSpeedPercentage = targetSpeedPercentage + 0.1f * (effectiveSpeed / 25.0f);
+    float target_speed = v_pedaly * targetSpeedPercentage;
+
+    // FEEDFORWARD
+    feedforwardDuty = getDutyCycleFromVWheelKmh(v_pedaly);
+    feedforwardDuty = feedforwardAlpha * feedforwardDuty +
+                      (1.0f - feedforwardAlpha) * lastFeedforwardDuty;
+    lastFeedforwardDuty = feedforwardDuty;
+
+    // calculate always!!
+    float pidDuty = PID_Calculate(&motorWheelSpeedPID, target_speed, v_silnik);
+    rawDutyCycle = feedforwardDuty + pidDuty;  // Połączenie feedforward z PID
+
+    rawDutyCycle = constrain(rawDutyCycle, 0.0f, 100.0f);
 
     if (fabsf(v_pedaly - v_kolo) < ALGORITHM_PEDAL_SYNC_THRESHOLD * v_kolo) {
-        float target_speed = v_pedaly * dynamicTargetSpeedPercentage;  // motor speed 105% of wheel speed
-        float rawDutyCycle =
-            PID_Calculate(&motorWheelSpeedPID, target_speed, v_silnik);
-        rawDutyCycle = constrain(rawDutyCycle, 0.0f, 100.0f);                                        // TODOOOOO
-
-        last_v_kolo = v_kolo;
         lastTick = now;
-
         currentDutyCycle = rawDutyCycle;
     } else {
         currentDutyCycle = 0.0f;
-        PID_Reset(&motorWheelSpeedPID);
-        last_v_kolo = 0;
+        rawDutyCycle = pidDuty;
     }
 }
 
