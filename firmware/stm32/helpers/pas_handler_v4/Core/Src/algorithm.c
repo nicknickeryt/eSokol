@@ -95,24 +95,18 @@ void algorithm_init() {
 }
 
 // TODO rename this garbage
-
 float last_v_kolo = 0.0f;
 uint32_t lastTick = 0;
 uint32_t lastNewPasProcTick = 0;
 float filteredSpeedDrop = 0.0f;
 
-PID motorWheelSpeedPID = {10.25f, 0.1f, 0.0f, 0, 0, 100};  // TODO PID agresjI >:)
-
-// ku = 4.5
-
-#define ALGORITHM_PEDAL_SYNC_THRESHOLD 0.3f  // is it ok? idk
+PID motorWheelSpeedPID = {0.6f, 0.05f, 0.0f, 0, 0, 100};  // TODO PID agresjI >:)
 
 void algorithm_newPasProc() {
     uint32_t now = HAL_GetTick();
 
     if (now - lastPasPulseTime > ALGORITHM_PAS_INACTIVE_TIME_MS) {
         currentDutyCycle = 0.0f;
-        motor_setDutyCycle(currentDutyCycle);
         pasPulses = 0;
         PID_Reset(&motorWheelSpeedPID);
         last_v_kolo = 0;
@@ -129,19 +123,23 @@ void algorithm_newPasProc() {
     float v_silnik =
         speedometer_getMotorWheelVelocityKmh();  // v kola obliczone z silnika
 
+    float effectiveSpeed = fminf(v_pedaly, 25.0f);  
+    float dynamicTargetSpeedPercentage = targetSpeedPercentage + 0.1f * (effectiveSpeed / 25.0f);
+
     if (fabsf(v_pedaly - v_kolo) < ALGORITHM_PEDAL_SYNC_THRESHOLD * v_kolo) {
-        float target_speed = v_pedaly * targetSpeedPercentage;  // motor speed 105% of wheel speed
+        float target_speed = v_pedaly * dynamicTargetSpeedPercentage;  // motor speed 105% of wheel speed
         float rawDutyCycle =
             PID_Calculate(&motorWheelSpeedPID, target_speed, v_silnik);
-        rawDutyCycle = constrain(rawDutyCycle, 0.0f, 60.0f);                                        // TODOOOOO
+        rawDutyCycle = constrain(rawDutyCycle, 0.0f, 100.0f);                                        // TODOOOOO
 
         last_v_kolo = v_kolo;
         lastTick = now;
 
-        currentDutyCycle = emaFilter_update(&pasFilter, rawDutyCycle);
-        currentDutyCycle = limitDutyCycleIncrease(currentDutyCycle);
+        currentDutyCycle = rawDutyCycle;
     } else {
         currentDutyCycle = 0.0f;
+        PID_Reset(&motorWheelSpeedPID);
+        last_v_kolo = 0;
     }
 }
 

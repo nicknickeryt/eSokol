@@ -27,6 +27,8 @@
 #define R_WHEEL 0.25
 #define CIRCUMFERENCE_WHEEL_M (2.0 * PI * R_WHEEL)
 
+#define ALGORITHM_PEDAL_SYNC_THRESHOLD 1.0f  // is it ok? idk
+
 void algorithm_handlePasPulse();
 
 void algorithm_init();
