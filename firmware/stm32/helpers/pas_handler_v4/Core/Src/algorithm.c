@@ -8,6 +8,7 @@
 #include "algorithm.h"
 
 #include <math.h>
+#include <stdlib.h>
 
 #include "adc.h"
 #include "commands.h"
@@ -44,10 +45,10 @@ float targetSpeedPercentage = ALGORITHM_TARGET_SPEED_PERCENTAGE_DEFAULT;
 // FEEDFORWARD
 float lastFeedforwardDuty = 0.0f;
 float feedforwardDuty = 0.0f;
-const float feedforwardAlpha = 0.01f;
+const float feedforwardAlpha = 0.1f;
 
 uint32_t getDutyCycleFromVWheelKmh(float x) {
-    // f(x) = 0,0001227995637 x⁵ − 0,0061246087742 x⁴ + 0,1124919694247 x³ −
+    // f(x) = 0,0001227995637 x⁵ − 0,0061246087742 x⁴ + 0,1124919694247 x³ -
     // 0,8730248662225 x² + 3,9743492255457 x + 1,6789618357226
     if (x > 27.0f) return 0;
 
@@ -58,7 +59,7 @@ uint32_t getDutyCycleFromVWheelKmh(float x) {
             x +
         1.6789618f;
 
-    duty = duty + (duty * duty * 0.001f);
+    // duty = duty + (duty * duty * 0.001f);
 
     if (duty < 0.0f) duty = 0.0f;
     if (duty > 100.0f) duty = 100.0f;
@@ -113,60 +114,73 @@ void algorithm_updateSoundEffect() {
     TIM1->PSC = PSC_max - ((PSC_max - PSC_min) / rangeSize) * D_local;
 }
 
+char* pidTestStatusMessage;
+
 void algorithm_init() {
     emaFilter_init(&throttleFilter, 0.0f, throttleFilterAlpha, 1);
     emaFilter_init(&pasFilter, 0.0f, pasFilterAlpha, 1);
+    pidTestStatusMessage = (char*)malloc(50 * sizeof(char));
 }
 
 // TODO rename this garbage
 uint32_t lastTick = 0;
 uint32_t lastNewPasProcTick = 0;
-float filteredSpeedDrop = 0.0f;
 
-PID motorWheelSpeedPID = {0.6f, 0.05f, 0.1f, 0, 0, 100};
+uint32_t lastPidSendTick = 0;
+
+PID motorWheelSpeedPID = {0.5f, 0.05f, 0.5f, 0, 0, 100};
 
 void algorithm_newPasProc() {
     uint32_t now = HAL_GetTick();
 
     if (now - lastNewPasProcTick < 10) return;  // proc every 10ms
 
+    lastNewPasProcTick = now;
+
     if (now - lastPasPulseTime > ALGORITHM_PAS_INACTIVE_TIME_MS) {
         currentDutyCycle = 0.0f;
         pasPulses = 0;
         PID_Reset(&motorWheelSpeedPID);
         emaFilter_reset(&pasFilter);
-        feedforwardDuty = 0.0f;
-        lastFeedforwardDuty = 0.0f;
         return;
     }
 
-    lastNewPasProcTick = now;
-
-    float v_kolo = speedometer_getWheelVelocityKmh();
     float v_pedaly = targetVelocityWheelKmh;
     float v_silnik = speedometer_getMotorWheelVelocityKmh();
 
     float target_speed = v_pedaly * targetSpeedPercentage;
 
-    // FEEDFORWARD
-    feedforwardDuty = getDutyCycleFromVWheelKmh(v_pedaly);
-    feedforwardDuty = feedforwardAlpha * feedforwardDuty +
-                      (1.0f - feedforwardAlpha) * lastFeedforwardDuty;
-    lastFeedforwardDuty = feedforwardDuty;
-
     // calculate always!!
     float pidDuty = PID_Calculate(&motorWheelSpeedPID, target_speed, v_silnik);
-    rawDutyCycle = feedforwardDuty + pidDuty;  // Połączenie feedforward z PID
-
+    rawDutyCycle = pidDuty;  
+    currentDutyCycle = pidDuty;
     rawDutyCycle = constrain(rawDutyCycle, 0.0f, 100.0f);
 
-    if (fabsf(v_pedaly - v_kolo) < ALGORITHM_PEDAL_SYNC_THRESHOLD * v_kolo) {
-        lastTick = now;
-        currentDutyCycle = rawDutyCycle;
-    } else {
-        currentDutyCycle = 0.0f;
-        rawDutyCycle = pidDuty;
+    if (now - lastPidSendTick >= 100) {
+        int target = (int)(target_speed * 100.0f);    // np. 800
+        int current = (int)(v_silnik * 100.0f);  // np. 362
+
+        // Rozbij targetSpeed na 4 cyfry
+        char t1 = (target / 1000) + '0';
+        char t2 = ((target / 100) % 10) + '0';
+        char t3 = ((target / 10) % 10) + '0';
+        char t4 = (target % 10) + '0';
+
+        // Rozbij currentSpeed na 4 cyfry
+        char c1 = (current / 1000) + '0';
+        char c2 = ((current / 100) % 10) + '0';
+        char c3 = ((current / 10) % 10) + '0';
+        char c4 = (current % 10) + '0';
+
+        // Złóż wynikowy string
+        sprintf(pidTestStatusMessage, "eskl_pid%c%c%c%c%c%c%c%c\r\n", t1, t2,
+                t3, t4, c1, c2, c3, c4);
+
+        logger_sendChar(pidTestStatusMessage);
+
+        lastPidSendTick = now;
     }
+    
 }
 
 void algorithm_throttleProc() {
@@ -188,6 +202,60 @@ void algorithm_throttleProc() {
 
     currentDutyCycle = emaFilter_update(&throttleFilter, rawDutyCycle);
     currentDutyCycle = limitDutyCycleIncrease(currentDutyCycle);
+    
+}
+
+PID testPid = {0.5f, 0.05f, 0.5f, 0, 0, 100};
+// PID testPid = {0.5f, 0.02f, 1.0f, 0, 0, 100}; // tez ok
+// PID testPid = {0.5f, 0.02f, 0.0f, 0, 0, 100}; // wydaje mi sie ze fajne parametry
+
+uint32_t testPidLastSwitchTick = 0;
+uint32_t lastTestPidTick = 0;
+bool testPidTarget8 = true;
+
+void algorithm_pidTestProc() {
+    uint32_t now = HAL_GetTick();
+
+    // Obliczaj PID co 10 ms
+    if (now - lastTestPidTick < 10) return;
+    lastTestPidTick = now;
+
+    // if (now - testPidLastSwitchTick >= 20000) {
+    //     testPidLastSwitchTick = now;
+    //     testPidTarget8 = !testPidTarget8;
+    // }
+
+    float currentSpeed = speedometer_getMotorWheelVelocityKmh();
+    float targetSpeed = testPidTarget8 ? 7.0f : 0.0f;
+
+    float pidDuty = PID_Calculate(&testPid, targetSpeed, currentSpeed);
+    pidDuty = constrain(pidDuty, 0.0f, 100.0f);
+
+    rawDutyCycle = pidDuty;
+    currentDutyCycle = pidDuty;
+
+    if (now - lastPidSendTick >= 100) {
+        int target = (int)(targetSpeed * 100.0f);    // np. 800
+        int current = (int)(currentSpeed * 100.0f);  // np. 362
+
+        // Rozbij targetSpeed na 4 cyfry
+        char t1 = (target / 1000) + '0';
+        char t2 = ((target / 100) % 10) + '0';
+        char t3 = ((target / 10) % 10) + '0';
+        char t4 = (target % 10) + '0';
+
+        // Rozbij currentSpeed na 4 cyfry
+        char c1 = (current / 1000) + '0';
+        char c2 = ((current / 100) % 10) + '0';
+        char c3 = ((current / 10) % 10) + '0';
+        char c4 = (current % 10) + '0';
+
+        // Złóż wynikowy string
+        sprintf(pidTestStatusMessage, "eskl_pid%c%c%c%c%c%c%c%c\r\n", t1, t2,
+                t3, t4, c1, c2, c3, c4);
+        logger_sendChar(pidTestStatusMessage);
+        lastPidSendTick = now;
+    }
 }
 
 void algorithm_proc() {
@@ -201,8 +269,10 @@ void algorithm_proc() {
     if (throttleEnabled)
         algorithm_throttleProc();
     else if (pasEnabled)
+        currentDutyCycle = 0.0f;
         // algorithm_pasProc();
-        algorithm_newPasProc();
+        // algorithm_newPasProc();
+        // algorithm_pidTestProc();
     else
         currentDutyCycle = 0.0f;
 

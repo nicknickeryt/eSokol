@@ -20,8 +20,8 @@ EMAFilter motorWheelSpeedFilter;
 
 void speedometer_init() {
     wheelVelocityBuffer = (char*)malloc(18 * sizeof(char));
-    emaFilter_init(&wheelSpeedFilter, 0.0f, 0.9f, 10);
-    emaFilter_init(&motorWheelSpeedFilter, 0.0f, 0.9f, 10);
+    emaFilter_init(&wheelSpeedFilter, 0.0f, 0.7f, 10);
+    emaFilter_init(&motorWheelSpeedFilter, 0.0f, 0.7f, 10);
 }
 
 float speedometer_calculateWheelVelocity(uint32_t hallCurrTick) {
@@ -43,6 +43,7 @@ void speedometer_setWheelVelocity(float velocity) {
     wheelCurrentVelocityKmh = emaFilter_update(&wheelSpeedFilter, velocity);
 }
 void speedometer_setMotorWheelVelocity(float velocity) {
+    if(velocity > 27.0f) return;
     motorWheelCurrentVelocityKmh = emaFilter_update(&motorWheelSpeedFilter, velocity);
 }
 
@@ -54,7 +55,7 @@ void speedometer_proc() {
     if (HAL_GetTick() - wheelHallLastTick > 2500)
         wheelCurrentVelocityKmh = 0.0f;
     if (HAL_GetTick() - motorWheelHallLastTick > 2500)
-        motorWheelCurrentVelocityKmh = 0.0f;
+        motorWheelCurrentVelocityKmh = emaFilter_update(&motorWheelSpeedFilter, 0.0f);
 
     sprintf(wheelVelocityBuffer, "eskl_evel%s\r\n",
             logger_floatToChar(wheelCurrentVelocityKmh));

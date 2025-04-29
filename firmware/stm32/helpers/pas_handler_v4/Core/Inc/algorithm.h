@@ -11,12 +11,14 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#define ALGORITHM_TARGET_SPEED_PERCENTAGE_DEFAULT 1.00f ///// TODOOOOO
+#include "pid.h"
+
+#define ALGORITHM_TARGET_SPEED_PERCENTAGE_DEFAULT 1.05f ///// TODOOOOO
 
 #define ALGORITHM_TARGET_SPEED_PERCENTAGE_MIN 0.5f
 #define ALGORITHM_TARGET_SPEED_PERCENTAGE_MAX 1.5f
 
-#define ALGORITHM_PAS_INACTIVE_TIME_MS 500
+#define ALGORITHM_PAS_INACTIVE_TIME_MS 750
 
 #define ALGORITHM_MIN_THROTTLE_VOLTAGE 1.1                  // throttle voltage at idle is ~ 1.04V
 
@@ -27,7 +29,9 @@
 #define R_WHEEL 0.25
 #define CIRCUMFERENCE_WHEEL_M (2.0 * PI * R_WHEEL)
 
-#define ALGORITHM_PEDAL_SYNC_THRESHOLD 1.0f  // is it ok? idk
+#define ALGORITHM_PEDAL_SYNC_THRESHOLD 20.0f  // is it ok? idk
+
+extern PID motorWheelSpeedPID;
 
 void algorithm_handlePasPulse();
 

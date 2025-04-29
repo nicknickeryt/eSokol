@@ -25,7 +25,7 @@
 #include "sounds.h"
 #include "speedometer.h"
 
-Command commands[17] = {{"eskl_animStart\r\n", anim_start},
+Command commands[23] = {{"eskl_animStart\r\n", anim_start},
                         {"eskl_frontCTog\r\n", toggleFrontCold},
                         {"eskl_frontWTog\r\n", toggleFrontWarm},
                         {"eskl_rearLETog\r\n", toggleRearLED},
@@ -39,7 +39,13 @@ Command commands[17] = {{"eskl_animStart\r\n", anim_start},
                         {"eskl_algCmpInc\r\n", algorithmComponentIncrement},
                         {"eskl_algCmpDec\r\n", algorithmComponentDecrement},
                         {"eskl_ambienTog\r\n", toggleAmbientLight},
-                        {"eskl_algToggle\r\n", algorithmToggleEnabled}};
+                        {"eskl_algToggle\r\n", algorithmToggleEnabled},
+                        {"eskl_algPKpInc\r\n", algorithmKpIncrease},
+                        {"eskl_algPKpDec\r\n", algorithmKpDecrease},
+                        {"eskl_algPKiInc\r\n", algorithmKiIncrease},
+                        {"eskl_algPKiDec\r\n", algorithmKiDecrease},
+                        {"eskl_algPKdInc\r\n", algorithmKdIncrease},
+                        {"eskl_algPKdDec\r\n", algorithmKdDecrease}};
 
 VariableCommand variableCommands[1] = {{"eskl_bri__", setFrontColdBrightness}};
 
@@ -56,7 +62,7 @@ bool soundEnabled = true;
 bool bulbsEnabled = false;
 bool ambientLightEnabled = true;
 
-void initStatusMessage() { statusMessage = (char*)malloc(50 * sizeof(char)); }
+void initStatusMessage() { statusMessage = (char*)malloc(65 * sizeof(char)); }
 
 void anim_start() {
     animation_play(ANIM_STARTUP_PHASE1);
@@ -201,6 +207,53 @@ void algorithmToggleEnabled() {
     sendStatus();
 }
 
+// {0.5f, 0.05f, 0.5f, 0, 0, 100};
+
+// KP
+void algorithmKpIncrease() {
+    motorWheelSpeedPID.Kp += 0.01f;
+    sound_playToggle(1);
+
+    sendStatus();
+}
+
+void algorithmKpDecrease() {
+    motorWheelSpeedPID.Kp -= 0.01f;
+    sound_playToggle(0);
+
+    sendStatus();
+}
+
+// KI
+void algorithmKiIncrease() {
+    motorWheelSpeedPID.Ki += 0.001f;
+    sound_playToggle(1);
+
+    sendStatus();
+}
+
+void algorithmKiDecrease() {
+    motorWheelSpeedPID.Ki -= 0.001f;
+    sound_playToggle(0);
+
+    sendStatus();
+}
+
+// KD
+void algorithmKdIncrease() {
+    motorWheelSpeedPID.Kd += 0.01f;
+    sound_playToggle(1);
+
+    sendStatus();
+}
+
+void algorithmKdDecrease() {
+    motorWheelSpeedPID.Kd -= 0.01f;
+    sound_playToggle(0);
+
+    sendStatus();
+}
+
 void sendStatus() {
     char frontColdBrightnessHundreds = (frontColdBrightness / 100) + '0';
     char frontColdBrightnessTens = ((frontColdBrightness / 10) % 10) + '0';
@@ -259,36 +312,65 @@ void sendStatus() {
     char wheelVelocityUnits = '0' + (wheelVelocityInt % 10);
     char wheelVelocityFracTens = '0' + (wheelVelocityFrac / 10);
     char wheelVelocityFracUnits = '0' + (wheelVelocityFrac % 10);
+
+    int kpInt = (int)(motorWheelSpeedPID.Kp * 1000.0f + 0.5f);
+    int kiInt = (int)(motorWheelSpeedPID.Ki * 1000.0f + 0.5f);
+    int kdInt = (int)(motorWheelSpeedPID.Kd * 1000.0f + 0.5f);
+
+    // Kp
+    char kpThousands = (kpInt / 10000) + '0';
+    char kpThousandsRest = ((kpInt / 1000) % 10) + '0';
+    char kpHundreds = ((kpInt / 100) % 10) + '0';
+    char kpTens = ((kpInt / 10) % 10) + '0';
+    char kpUnits = (kpInt % 10) + '0';
+
+    // Ki
+    char kiThousands = (kiInt / 10000) + '0';
+    char kiThousandsRest = ((kiInt / 1000) % 10) + '0';
+    char kiHundreds = ((kiInt / 100) % 10) + '0';
+    char kiTens = ((kiInt / 10) % 10) + '0';
+    char kiUnits = (kiInt % 10) + '0';
+
+    // Kd
+    char kdThousands = (kdInt / 10000) + '0';
+    char kdThousandsRest = ((kdInt / 1000) % 10) + '0';
+    char kdHundreds = ((kdInt / 100) % 10) + '0';
+    char kdTens = ((kdInt / 10) % 10) + '0';
+    char kdUnits = (kdInt % 10) + '0';
     
-    sprintf(statusMessage,
-            "eskl_st%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\r\n",
-            frontColdEnabled ? '1' : '0', frontWarmEnabled ? '1' : '0',
-            rearEnabled ? '1' : '0', throttleEnabled ? '1' : '0',
-            sportModeDisabled ? '1' : '0', soundEnabled ? '1' : '0',
-            bulbsEnabled ? '1' : '0',
+    sprintf(statusMessage, "eskl_st%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\r\n",
 
-            frontColdBrightnessHundreds, frontColdBrightnessTens,
-            frontColdBrightnessUnits,
+        frontColdEnabled ? '1' : '0', frontWarmEnabled ? '1' : '0',
+        rearEnabled ? '1' : '0', throttleEnabled ? '1' : '0',
+        sportModeDisabled ? '1' : '0', soundEnabled ? '1' : '0',
+        bulbsEnabled ? '1' : '0',
 
-            targetSpeedPercentageHundreds, targetSpeedPercentageTens,
-            targetSpeedPercentageUnits,
+        frontColdBrightnessHundreds, frontColdBrightnessTens,
+        frontColdBrightnessUnits,
 
-            batteryVoltageHundreds, batteryVoltageTens, batteryVoltageUnits,
+        targetSpeedPercentageHundreds, targetSpeedPercentageTens,
+        targetSpeedPercentageUnits,
 
-            blinkerLeftPinState ? '0' : '1', blinkerRightPinState ? '0' : '1',
-            '0', ambientLightEnabled ? '1' : '0',
+        batteryVoltageHundreds, batteryVoltageTens, batteryVoltageUnits,
 
-            batteryCurrentThousands, batteryCurrentHundreds, batteryCurrentTens,
-            batteryCurrentUnits,
+        blinkerLeftPinState ? '0' : '1', blinkerRightPinState ? '0' : '1',
+        '0', ambientLightEnabled ? '1' : '0',
 
-            distanceThousands, distanceHundreds, distanceTens, distanceUnits,
-            distanceFracHundreds, distanceFracTens, distanceFracUnits,
+        batteryCurrentThousands, batteryCurrentHundreds, batteryCurrentTens,
+        batteryCurrentUnits,
 
-            motorWheelVelocityTens, motorWheelVelocityUnits, motorWheelVelocityFracTens, motorWheelVelocityFracUnits,
+        distanceThousands, distanceHundreds, distanceTens, distanceUnits,
+        distanceFracHundreds, distanceFracTens, distanceFracUnits,
 
-            algorithm_isEnabled() ? '1' : '0',
-        
-            wheelVelocityTens, wheelVelocityUnits, wheelVelocityFracTens, wheelVelocityFracUnits);
+        motorWheelVelocityTens, motorWheelVelocityUnits, motorWheelVelocityFracTens, motorWheelVelocityFracUnits,
+
+        algorithm_isEnabled() ? '1' : '0',
+    
+        wheelVelocityTens, wheelVelocityUnits, wheelVelocityFracTens, wheelVelocityFracUnits,
+    
+        kpThousands, kpThousandsRest, kpHundreds, kpTens, kpUnits,
+        kiThousands, kiThousandsRest, kiHundreds, kiTens, kiUnits,
+        kdThousands, kdThousandsRest, kdHundreds, kdTens, kdUnits);
 
     logger_sendChar(statusMessage);
 }
