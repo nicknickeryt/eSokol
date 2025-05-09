@@ -23,7 +23,7 @@ typedef struct {
   void (*action)(uint16_t arg);
 } VariableCommand;
 
-extern Command commands[16];
+extern Command commands[23];
 
 extern VariableCommand variableCommands[1];
 
@@ -64,8 +64,14 @@ void toggleAmbientLight();
 
 void algorithmComponentIncrement();
 void algorithmComponentDecrement();
-void algorithmFactorIncrement();
-void algorithmFactorDecrement();
+void algorithmToggleEnabled();
+
+void algorithmKpIncrease();
+void algorithmKpDecrease();
+void algorithmKiIncrease();
+void algorithmKiDecrease();
+void algorithmKdIncrease();
+void algorithmKdDecrease();
 
 void sendStatus();
 

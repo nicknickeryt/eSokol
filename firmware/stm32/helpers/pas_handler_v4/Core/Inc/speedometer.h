@@ -11,12 +11,17 @@
 
 #include <stdint.h> 
 
-void speedometer_init(void);
+void speedometer_init();
 
-float speedometer_calculateVelocity(uint32_t hallCurrTick);
-void speedometer_setVelocity(float velocity);
-float speedometer_getVelocity(void);
+float speedometer_calculateWheelVelocity(uint32_t hallCurrTick);
+float speedometer_calculateMotorWheelVelocity(uint32_t hallCurrTick);
 
-void speedometer_proc(void);
+void speedometer_setWheelVelocity(float velocity);
+void speedometer_setMotorWheelVelocity(float velocity);
+
+float speedometer_getWheelVelocityKmh();
+float speedometer_getMotorWheelVelocityKmh();
+
+void speedometer_proc();
 
 #endif /* __SPEEDOMETER_H */

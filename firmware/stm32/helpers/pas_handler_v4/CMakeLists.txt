@@ -66,6 +66,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     Core/Src/speedometer.c
     Core/Src/bike.c
     Core/Src/odometer.c
+    Core/Src/pid.c
 )
 
 # Add include paths

@@ -23,8 +23,9 @@
 #include "motor.h"
 #include "odometer.h"
 #include "sounds.h"
+#include "speedometer.h"
 
-Command commands[16] = {{"eskl_animStart\r\n", anim_start},
+Command commands[23] = {{"eskl_animStart\r\n", anim_start},
                         {"eskl_frontCTog\r\n", toggleFrontCold},
                         {"eskl_frontWTog\r\n", toggleFrontWarm},
                         {"eskl_rearLETog\r\n", toggleRearLED},
@@ -37,9 +38,14 @@ Command commands[16] = {{"eskl_animStart\r\n", anim_start},
                         {"eskl_blinkBoth\r\n", blinkBlinkerBoth},
                         {"eskl_algCmpInc\r\n", algorithmComponentIncrement},
                         {"eskl_algCmpDec\r\n", algorithmComponentDecrement},
-                        {"eskl_algFacInc\r\n", algorithmFactorIncrement},
-                        {"eskl_algFacDec\r\n", algorithmFactorDecrement},
-                        {"eskl_ambienTog\r\n", toggleAmbientLight}};
+                        {"eskl_ambienTog\r\n", toggleAmbientLight},
+                        {"eskl_algToggle\r\n", algorithmToggleEnabled},
+                        {"eskl_algPKpInc\r\n", algorithmKpIncrease},
+                        {"eskl_algPKpDec\r\n", algorithmKpDecrease},
+                        {"eskl_algPKiInc\r\n", algorithmKiIncrease},
+                        {"eskl_algPKiDec\r\n", algorithmKiDecrease},
+                        {"eskl_algPKdInc\r\n", algorithmKdIncrease},
+                        {"eskl_algPKdDec\r\n", algorithmKdDecrease}};
 
 VariableCommand variableCommands[1] = {{"eskl_bri__", setFrontColdBrightness}};
 
@@ -56,7 +62,7 @@ bool soundEnabled = true;
 bool bulbsEnabled = false;
 bool ambientLightEnabled = true;
 
-void initStatusMessage() { statusMessage = (char*)malloc(43 * sizeof(char)); }
+void initStatusMessage() { statusMessage = (char*)malloc(65 * sizeof(char)); }
 
 void anim_start() {
     animation_play(ANIM_STARTUP_PHASE1);
@@ -160,92 +166,108 @@ void toggleAmbientLight() {
 }
 
 void algorithmComponentIncrement() {
-    float algoritm_offset = algorithm_getDutyOffset();
+    float algorithm_targetSpeedPercentage =
+        algorithm_getTargetSpeedPercentage();
 
-    algoritm_offset = algoritm_offset >= ALGORITHM_OFFSET_MAX
-                          ? ALGORITHM_OFFSET_MAX
-                          : algoritm_offset + 0.1f;
-    algoritm_offset >= ALGORITHM_OFFSET_MAX ? sound_play(SOUND_ERR)
-                                            : sound_playToggle(1);
-    algorithm_setDutyOffset(algoritm_offset);
+    algorithm_targetSpeedPercentage =
+        algorithm_targetSpeedPercentage >= ALGORITHM_TARGET_SPEED_PERCENTAGE_MAX
+            ? ALGORITHM_TARGET_SPEED_PERCENTAGE_MAX
+            : algorithm_targetSpeedPercentage + 0.01f;
+    algorithm_targetSpeedPercentage >= ALGORITHM_TARGET_SPEED_PERCENTAGE_MAX
+        ? sound_play(SOUND_ERR)
+        : sound_playToggle(1);
+
+    algorithm_setTargetSpeedPercentage(algorithm_targetSpeedPercentage);
 
     sendStatus();
 }
 
 void algorithmComponentDecrement() {
-    float algoritm_offset = algorithm_getDutyOffset();
+    float algorithm_targetSpeedPercentage =
+        algorithm_getTargetSpeedPercentage();
 
-    algoritm_offset = algoritm_offset <= ALGORITHM_OFFSET_MIN
-                          ? ALGORITHM_OFFSET_MIN
-                          : algoritm_offset - 0.1f;
+    algorithm_targetSpeedPercentage =
+        algorithm_targetSpeedPercentage <= ALGORITHM_TARGET_SPEED_PERCENTAGE_MIN
+            ? ALGORITHM_TARGET_SPEED_PERCENTAGE_MIN
+            : algorithm_targetSpeedPercentage - 0.01f;
 
-    algoritm_offset <= ALGORITHM_OFFSET_MIN ? sound_play(SOUND_ERR)
-                                            : sound_playToggle(0);
-    algorithm_setDutyOffset(algoritm_offset);
+    algorithm_targetSpeedPercentage <= ALGORITHM_TARGET_SPEED_PERCENTAGE_MIN
+        ? sound_play(SOUND_ERR)
+        : sound_playToggle(0);
 
-    sendStatus();
-}
-
-void algorithmFactorIncrement() {
-    float algoritm_factor = algorithm_getDutyFactor();
-
-    algoritm_factor = algoritm_factor >= ALGORITHM_FACTOR_MAX
-                          ? ALGORITHM_FACTOR_MAX
-                          : algoritm_factor + 0.00001f;
-
-    algoritm_factor >= ALGORITHM_FACTOR_MAX ? sound_play(SOUND_ERR)
-                                            : sound_playToggle(1);
-    algorithm_setDutyFactor(algoritm_factor);
+    algorithm_setTargetSpeedPercentage(algorithm_targetSpeedPercentage);
 
     sendStatus();
 }
 
-void algorithmFactorDecrement() {
-    float algoritm_factor = algorithm_getDutyFactor();
-
-    algoritm_factor = algoritm_factor <= ALGORITHM_FACTOR_MIN
-                          ? ALGORITHM_FACTOR_MIN
-                          : algoritm_factor - 0.00001f;
-
-    algoritm_factor <= ALGORITHM_FACTOR_MIN ? sound_play(SOUND_ERR)
-                                            : sound_playToggle(0);
-    algorithm_setDutyFactor(algoritm_factor);
+void algorithmToggleEnabled() {
+    algorithm_toggleEnabled();
+    sound_playToggle(algorithm_isEnabled());
 
     sendStatus();
 }
 
-/* status format: eskl_stABCDEFGHHHIIIJJJKLMNNNN
- * A   =>  frontColdEnabled(bool 0:1)
- * B   =>  frontWarmEnabled(bool 0:1)
- * C   =>  rearEnabled(bool 0:1)
- * E   =>  throttleEnabled(bool 0:1)
- * E   =>  sportModeDisabled(bool 0:1)
- * F   =>  soundEnabled(bool 0:1)
- * G   =>  bulbsEnabled(bool 0:1)
- * HHH =>  frontColdBrightness(uint8_t 000:999)
- * III =>  algorithm_eq_component(uint8_t 000:999) -> float (-9.9: 9.9)
- *                    * 1st digit - sign (0 positive, 1 negative);
- *                    * 2nd digit - whole part
- *                    * 3rd digit - fractional part
- * JJJ =>  batteryVoltage(uint8_t 0:30) -> float
- * K   =>  blinkerLeftPinState(bool 0:1)
- * L   =>  blinkerRightPinState(bool 0:1)
- * M   =>  ambientLightEnabled(bool 0:1)
- * NNNN=>  batteryCurrent(0:9999) (miliVolts!)
- */
+// {0.5f, 0.05f, 0.5f, 0, 0, 100};
+
+// KP
+void algorithmKpIncrease() {
+    motorWheelSpeedPID.Kp += 0.01f;
+    sound_playToggle(1);
+
+    sendStatus();
+}
+
+void algorithmKpDecrease() {
+    motorWheelSpeedPID.Kp -= 0.01f;
+    sound_playToggle(0);
+
+    sendStatus();
+}
+
+// KI
+void algorithmKiIncrease() {
+    motorWheelSpeedPID.Ki += 0.001f;
+    sound_playToggle(1);
+
+    sendStatus();
+}
+
+void algorithmKiDecrease() {
+    motorWheelSpeedPID.Ki -= 0.001f;
+    sound_playToggle(0);
+
+    sendStatus();
+}
+
+// KD
+void algorithmKdIncrease() {
+    motorWheelSpeedPID.Kd += 0.01f;
+    sound_playToggle(1);
+
+    sendStatus();
+}
+
+void algorithmKdDecrease() {
+    motorWheelSpeedPID.Kd -= 0.01f;
+    sound_playToggle(0);
+
+    sendStatus();
+}
+
 void sendStatus() {
     char frontColdBrightnessHundreds = (frontColdBrightness / 100) + '0';
     char frontColdBrightnessTens = ((frontColdBrightness / 10) % 10) + '0';
     char frontColdBrightnessUnits = (frontColdBrightness % 10) + '0';
 
-    float algoritm_offset = algorithm_getDutyOffset();
-    char algorithm_offsetSign = algoritm_offset > 0 ? '0' : '1';
-    char algorithm_eq_componentWhole =
-        (int)(algoritm_offset < 0 ? -algoritm_offset : algoritm_offset) + '0';
-    char algorithm_offsetFrac =
-        (int)((algoritm_offset < 0 ? -algoritm_offset : algoritm_offset) * 10) %
-            10 +
-        '0';
+    uint16_t algoritm_targetSpeedPercentage =
+        algorithm_getTargetSpeedPercentage() * 100;
+
+    char targetSpeedPercentageHundreds =
+        (algoritm_targetSpeedPercentage / 100) + '0';
+    char targetSpeedPercentageTens =
+        ((algoritm_targetSpeedPercentage / 10) % 10) + '0';
+    char targetSpeedPercentageUnits =
+        (algoritm_targetSpeedPercentage % 10) + '0';
 
     char batteryVoltageHundreds = (adc_batteryVoltage / 100) + '0';
     char batteryVoltageTens = ((adc_batteryVoltage / 10) % 10) + '0';
@@ -273,38 +295,82 @@ void sendStatus() {
     char distanceFracTens = ((distanceFraction / 10) % 10) + '0';
     char distanceFracUnits = (distanceFraction % 10) + '0';
 
-    float algorithm_factor = algorithm_getDutyFactor();
-    int algorithmFactorValue =
-        (int)(algorithm_factor * 100000.0f);  // 0.00001 -> 10, 0.00020 -> 200
-    if (algorithmFactorValue < 1) algorithmFactorValue = 1;
-    if (algorithmFactorValue > 20) algorithmFactorValue = 20;
+    float motorWheelVelocity = speedometer_getMotorWheelVelocityKmh();
+    int motorWheelVelocityInt = (int)motorWheelVelocity;
+    int motorWheelVelocityFrac = (int)((motorWheelVelocity - motorWheelVelocityInt) * 100.0f + 0.5f);
+    
+    char motorWheelVelocityTens = '0' + (motorWheelVelocityInt / 10);
+    char motorWheelVelocityUnits = '0' + (motorWheelVelocityInt % 10);
+    char motorWheelVelocityFracTens = '0' + (motorWheelVelocityFrac / 10);
+    char motorWheelVelocityFracUnits = '0' + (motorWheelVelocityFrac % 10);
 
-    char algorithmFactorTens = (algorithmFactorValue / 10) + '0';
-    char algorithmFactorUnits = (algorithmFactorValue % 10) + '0';
+    float wheelVelocity = speedometer_getWheelVelocityKmh();
+    int wheelVelocityInt = (int)wheelVelocity;
+    int wheelVelocityFrac = (int)((wheelVelocity - wheelVelocityInt) * 100.0f + 0.5f);
+    
+    char wheelVelocityTens = '0' + (wheelVelocityInt / 10);
+    char wheelVelocityUnits = '0' + (wheelVelocityInt % 10);
+    char wheelVelocityFracTens = '0' + (wheelVelocityFrac / 10);
+    char wheelVelocityFracUnits = '0' + (wheelVelocityFrac % 10);
 
-    sprintf(statusMessage,
-            "eskl_st%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%"
-            "c%c%c%c\r\n",
-            frontColdEnabled ? '1' : '0', frontWarmEnabled ? '1' : '0',
-            rearEnabled ? '1' : '0', throttleEnabled ? '1' : '0',
-            sportModeDisabled ? '1' : '0', soundEnabled ? '1' : '0',
-            bulbsEnabled ? '1' : '0',
+    int kpInt = (int)(motorWheelSpeedPID.Kp * 1000.0f + 0.5f);
+    int kiInt = (int)(motorWheelSpeedPID.Ki * 1000.0f + 0.5f);
+    int kdInt = (int)(motorWheelSpeedPID.Kd * 1000.0f + 0.5f);
 
-            frontColdBrightnessHundreds, frontColdBrightnessTens,
-            frontColdBrightnessUnits, algorithm_offsetSign,
-            algorithm_eq_componentWhole, algorithm_offsetFrac,
-            batteryVoltageHundreds, batteryVoltageTens, batteryVoltageUnits,
+    // Kp
+    char kpThousands = (kpInt / 10000) + '0';
+    char kpThousandsRest = ((kpInt / 1000) % 10) + '0';
+    char kpHundreds = ((kpInt / 100) % 10) + '0';
+    char kpTens = ((kpInt / 10) % 10) + '0';
+    char kpUnits = (kpInt % 10) + '0';
 
-            blinkerLeftPinState ? '0' : '1', blinkerRightPinState ? '0' : '1',
-            '0', ambientLightEnabled ? '1' : '0',
+    // Ki
+    char kiThousands = (kiInt / 10000) + '0';
+    char kiThousandsRest = ((kiInt / 1000) % 10) + '0';
+    char kiHundreds = ((kiInt / 100) % 10) + '0';
+    char kiTens = ((kiInt / 10) % 10) + '0';
+    char kiUnits = (kiInt % 10) + '0';
 
-            batteryCurrentThousands, batteryCurrentHundreds, batteryCurrentTens,
-            batteryCurrentUnits,
+    // Kd
+    char kdThousands = (kdInt / 10000) + '0';
+    char kdThousandsRest = ((kdInt / 1000) % 10) + '0';
+    char kdHundreds = ((kdInt / 100) % 10) + '0';
+    char kdTens = ((kdInt / 10) % 10) + '0';
+    char kdUnits = (kdInt % 10) + '0';
+    
+    sprintf(statusMessage, "eskl_st%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\r\n",
 
-            distanceThousands, distanceHundreds, distanceTens, distanceUnits,
-            distanceFracHundreds, distanceFracTens, distanceFracUnits,
+        frontColdEnabled ? '1' : '0', frontWarmEnabled ? '1' : '0',
+        rearEnabled ? '1' : '0', throttleEnabled ? '1' : '0',
+        sportModeDisabled ? '1' : '0', soundEnabled ? '1' : '0',
+        bulbsEnabled ? '1' : '0',
 
-            algorithmFactorTens, algorithmFactorUnits);
+        frontColdBrightnessHundreds, frontColdBrightnessTens,
+        frontColdBrightnessUnits,
+
+        targetSpeedPercentageHundreds, targetSpeedPercentageTens,
+        targetSpeedPercentageUnits,
+
+        batteryVoltageHundreds, batteryVoltageTens, batteryVoltageUnits,
+
+        blinkerLeftPinState ? '0' : '1', blinkerRightPinState ? '0' : '1',
+        '0', ambientLightEnabled ? '1' : '0',
+
+        batteryCurrentThousands, batteryCurrentHundreds, batteryCurrentTens,
+        batteryCurrentUnits,
+
+        distanceThousands, distanceHundreds, distanceTens, distanceUnits,
+        distanceFracHundreds, distanceFracTens, distanceFracUnits,
+
+        motorWheelVelocityTens, motorWheelVelocityUnits, motorWheelVelocityFracTens, motorWheelVelocityFracUnits,
+
+        algorithm_isEnabled() ? '1' : '0',
+    
+        wheelVelocityTens, wheelVelocityUnits, wheelVelocityFracTens, wheelVelocityFracUnits,
+    
+        kpThousands, kpThousandsRest, kpHundreds, kpTens, kpUnits,
+        kiThousands, kiThousandsRest, kiHundreds, kiTens, kiUnits,
+        kdThousands, kdThousandsRest, kdHundreds, kdTens, kdUnits);
 
     logger_sendChar(statusMessage);
 }

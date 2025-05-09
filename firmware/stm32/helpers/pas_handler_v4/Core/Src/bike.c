@@ -7,14 +7,13 @@
 #include "blinkers.h"
 #include "commands.h"
 #include "gpio.h"
+#include "logger.h"
 #include "main.h"
-#include "odometer.h"
 #include "motor.h"
+#include "odometer.h"
 #include "sounds.h"
 #include "speedometer.h"
 #include "uart.h"
-
-#include "logger.h"
 
 bool bike_bluetoothConnected = false;
 
@@ -36,12 +35,16 @@ void bike_handleGpioInterrupt(uint16_t GPIO_Pin) {
         case PAS_SIGNAL_Pin:
             algorithm_handlePasPulse();
             break;
-        case HALL_SPEED_Pin:
-            if (gpio_read(HALL_SPEED_GPIO_Port, HALL_SPEED_Pin)) {
-                speedometer_setVelocity(
-                    speedometer_calculateVelocity(HAL_GetTick()));
+        case SPEED_WHEEL_Pin:
+                speedometer_setWheelVelocity(
+                    speedometer_calculateWheelVelocity(HAL_GetTick()));
                 odometer_pulseInterrupt();
-            }
+            break;
+        case SPEED_MOTOR_Pin:
+            if (!gpio_read(SPEED_MOTOR_GPIO_Port,
+                           SPEED_MOTOR_Pin))  // falling edge interrupt!
+                speedometer_setMotorWheelVelocity(
+                    speedometer_calculateMotorWheelVelocity(HAL_GetTick()));
             break;
         case BLINKER_LEFT_IN_Pin:
             gpio_read(BLINKER_LEFT_IN_GPIO_Port, BLINKER_LEFT_IN_Pin)
@@ -59,8 +62,8 @@ void bike_handleGpioInterrupt(uint16_t GPIO_Pin) {
 void bike_init() {
     HAL_UARTEx_ReceiveToIdle_IT(&huart1, rxBuffer, 16);
 
-    TIM1->CCR1 = 0;  // OUT_PWM
-    TIM1->CCR4 = 500;              // FRONT_COLD_PWM
+    TIM1->CCR1 = 0;    // OUT_PWM
+    TIM1->CCR4 = 500;  // FRONT_COLD_PWM
 
     HAL_TIM_PWM_Start(TIM_THROTTLE_LEDS, TIM_CHANNEL_1);  // OUT_PWM
     HAL_TIM_PWM_Start(TIM_THROTTLE_LEDS, TIM_CHANNEL_4);  // FRONT_COLD_PWM
@@ -103,9 +106,11 @@ void sendMeasurement(uint8_t dutyCycle, float velocity) {
     char message[64];
 
     int velocityWhole = (int)velocity;
-    int velocityFrac = (int)((velocity - velocityWhole) * 10);  // jedna cyfra po przecinku
+    int velocityFrac =
+        (int)((velocity - velocityWhole) * 10);  // jedna cyfra po przecinku
 
-    sprintf(message, "eskl_measure: DUTY %d VKMH %d.%d\r\n", dutyCycle, velocityWhole, velocityFrac);
+    sprintf(message, "eskl_measure: DUTY %d VKMH %d.%d\r\n", dutyCycle,
+            velocityWhole, velocityFrac);
     logger_sendChar(message);
 }
 
@@ -121,6 +126,6 @@ void bike_measurementMode() {
             speedometer_proc();
         }
 
-        sendMeasurement(i, speedometer_getVelocity());
+        sendMeasurement(i, speedometer_getWheelVelocityKmh());
     }
 }

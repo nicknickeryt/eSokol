@@ -1,35 +1,65 @@
 #include "speedometer.h"
-#include "helpers.h"
-#include "algorithm.h"
-#include "logger.h"
 
 #include <stdlib.h>
 
-char* velocityBuffer = 0;
+#include "algorithm.h"
+#include "helpers.h"
+#include "logger.h"
 
-uint32_t hallLastTick = 0;
+char* wheelVelocityBuffer = 0;
+
+uint32_t wheelHallLastTick = 0;
 uint32_t hallLastSendTick = 0;
-float currentRealBikeVelocity = 0;
+float wheelCurrentVelocityKmh = 0;
 
-void speedometer_init() { velocityBuffer = (char*)malloc(18 * sizeof(char)); }
+uint32_t motorWheelHallLastTick = 0;
+float motorWheelCurrentVelocityKmh = 0;
 
-float speedometer_calculateVelocity(uint32_t hallCurrTick) {
-    float omega = (2.0f * PI) / ((hallCurrTick - hallLastTick) / 1000.0f);
-    hallLastTick = hallCurrTick;
+EMAFilter wheelSpeedFilter;
+EMAFilter motorWheelSpeedFilter;
+
+void speedometer_init() {
+    wheelVelocityBuffer = (char*)malloc(18 * sizeof(char));
+    emaFilter_init(&wheelSpeedFilter, 0.0f, 0.7f, 10);
+    emaFilter_init(&motorWheelSpeedFilter, 0.0f, 0.7f, 10);
+}
+
+float speedometer_calculateWheelVelocity(uint32_t hallCurrTick) {
+    float omega = (2.0f * PI) / ((hallCurrTick - wheelHallLastTick) / 1000.0f);
+    omega /= 2.0f;  // we've got 2 magnets!
+    wheelHallLastTick = hallCurrTick;
     return omega * R_WHEEL * 3.6;  // velocity in km/h
 }
 
-void speedometer_setVelocity(float velocity) { currentRealBikeVelocity = velocity; }
+float speedometer_calculateMotorWheelVelocity(uint32_t hallCurrTick) {
+    float omega =
+        (2.0f * PI) / ((hallCurrTick - motorWheelHallLastTick) / 1000.0f);
+    omega /= 2.0f;  // we've got 2 magnets!
+    motorWheelHallLastTick = hallCurrTick;
+    return omega * MOTOR_GEAR_RATIO * R_WHEEL * 3.6;  // velocity in km/h
+}
 
-float speedometer_getVelocity() { return currentRealBikeVelocity;}
+void speedometer_setWheelVelocity(float velocity) {
+    wheelCurrentVelocityKmh = emaFilter_update(&wheelSpeedFilter, velocity);
+}
+void speedometer_setMotorWheelVelocity(float velocity) {
+    if(velocity > 27.0f) return;
+    motorWheelCurrentVelocityKmh = emaFilter_update(&motorWheelSpeedFilter, velocity);
+}
+
+float speedometer_getWheelVelocityKmh() { return wheelCurrentVelocityKmh; }
+float speedometer_getMotorWheelVelocityKmh() { return motorWheelCurrentVelocityKmh; }
 
 void speedometer_proc() {
-    if (!(HAL_GetTick() - hallLastSendTick > 300)) return;
-    if (HAL_GetTick() - hallLastTick > 2500) currentRealBikeVelocity = 0.0f;
+    if (!(HAL_GetTick() - hallLastSendTick > 100)) return;
+    if (HAL_GetTick() - wheelHallLastTick > 2500)
+        wheelCurrentVelocityKmh = 0.0f;
+    if (HAL_GetTick() - motorWheelHallLastTick > 2500)
+        motorWheelCurrentVelocityKmh = emaFilter_update(&motorWheelSpeedFilter, 0.0f);
 
-    sprintf(velocityBuffer, "eskl_evel%s\r\n",
-            logger_floatToChar(currentRealBikeVelocity));
+    sprintf(wheelVelocityBuffer, "eskl_evel%s\r\n",
+            logger_floatToChar(wheelCurrentVelocityKmh));
     hallLastSendTick = HAL_GetTick();
-
-    logger_sendChar(velocityBuffer);
+    
+    logger_sendChar(wheelVelocityBuffer);
 }
